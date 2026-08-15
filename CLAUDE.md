@@ -1,0 +1,190 @@
+# Configuração global do Claude Code
+
+Índice factual do que está instalado em `~/.claude/` nesta máquina.
+Instalado em 2026-08-14 a partir de <https://github.com/affaan-m/everything-claude-code>.
+
+> Este arquivo descreve **o que existe**, não preferências de trabalho.
+> Preferências confirmadas pelo usuário podem ser adicionadas abaixo, na seção final.
+
+## Ambiente desta máquina
+
+- SO: Windows 11 Enterprise (`win32`)
+- Shell primário: PowerShell 5.1; Bash (Git Bash) também disponível
+- Node.js v24.17.0 · git 2.54.0
+- **tmux não está instalado.** Binário `wsl` presente, mas o Claude Code roda nativo no Windows
+- Instalação por **cópia de arquivos** para `~/.claude/`, não como plugin de marketplace
+
+## O que está instalado
+
+| Diretório | Qtd | Conteúdo |
+|---|---|---|
+| `agents/` | 68 | Subagents especializados (`.md` com frontmatter) |
+| `commands/` | 94 | Slash commands |
+| `skills/` | 285 | Skills em subdiretórios com `SKILL.md` |
+| `rules/` | 122 | Regras por linguagem, em 22 subdiretórios |
+| `scripts/` | 258 | Utilitários Node.js e implementação dos hooks |
+| `contexts/` | 3 | Arquivos de contexto (referência manual, não carregam sozinhos) |
+| `mcp-configs/` | 1 | `mcp-servers.json` — catálogo de referência, não ativo |
+
+### Regras por linguagem (`rules/<lang>/`)
+
+22 linguagens. Cada uma tem `coding-style.md`, `hooks.md`, `patterns.md`,
+`security.md`, `testing.md`:
+
+`angular`, `arkts`, `common`, `cpp`, `csharp`, `dart`, `fsharp`, `golang`,
+`java`, `kotlin`, `nuxt`, `perl`, `php`, `python`, `react`, `react-native`,
+`ruby`, `rust`, `swift`, `typescript`, `vue`, `web`
+
+`python/` tem ainda `fastapi.md`.
+
+> **Só `rules/common/*.md` é carregado automaticamente.** As regras por
+> linguagem são referência sob demanda — siga a tabela abaixo.
+
+#### Quando carregar cada uma
+
+No início de uma tarefa que envolva escrever ou revisar código, identifique a
+stack pelos arquivos-marcadores na raiz do projeto e **leia os arquivos da
+linguagem correspondente antes de editar**. Leia só o que for usar:
+`coding-style.md` e `patterns.md` para escrever, `testing.md` para testes,
+`security.md` em código que toca autenticação, entrada de usuário ou banco.
+
+| Marcador no projeto | Leia |
+|---|---|
+| `pom.xml`, `build.gradle`, `*.java` | `rules/java/` |
+| `angular.json` | `rules/angular/` + `rules/typescript/` |
+| `pubspec.yaml`, `*.dart` | `rules/dart/` |
+| `tsconfig.json`, `*.ts` sem Angular | `rules/typescript/` |
+| `package.json` com `react` | `rules/react/` + `rules/typescript/` |
+| `requirements.txt`, `pyproject.toml` | `rules/python/` |
+| `go.mod` | `rules/golang/` |
+| `Cargo.toml` | `rules/rust/` |
+| HTML/CSS, acessibilidade, frontend em geral | `rules/web/` |
+
+Quando a regra da linguagem conflitar com `rules/common/`, **a da linguagem
+vence** — ela é mais específica. Exemplo: `common/coding-style.md` prega
+imutabilidade como padrão, mas Go idiomático usa ponteiro para mutação.
+
+As stacks em uso nesta máquina são Java/Spring, Angular/TypeScript e
+Flutter/Dart — essas três são as que mais vão disparar a tabela.
+
+### Agents mais relevantes para as stacks em uso nesta máquina
+
+- Java/Spring: `java-reviewer`, `java-build-resolver`, `database-reviewer`
+- Angular/TypeScript: `typescript-reviewer`, `react-reviewer`, `a11y-architect`
+- Flutter/Dart: `flutter-reviewer`, `dart-build-resolver`
+- Transversais: `code-reviewer`, `security-reviewer`, `planner`, `architect`,
+  `tdd-guide`, `silent-failure-hunter`, `performance-optimizer`, `code-explorer`
+
+### Skills mais relevantes para as stacks em uso
+
+`springboot-patterns`, `springboot-security`, `springboot-tdd`,
+`springboot-verification`, `jpa-patterns`, `java-coding-standards`,
+`angular-developer`, `dart-flutter-patterns`, `flutter-dart-code-review`,
+`postgres-patterns`, `database-migrations`, `docker-patterns`, `github-ops`,
+`e2e-testing`, `git-workflow`
+
+## Hooks ativos
+
+Mesclados em `~/.claude/settings.json` sob a chave `hooks`. Nenhuma configuração
+anterior foi sobrescrita — `permissions`, `model`, `effortLevel` e
+`enabledPlugins` seguem como estavam.
+
+Distribuição: `PreToolUse` 8 · `Stop` 7 · `SessionStart` 2 · `PostToolUse` 2 ·
+`PostToolUseFailure` 2 · `PreCompact` 1 · `SessionEnd` 1.
+
+Os comandos dos hooks não usam caminho fixo: trazem um resolver JS inline que
+localiza a raiz via `scripts/lib/resolve-ecc-root.js`. Verificado que ele
+resolve para `C:\Users\Lucas\.claude`. Por isso **não há** `${CLAUDE_PLUGIN_ROOT}`
+literal a substituir.
+
+### Variáveis de controle (em `settings.json` → `env`)
+
+| Variável | Valor | Efeito |
+|---|---|---|
+| `ECC_HOOK_PROFILE` | `standard` | Perfil padrão. Ativa format/typecheck no `Stop`, check de `console.log`, tracking de custo e sessão |
+| `ECC_GATEGUARD` | `off` | **Desliga o GateGuard** (ver abaixo) |
+
+Outros controles disponíveis, não usados no momento:
+`ECC_HOOKS_ENABLED=false` (mata todos os hooks) e
+`ECC_DISABLED_HOOKS=id1,id2` (desliga hooks específicos por id).
+
+### Comportamentos que alteram ou bloqueiam ações
+
+- **`block-no-verify`** — BLOQUEIA (`exit 2`) `git commit --no-verify`.
+  Ativo em todos os perfis. Mantido de propósito.
+- **`config-protection`** — BLOQUEIA (`exit 2`) edição de arquivos de config de
+  linter/formatter já existentes (ex.: `eslint.config.js`), para forçar corrigir
+  o código em vez de afrouxar a regra.
+- **`gateguard-fact-force`** — negaria o primeiro `Bash` da sessão e o primeiro
+  `Edit` de cada arquivo, exigindo declaração de fatos antes. Usa
+  `permissionDecision: "deny"`, não `exit 2`. **Desligado** via `ECC_GATEGUARD=off`.
+  Para religar, remova essa env var.
+- **`auto-tmux-dev`** — não bloqueia, mas **reescreve** comandos de dev server.
+  No Windows, `npm run dev` vira `start "DevServer-<pasta>" cmd /k "npm run dev"`,
+  abrindo uma janela cmd separada. Efeito colateral: o log do dev server fica
+  nessa janela e não é legível pelo agente. Para desligar, acrescente
+  `pre:bash:auto-tmux-dev` a `ECC_DISABLED_HOOKS`.
+
+### Não é um problema nesta máquina
+
+`scripts/hooks/pre-bash-dev-server-block.js` bloquearia `npm run dev` fora do
+tmux, mas está **inerte** por dois motivos independentes: tem guarda
+`process.platform !== 'win32'`, e não está registrado em
+`scripts/hooks/bash-hook-dispatcher.js`. É código legado. Nada foi removido.
+
+## MCP servers
+
+Ativos em `~/.claude.json` → `mcpServers` (nível raiz = escopo global):
+
+| Server | Precisa de chave |
+|---|---|
+| `memory` | não |
+| `sequential-thinking` | não |
+| `context7` | não |
+| `filesystem` | não — escopo: `C:\Users\Lucas\Desktop` e `G:\Meu Drive\TCC` |
+
+Pendências com credencial estão em `~/.claude/SETUP_TODO.md`.
+
+`~/.claude/mcp-configs/mcp-servers.json` é apenas catálogo de referência (~40
+servers). Nada ali é lido automaticamente.
+
+## Plugins
+
+Via `settings.json` → `enabledPlugins`:
+
+- `context-mode@context-mode` (marketplace `mksglu/context-mode`) — já existia,
+  preservado.
+
+## Backup
+
+Estado anterior de `settings.json` e `.claude.json`:
+`~/.claude/backups/pre-ecc-20260814-201119/`
+
+## Sincronização entre máquinas
+
+A conta do VS Code / claude.ai **não** replica `~/.claude/`. A sincronização é
+feita por git: este diretório é um repositório. Ver [README.md](README.md).
+
+- `settings.shared.json` — parte portátil da config (hooks, env, model,
+  plugins). **Versionado.**
+- `settings.json` — config local, inclui `permissions.allow` com caminhos e
+  aprovações desta máquina. **Não versionado.**
+- `~/.claude.json` — fica fora deste diretório; contém `oauthAccount` e os MCP
+  servers. **Nunca versionar.**
+
+Depois de mudar hooks, env, model ou plugins, rode antes de commitar:
+
+```powershell
+node ~\.claude\scripts\sync\make-shared.js
+```
+
+Numa máquina nova, depois do clone:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File ~\.claude\scripts\sync\apply-shared.ps1
+```
+
+## Preferências do usuário
+
+<!-- Vazio de propósito. Nada aqui foi presumido.
+     Adicione preferências conforme forem confirmadas. -->

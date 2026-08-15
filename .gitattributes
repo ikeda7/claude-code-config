@@ -1,0 +1,15 @@
+# Normaliza line endings para o repositorio ficar identico entre maquinas.
+# Sem isto, um clone no Windows e outro no Linux/macOS geram diff em todo arquivo.
+
+* text=auto eol=lf
+
+# Scripts do PowerShell precisam de CRLF em algumas versoes do Windows
+*.ps1 text eol=crlf
+
+# Binarios
+*.png binary
+*.jpg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.zip binary

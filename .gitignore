@@ -1,0 +1,122 @@
+# .gitignore para versionar ~/.claude/ com segurança
+#
+# Objetivo: versionar a ESTRUTURA do toolkit (agents, commands, skills, rules,
+# scripts, contexts, mcp-configs, prompts, CLAUDE.md) e deixar de fora tudo que
+# é local, volátil ou sensível.
+#
+# ATENÇÃO ao editar: padrões genéricos como `*token*` sem a barra inicial valem
+# para QUALQUER profundidade e silenciosamente excluem conteúdo legítimo — por
+# exemplo `skills/token-budget-advisor/` e `skills/evm-token-decimals/`.
+# Por isso os catch-alls abaixo são ancorados na raiz com `/`.
+#
+# ANTES DO PRIMEIRO PUSH, confira o que entrou:
+#   git ls-files | Select-String -Pattern "credential|\.env|\.pem$|\.key$"
+#   git status --ignored --short
+
+# ==========================================================================
+# CREDENCIAIS E TOKENS
+# ==========================================================================
+
+# Arquivos conhecidos, por nome exato
+.credentials.json
+mcp-needs-auth-cache.json
+
+# settings.json é LOCAL: `permissions.allow` acumula aprovações pontuais desta
+# máquina (caminhos absolutos, UUIDs de sessão, nomes de projeto de cliente) e
+# já conteve credencial em texto claro. O que é portátil vive em
+# settings.shared.json, gerado por scripts/sync/make-shared.js.
+settings.json
+settings.local.json
+!settings.shared.json
+
+# Catch-all ancorado NA RAIZ (não pega subdiretórios de skills/)
+/*credential*
+/*secret*
+/*token*
+/*.pem
+/*.key
+
+# Chaves e certificados em qualquer profundidade (colisão improvável)
+*.p12
+*.pfx
+*.pem.bak
+id_rsa
+id_ed25519
+
+# Variáveis de ambiente em qualquer profundidade
+.env
+.env.*
+!.env.example
+
+# ==========================================================================
+# DADOS DE SESSÃO E HISTÓRICO
+# Locais, volumosos, e podem conter trechos de código e segredos dos projetos
+# em que você trabalhou.
+# ==========================================================================
+sessions/
+session-data/
+session-env/
+projects/
+shell-snapshots/
+file-history/
+todos/
+
+# .jsonl ancorado na raiz: history.jsonl é da raiz, mas skill-comply/fixtures/
+# tem .jsonl legítimos que DEVEM ser versionados.
+/*.jsonl
+
+# ==========================================================================
+# CACHE, DEBUG, LOGS E MÉTRICAS
+# ==========================================================================
+cache/
+debug/
+metrics/
+downloads/
+statsig/
+*.log
+.last-cleanup
+
+# ==========================================================================
+# ESTADO LOCAL DE IDE E PLUGINS
+# Reinstalados via marketplace — versionar traria node_modules inteiro.
+# ==========================================================================
+ide/
+plugins/
+context-mode/
+
+# ==========================================================================
+# BACKUPS
+# Contêm cópias de settings.json e de .claude.json, e .claude.json carrega
+# `oauthAccount`. Nunca versionar.
+# ==========================================================================
+backups/
+
+# ==========================================================================
+# SISTEMA OPERACIONAL
+# ==========================================================================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ==========================================================================
+# NODE
+# ==========================================================================
+node_modules/
+
+# ==========================================================================
+# NOTAS
+#
+# - settings.json NÃO é versionado. O núcleo portátil da configuração (hooks,
+#   env, model, effortLevel, plugins) fica em settings.shared.json, que É
+#   versionado. Rode `scripts/sync/apply-shared.ps1` numa máquina nova para
+#   mesclar o compartilhado no settings.json local sem perder as permissões
+#   daquela máquina.
+#
+# - ~/.claude.json NÃO é coberto por este arquivo — fica em ~/, fora deste
+#   diretório. Ele contém `oauthAccount` e as configs de MCP servers.
+#   NUNCA versione esse arquivo.
+#
+# - prompts/ É versionado: são os roteiros reutilizáveis, como
+#   setup-roadmap-github.md. Se algum contiver dado sensível, adicione
+#   uma exceção específica aqui.
+# ==========================================================================
