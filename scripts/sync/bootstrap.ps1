@@ -10,7 +10,11 @@
 #   3. injeta os MCP servers portateis em ~/.claude.json
 #   4. reporta o que ficou pendente
 #
-# Nao toca em credenciais. Nao autoriza OAuth. Nao apaga nada — tudo com backup.
+# Nao toca em credenciais. Nao autoriza OAuth. Nao apaga nada: tudo com backup.
+#
+# IMPORTANTE: este arquivo deve permanecer em ASCII puro. O PowerShell 5.1 le
+# .ps1 sem BOM como ANSI, e qualquer caractere acentuado ou travessao quebra o
+# parser. Ha um teste que verifica isso (tests/check-ascii.ps1).
 #
 # $env:CLAUDE_HOME sobrescreve o diretorio home (usado pelos testes).
 
@@ -34,21 +38,24 @@ if (-not $node) {
     Write-Output "  ERRO: Node.js nao encontrado. Instale Node 18+ e rode de novo."
     exit 1
 }
-$nodeVersion = (& node --version)
-Write-Output "  node $nodeVersion"
+Write-Output ("  node " + (& node --version))
 
 $git = Get-Command git -ErrorAction SilentlyContinue
-if ($git) { Write-Output "  git  $((& git --version) -replace 'git version ','')" }
-else { Write-Output "  AVISO: git nao encontrado — o sync futuro vai precisar dele." }
+if ($git) {
+    Write-Output ("  git  " + ((& git --version) -replace 'git version ',''))
+} else {
+    Write-Output "  AVISO: git nao encontrado. O sync futuro vai precisar dele."
+}
 
 if (-not (Test-Path (Join-Path $ClaudeDir 'settings.shared.json'))) {
-    Write-Output "  ERRO: settings.shared.json ausente. O clone foi para $ClaudeDir mesmo?"
+    Write-Output "  ERRO: settings.shared.json ausente."
+    Write-Output "  O clone foi para $ClaudeDir mesmo?"
     exit 1
 }
 Write-Output ""
 
 # ---- 2. settings -----------------------------------------------------------
-Write-Output "[2/3] Configuracao (hooks, env, model, plugins)"
+Write-Output "[2/3] Configuracao: hooks, env, model, plugins"
 & powershell -ExecutionPolicy Bypass -File (Join-Path $SyncDir 'apply-shared.ps1')
 if ($LASTEXITCODE -ne 0) {
     Write-Output "  ERRO ao aplicar settings. Abortado."
@@ -72,15 +79,15 @@ Write-Output "=============================================="
 Write-Output ""
 Write-Output "  1. Reinicie o Claude Code para carregar hooks e regras."
 Write-Output ""
-Write-Output "  2. MCP que exigem credencial (opcional) — ver SETUP_TODO.md:"
-Write-Output "       github, supabase       -> precisam de token"
-Write-Output "       vercel, cloudflare     -> OAuth, rode /mcp numa sessao interativa"
-Write-Output "       railway                -> precisa do Railway CLI logado"
+Write-Output "  2. MCP que exigem credencial (opcional). Ver SETUP_TODO.md:"
+Write-Output "       github, supabase    -> precisam de token"
+Write-Output "       vercel, cloudflare  -> OAuth, rode /mcp em sessao interativa"
+Write-Output "       railway             -> precisa do Railway CLI logado"
 Write-Output ""
 Write-Output "  3. Conectores claude.ai (Gmail, Drive, Calendar, Canva):"
 Write-Output "       autorize nas configuracoes de conectores do claude.ai."
 Write-Output ""
-Write-Output "  Config local desta maquina (permissions) foi preservada."
+Write-Output "  A config local desta maquina (permissions) foi preservada."
 Write-Output "  ~/.claude.json nao e versionado: oauthAccount permanece so aqui."
 Write-Output ""
 exit 0

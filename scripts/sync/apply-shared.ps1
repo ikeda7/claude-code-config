@@ -4,10 +4,13 @@
 #   powershell -ExecutionPolicy Bypass -File ~\.claude\scripts\sync\apply-shared.ps1
 #
 # Mescla as chaves portateis (hooks, env, model, effortLevel, plugins) sobre o
-# settings.json local, PRESERVANDO `permissions` — as aprovacoes de comando
+# settings.json local, PRESERVANDO `permissions`: as aprovacoes de comando
 # desta maquina nao sao tocadas.
 #
 # Faz backup antes de escrever e valida o JSON depois.
+#
+# IMPORTANTE: manter este arquivo em ASCII puro. O PowerShell 5.1 le .ps1 sem
+# BOM como ANSI, e acento ou travessao quebra o parser.
 #
 # $env:CLAUDE_HOME sobrescreve o diretorio home (usado pelos testes).
 
@@ -51,7 +54,7 @@ if ($existingNames -contains 'permissions' -and $localObj.permissions.allow) {
 
 $applied = @()
 foreach ($prop in $sharedObj.PSObject.Properties) {
-    # permissions nunca vem do compartilhado — protecao redundante
+    # permissions nunca vem do compartilhado: protecao redundante
     if ($prop.Name -eq 'permissions') { continue }
     $localObj | Add-Member -MemberType NoteProperty -Name $prop.Name -Value $prop.Value -Force
     $applied += $prop.Name
