@@ -1,0 +1,21 @@
+{
+  "_comment": "MCP servers portateis: nenhum exige chave. Aplicados por apply-mcp.js em ~/.claude.json (escopo global). Servers que exigem credencial ficam em SETUP_TODO.md e nunca entram aqui.",
+  "mcpServers": {
+    "memory": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-memory"]
+    },
+    "sequential-thinking": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"]
+    },
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp@latest"]
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "__ROOTS__"]
+    }
+  }
+}

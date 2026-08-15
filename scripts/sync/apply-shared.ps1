@@ -1,25 +1,31 @@
 # Aplica settings.shared.json no settings.json local desta maquina.
 #
-# Uso (PowerShell):
+# Uso:
 #   powershell -ExecutionPolicy Bypass -File ~\.claude\scripts\sync\apply-shared.ps1
 #
 # Mescla as chaves portateis (hooks, env, model, effortLevel, plugins) sobre o
 # settings.json local, PRESERVANDO `permissions` — as aprovacoes de comando
 # desta maquina nao sao tocadas.
 #
-# Faz backup antes de escrever.
+# Faz backup antes de escrever e valida o JSON depois.
+#
+# $env:CLAUDE_HOME sobrescreve o diretorio home (usado pelos testes).
 
 $ErrorActionPreference = 'Stop'
 
-$ClaudeDir = Join-Path $env:USERPROFILE '.claude'
+$HomeDir = if ($env:CLAUDE_HOME) { $env:CLAUDE_HOME } else { $env:USERPROFILE }
+$ClaudeDir = Join-Path $HomeDir '.claude'
 $Shared    = Join-Path $ClaudeDir 'settings.shared.json'
 $Local     = Join-Path $ClaudeDir 'settings.json'
 
 if (-not (Test-Path $Shared)) {
-    Write-Error "settings.shared.json nao encontrado em $ClaudeDir. O repositorio foi clonado corretamente?"
+    Write-Output "ERRO: settings.shared.json nao encontrado em $ClaudeDir"
+    Write-Output "O repositorio foi clonado corretamente?"
+    exit 1
 }
 
 # ---- backup ----------------------------------------------------------------
+$backupDir = $null
 if (Test-Path $Local) {
     $stamp     = Get-Date -Format 'yyyyMMdd-HHmmss'
     $backupDir = Join-Path $ClaudeDir "backups\pre-sync-$stamp"
@@ -34,37 +40,56 @@ $sharedObj = Get-Content $Shared -Raw | ConvertFrom-Json
 if (Test-Path $Local) {
     $localObj = Get-Content $Local -Raw | ConvertFrom-Json
 } else {
-    $localObj = [PSCustomObject]@{}
+    $localObj = New-Object PSObject
+}
+
+$existingNames = @($localObj.PSObject.Properties | ForEach-Object { $_.Name })
+$permCountBefore = 0
+if ($existingNames -contains 'permissions' -and $localObj.permissions.allow) {
+    $permCountBefore = @($localObj.permissions.allow).Count
 }
 
 $applied = @()
 foreach ($prop in $sharedObj.PSObject.Properties) {
+    # permissions nunca vem do compartilhado — protecao redundante
+    if ($prop.Name -eq 'permissions') { continue }
     $localObj | Add-Member -MemberType NoteProperty -Name $prop.Name -Value $prop.Value -Force
     $applied += $prop.Name
 }
 
-# permissions nunca vem do compartilhado; se nao existir local, cria vazio
-if (-not $localObj.PSObject.Properties.Name.Contains('permissions')) {
-    $localObj | Add-Member -MemberType NoteProperty -Name 'permissions' -Value ([PSCustomObject]@{ allow = @(); additionalDirectories = @() }) -Force
+# garante que permissions exista, sem sobrescrever o que ja havia
+if (-not ($existingNames -contains 'permissions')) {
+    $emptyPerms = [PSCustomObject]@{ allow = @(); additionalDirectories = @() }
+    $localObj | Add-Member -MemberType NoteProperty -Name 'permissions' -Value $emptyPerms -Force
 }
 
+# Depth alto: o objeto `hooks` e profundamente aninhado
 $localObj | ConvertTo-Json -Depth 100 | Out-File $Local -Encoding utf8
 
 # ---- verificacao -----------------------------------------------------------
 try {
-    Get-Content $Local -Raw | ConvertFrom-Json | Out-Null
-    Write-Output "settings.json valido."
+    $check = Get-Content $Local -Raw | ConvertFrom-Json
 } catch {
-    Write-Error "settings.json ficou invalido. Restaure de $backupDir"
+    Write-Output "ERRO: settings.json ficou invalido."
+    if ($backupDir) { Write-Output "Restaure de: $backupDir" }
+    exit 1
 }
 
-$permCount = 0
-if ($localObj.permissions.allow) { $permCount = $localObj.permissions.allow.Count }
+$permCountAfter = 0
+if ($check.permissions.allow) { $permCountAfter = @($check.permissions.allow).Count }
+
+if ($permCountAfter -lt $permCountBefore) {
+    Write-Output "ERRO: permissions encolheu de $permCountBefore para $permCountAfter."
+    if ($backupDir) { Write-Output "Restaure de: $backupDir" }
+    exit 1
+}
+
+$hookEvents = 0
+if ($check.hooks) { $hookEvents = @($check.hooks.PSObject.Properties).Count }
 
 Write-Output ""
-Write-Output "Aplicado: $($applied -join ', ')"
-Write-Output "Preservado: permissions ($permCount regras locais)"
-Write-Output ""
-Write-Output "Proximos passos nesta maquina:"
-Write-Output "  1. Configure os MCP servers em ~/.claude.json (ver SETUP_TODO.md)"
-Write-Output "  2. Reinicie o Claude Code para carregar hooks e regras"
+Write-Output "settings.json valido."
+Write-Output "  aplicado:   $($applied -join ', ')"
+Write-Output "  hooks:      $hookEvents eventos"
+Write-Output "  permissions: $permCountAfter regras locais preservadas"
+exit 0
