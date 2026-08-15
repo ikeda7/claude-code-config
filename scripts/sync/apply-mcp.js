@@ -5,7 +5,7 @@
  *
  *   node ~/.claude/scripts/sync/apply-mcp.js [--force] [caminho-extra ...]
  *
- * Preserva TODO o resto do arquivo — inclusive `oauthAccount` e `projects`.
+ * Preserva TODO o resto do arquivo, inclusive `oauthAccount` e `projects`.
  * Por padrao nao sobrescreve server ja existente; use --force para isso.
  *
  * Os roots do `filesystem` sao resolvidos por maquina: so entram diretorios
@@ -52,6 +52,17 @@ function resolveRoots() {
   return roots;
 }
 
+/**
+ * Le JSON tolerando BOM. Arquivos gravados por ferramentas do Windows
+ * (Out-File -Encoding utf8 no PowerShell 5.1, Bloco de Notas) comecam com
+ * U+FEFF, e JSON.parse rejeita esse byte.
+ */
+function readJsonTolerant(file) {
+  let text = fs.readFileSync(file, 'utf8');
+  if (text.charCodeAt(0) === 0xfeff) text = text.slice(1);
+  return JSON.parse(text);
+}
+
 function backup(file) {
   if (!fs.existsSync(file)) return null;
   const stamp = new Date().toISOString().replace(/[-:T]/g, '').slice(0, 15);
@@ -68,13 +79,13 @@ function main() {
     process.exit(1);
   }
 
-  const shared = JSON.parse(fs.readFileSync(SHARED, 'utf8')).mcpServers || {};
+  const shared = readJsonTolerant(SHARED).mcpServers || {};
   const roots = resolveRoots();
 
   let target = {};
   if (fs.existsSync(TARGET)) {
     try {
-      target = JSON.parse(fs.readFileSync(TARGET, 'utf8'));
+      target = readJsonTolerant(TARGET);
     } catch (err) {
       console.error(`ERRO: ${TARGET} nao e JSON valido (${err.message}). Abortado.`);
       process.exit(1);
@@ -118,7 +129,7 @@ function main() {
   fs.writeFileSync(TARGET, JSON.stringify(target, null, 2) + '\n', 'utf8');
 
   // verificacao pos-escrita
-  const after = JSON.parse(fs.readFileSync(TARGET, 'utf8'));
+  const after = readJsonTolerant(TARGET);
   if (hadOauth && !after.oauthAccount) {
     console.error('ERRO CRITICO: oauthAccount sumiu. Restaure de ' + backupDir);
     process.exit(1);

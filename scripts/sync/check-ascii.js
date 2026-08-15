@@ -18,18 +18,33 @@ const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..', '..');
 
-function collectPs1(dir, acc = []) {
+function collect(dir, exts, acc = []) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
     if (entry.name === '.git' || entry.name === 'node_modules') continue;
     const full = path.join(dir, entry.name);
-    if (entry.isDirectory()) collectPs1(full, acc);
-    else if (entry.name.toLowerCase().endsWith('.ps1')) acc.push(full);
+    if (entry.isDirectory()) collect(full, exts, acc);
+    else if (exts.some(e => entry.name.toLowerCase().endsWith(e))) acc.push(full);
   }
   return acc;
 }
 
-const files = collectPs1(ROOT);
 let bad = 0;
+
+// ---- BOM ------------------------------------------------------------------
+// Um BOM em .js quebra `node --check` logo no shebang, e em .json quebra
+// JSON.parse. PowerShell 5.1 introduz BOM com Out-File/Set-Content -Encoding
+// utf8, entao isso reaparece toda vez que alguem edita por ali.
+const bomFiles = collect(ROOT, ['.js', '.json', '.mjs', '.ps1']);
+for (const file of bomFiles) {
+  const buf = fs.readFileSync(file);
+  if (buf.length >= 3 && buf[0] === 0xef && buf[1] === 0xbb && buf[2] === 0xbf) {
+    bad++;
+    console.log(`  BOM  ${path.relative(ROOT, file)}`);
+  }
+}
+
+// ---- ASCII nos .ps1 -------------------------------------------------------
+const files = collect(ROOT, ['.ps1']);
 
 for (const file of files) {
   const buf = fs.readFileSync(file);
@@ -50,10 +65,11 @@ for (const file of files) {
   });
 }
 
-console.log(`\nArquivos .ps1 verificados: ${files.length}`);
+console.log(`\nBOM verificado em ${bomFiles.length} arquivo(s); ASCII em ${files.length} .ps1`);
 if (bad > 0) {
-  console.log(`FALHOU: ${bad} linha(s) com caractere nao-ASCII.`);
-  console.log('Troque travessao por hifen e remova acentos.');
+  console.log(`FALHOU: ${bad} problema(s) de encoding.`);
+  console.log('  .ps1: troque travessao por hifen e remova acentos.');
+  console.log('  BOM:  grave com UTF-8 sem BOM (nunca Out-File -Encoding utf8 no PS 5.1).');
   process.exit(1);
 }
-console.log('OK: todos em ASCII puro.');
+console.log('OK: sem BOM e .ps1 em ASCII puro.');

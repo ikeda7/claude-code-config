@@ -66,8 +66,14 @@ if (-not ($existingNames -contains 'permissions')) {
     $localObj | Add-Member -MemberType NoteProperty -Name 'permissions' -Value $emptyPerms -Force
 }
 
-# Depth alto: o objeto `hooks` e profundamente aninhado
-$localObj | ConvertTo-Json -Depth 100 | Out-File $Local -Encoding utf8
+# Depth alto: o objeto `hooks` e profundamente aninhado.
+#
+# Gravar com [System.IO.File]::WriteAllText e UTF8Encoding($false), NAO com
+# Out-File -Encoding utf8: no PowerShell 5.1 esse parametro escreve BOM, e o
+# BOM quebra o JSON.parse de qualquer leitor Node (inclusive apply-mcp.js).
+$json = $localObj | ConvertTo-Json -Depth 100
+$utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+[System.IO.File]::WriteAllText($Local, $json, $utf8NoBom)
 
 # ---- verificacao -----------------------------------------------------------
 try {
