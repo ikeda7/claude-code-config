@@ -60,17 +60,25 @@ Pré-requisitos: Node.js 18+, git, Claude Code.
 ```powershell
 git clone <url-deste-repo> $env:USERPROFILE\.claude
 cd $env:USERPROFILE\.claude
-powershell -ExecutionPolicy Bypass -File .\scripts\sync\apply-shared.ps1
+powershell -ExecutionPolicy Bypass -File .\scripts\sync\bootstrap.ps1
 ```
 
-Depois:
+O `bootstrap.ps1` faz tudo: confere pré-requisitos, aplica a configuração
+compartilhada e injeta os MCP servers. Depois é só reiniciar o Claude Code.
 
-1. Configure os MCP servers em `~/.claude.json` — ver [SETUP_TODO.md](SETUP_TODO.md)
-2. Reinicie o Claude Code
+O que ele **preserva** naquela máquina:
+
+- `permissions` do `settings.json` local — as aprovações de comando de lá
+- `oauthAccount` e `projects` do `~/.claude.json` — sua autenticação
+- MCP servers customizados que já existirem (use `--force` para sobrescrever)
+
+Os roots do `filesystem` são resolvidos por máquina: só entram diretórios que
+existem de fato ali. `G:\Meu Drive` entra aqui, mas é ignorado numa máquina que
+não tenha esse drive.
 
 Se a máquina já tiver um `~/.claude/` com coisas suas, clone em outro lugar e
-copie o que interessa — o script de apply preserva `permissions`, mas o clone
-por cima sobrescreveria arquivos.
+copie o que interessa — o bootstrap preserva config, mas o clone por cima
+sobrescreveria arquivos.
 
 ## Fluxo de sincronização
 
@@ -78,14 +86,39 @@ Depois de mudar hooks, env, model ou plugins:
 
 ```powershell
 node .\scripts\sync\make-shared.js
+node .\scripts\sync\check-ascii.js
 git add -A ; git commit -m "chore: atualiza config" ; git push
 ```
 
 Na outra máquina:
 
 ```powershell
-git pull ; powershell -ExecutionPolicy Bypass -File .\scripts\sync\apply-shared.ps1
+git pull
+powershell -ExecutionPolicy Bypass -File .\scripts\sync\bootstrap.ps1
 ```
+
+## Scripts de sync
+
+| Script | O que faz |
+|---|---|
+| `bootstrap.ps1` | Setup completo de máquina nova. Orquestra os dois abaixo |
+| `apply-shared.ps1` | Mescla `settings.shared.json` no `settings.json` local |
+| `apply-mcp.js` | Injeta MCP servers em `~/.claude.json` |
+| `make-shared.js` | Regenera `settings.shared.json` (com varredura de segredos) |
+| `check-ascii.js` | Barra BOM e caractere não-ASCII em `.ps1` |
+
+### Por que o `check-ascii.js` existe
+
+Duas armadilhas de encoding do Windows já quebraram este repo:
+
+1. **PowerShell 5.1 lê `.ps1` sem BOM como ANSI.** Um travessão (`—`) num
+   comentário do `bootstrap.ps1` corrompeu o parser e derrubou um bloco inteiro,
+   com erro apontando para a linha errada. Por isso os `.ps1` são ASCII puro.
+2. **`Out-File -Encoding utf8` grava BOM no PS 5.1.** BOM quebra `JSON.parse` e
+   até `node --check` no shebang. Por isso o `apply-shared.ps1` grava via
+   `UTF8Encoding($false)` e o `apply-mcp.js` lê tolerando BOM alheio.
+
+Rode `check-ascii.js` antes de commitar mudança em script.
 
 ## Segurança
 
