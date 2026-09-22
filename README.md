@@ -14,10 +14,11 @@ agente, com as mesmas regras, os mesmos comandos e os mesmos automatismos.
 |---|---|---|
 | `agents/` | 68 | Subagents especializados por linguagem e por função |
 | `commands/` | 95 | Slash commands (`/plan`, `/pr`, `/setup-github`, …) |
-| `skills/` | 285 | Conhecimento sob demanda, carregado quando a tarefa casa |
-| `rules/` | 123 | Regras: `common/` sempre ativo, 22 linguagens sob demanda |
-| `scripts/` | 260 | Implementação dos hooks e utilitários de sync |
+| `skills/` | 284 | Conhecimento sob demanda, carregado quando a tarefa casa |
+| `rules/` | 123 | Regras: `common/` sempre ativo, 21 linguagens sob demanda |
+| `scripts/` | 264 | Implementação dos hooks e utilitários de sync |
 | `prompts/` | 1 | Roteiros reutilizáveis meus |
+| `docs/` | 1 | Guia de instalação das regras do toolkit original (referência) |
 | `contexts/` | 3 | Referência manual |
 | `mcp-configs/` | 1 | Catálogo de MCP servers (referência, não ativo) |
 
@@ -29,10 +30,15 @@ Claude Code lê no início de toda sessão.
 Só isto entra no contexto em toda sessão, de todo projeto:
 
 - `CLAUDE.md`
-- `rules/common/*.md` — 11 regras, incluindo o fluxo GitFlow
-- `rules/README.md`
+- `rules/common/*.md` — 12 regras, incluindo o fluxo GitFlow e o deploy na Vercel
 
-Todo o resto é **sob demanda**, e isso é proposital: 285 skills carregadas de
+O `README.md` que vinha em `rules/` foi movido para
+[docs/rules-guide.md](docs/rules-guide.md): todo `.md` em `rules/` sem
+`paths:` no frontmatter é carregado em toda sessão, e ele só tinha instruções
+de instalação do toolkit. As regras por linguagem têm `paths:` (ex.:
+`**/*.java`) e só entram quando um arquivo daquele tipo é tocado.
+
+Todo o resto é **sob demanda**, e isso é proposital: 284 skills carregadas de
 uma vez destruiriam a janela de contexto. Skills entram quando a descrição casa
 com a tarefa, agents quando são delegados, commands quando digitados, e as
 regras por linguagem seguem a tabela de marcadores no `CLAUDE.md`.
@@ -44,6 +50,9 @@ O que difere do toolkit original:
 - **`rules/common/gitflow-padrao.md`** — GitFlow obrigatório: `develop` como
   integração, PR sempre, nunca commit direto em `main`/`master`, Conventional
   Commits.
+- **`rules/common/deploy-vercel.md`** — três ambientes isolados (dev, preview,
+  produção), nada de segredo em variável pública, proteção dos links de
+  preview e limites do plano gratuito.
 - **`commands/setup-github.md`** — `/setup-github`, que executa meu roteiro de
   estruturação de repositório (`prompts/setup-roadmap-github.md`).
 - **Tabela de regras por linguagem no `CLAUDE.md`** — sem ela, as 110 regras de
@@ -53,18 +62,45 @@ O que difere do toolkit original:
   Atrito alto demais para o ganho.
 - **Split de `settings.json`** — ver abaixo.
 
-## Instalar em uma máquina nova
+## Uso em várias máquinas
 
-Pré-requisitos: Node.js 18+, git, Claude Code.
+Trabalho em 3 máquinas. Todas usam este mesmo repositório, clonado **direto em
+`~/.claude`**, que é a pasta que o Claude Code lê. Não mantenha um segundo clone
+em outro lugar (ex.: no Desktop): editar lá não muda nada até dar push e pull,
+e é fácil esquecer um dos dois.
+
+### Estado atual
+
+| Máquina | Configurada? |
+|---|---|
+| PC principal (Windows 11, este repo nasceu nele) | Sim, nada a rodar |
+| Máquina 2 | Rodar o passo 1 abaixo |
+| Máquina 3 | Rodar o passo 1 abaixo |
+
+### 1. Máquina nova (uma vez só)
+
+Pré-requisitos: Node.js 18+, git, Claude Code instalado e logado.
 
 ```powershell
-git clone <url-deste-repo> $env:USERPROFILE\.claude
+git clone https://github.com/ikeda7/claude-code-config $env:USERPROFILE\.claude
 cd $env:USERPROFILE\.claude
 powershell -ExecutionPolicy Bypass -File .\scripts\sync\bootstrap.ps1
 ```
 
+Depois **reinicie o Claude Code** (feche e abra o VS Code ou o terminal).
+
+Se o `git clone` reclamar que a pasta já existe, é porque o Claude Code já
+criou um `~/.claude` ali. Renomeie a antiga, clone e copie de volta só o que
+precisar:
+
+```powershell
+Rename-Item $env:USERPROFILE\.claude .claude.old
+# clone + bootstrap como acima, depois, se quiser o histórico de sessões:
+Copy-Item $env:USERPROFILE\.claude.old\projects $env:USERPROFILE\.claude\ -Recurse
+```
+
 O `bootstrap.ps1` faz tudo: confere pré-requisitos, aplica a configuração
-compartilhada e injeta os MCP servers. Depois é só reiniciar o Claude Code.
+compartilhada e injeta os MCP servers.
 
 O que ele **preserva** naquela máquina:
 
@@ -80,22 +116,62 @@ Se a máquina já tiver um `~/.claude/` com coisas suas, clone em outro lugar e
 copie o que interessa — o bootstrap preserva config, mas o clone por cima
 sobrescreveria arquivos.
 
-## Fluxo de sincronização
+### 2. Antes de começar a trabalhar (todo dia)
 
-Depois de mudar hooks, env, model ou plugins:
+Puxe o que as outras máquinas mandaram:
 
 ```powershell
-node .\scripts\sync\make-shared.js
-node .\scripts\sync\check-ascii.js
-git add -A ; git commit -m "chore: atualiza config" ; git push
+cd $env:USERPROFILE\.claude
+git pull
 ```
 
-Na outra máquina:
+Se o pull trouxe mudança em `settings.shared.json` ou `scripts/sync/mcp-shared.json`,
+rode também o bootstrap e reinicie o Claude Code. Mudança só em `agents/`,
+`skills/`, `commands/`, `rules/` ou `CLAUDE.md` não precisa de bootstrap: basta
+abrir uma sessão nova.
 
 ```powershell
-git pull
 powershell -ExecutionPolicy Bypass -File .\scripts\sync\bootstrap.ps1
 ```
+
+### 3. Depois de mudar algo (em qualquer máquina)
+
+```powershell
+cd $env:USERPROFILE\.claude
+node .\scripts\sync\make-shared.js    # só se mexeu em hooks, env, model ou plugins
+node .\scripts\sync\check-ascii.js    # só se mexeu em algum .ps1
+git status                            # confira o que vai subir
+git add -A ; git commit -m "chore: descreve a mudanca" ; git push
+```
+
+Depois faça o passo 2 nas outras máquinas.
+
+Onde cada tipo de mudança vive:
+
+| Quero mudar... | Edito... | Sincroniza? |
+|---|---|---|
+| Hooks, env, model, plugins | `settings.json`, depois `make-shared.js` | Sim, via `settings.shared.json` |
+| Regras, agents, skills, commands | Os `.md` nas pastas | Sim |
+| MCP servers | `scripts/sync/mcp-shared.json` | Sim, via bootstrap |
+| Permissões aprovadas | Nada: ficam por máquina | Não, de propósito |
+| Login do Claude, chaves de MCP | `~/.claude.json` | Não, nunca |
+
+### Conferir se uma máquina está em dia
+
+```powershell
+cd $env:USERPROFILE\.claude
+git fetch ; git status -sb
+```
+
+- `## main...origin/main` sem `[ahead]`/`[behind]`: sincronizada.
+- `[behind N]`: falta `git pull` (passo 2).
+- `[ahead N]`: tem commit local sem push.
+- Linhas com `??` ou `M`: arquivos mudados que ainda não foram commitados.
+
+Se houver conflito no pull porque as duas máquinas mudaram o mesmo arquivo,
+resolva no arquivo, `git add` e `git commit`. Na dúvida, nunca apague o
+`settings.json` local: ele não está no git e é recriado só em parte pelo
+bootstrap.
 
 ## Scripts de sync
 
