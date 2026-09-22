@@ -6,7 +6,10 @@ Instalado em 2026-08-14 a partir de <https://github.com/affaan-m/everything-clau
 > Este arquivo descreve **o que existe**, não preferências de trabalho.
 > Preferências confirmadas pelo usuário podem ser adicionadas abaixo, na seção final.
 
-## Ambiente desta máquina
+## Ambiente da máquina principal
+
+Este arquivo é sincronizado entre 3 máquinas. Os dados abaixo são da máquina
+onde a config nasceu; nas outras, confira versões antes de presumir.
 
 - SO: Windows 11 Enterprise (`win32`)
 - Shell primário: PowerShell 5.1; Bash (Git Bash) também disponível
@@ -19,10 +22,10 @@ Instalado em 2026-08-14 a partir de <https://github.com/affaan-m/everything-clau
 | Diretório | Qtd | Conteúdo |
 |---|---|---|
 | `agents/` | 68 | Subagents especializados (`.md` com frontmatter) |
-| `commands/` | 94 | Slash commands |
-| `skills/` | 285 | Skills em subdiretórios com `SKILL.md` |
-| `rules/` | 122 | Regras por linguagem, em 22 subdiretórios |
-| `scripts/` | 258 | Utilitários Node.js e implementação dos hooks |
+| `commands/` | 95 | Slash commands |
+| `skills/` | 284 | Skills em subdiretórios com `SKILL.md` |
+| `rules/` | 123 | Regras em 22 subdiretórios (`common/` + 21 linguagens) |
+| `scripts/` | 264 | Utilitários Node.js, implementação dos hooks e sync |
 | `contexts/` | 3 | Arquivos de contexto (referência manual, não carregam sozinhos) |
 | `mcp-configs/` | 1 | `mcp-servers.json` — catálogo de referência, não ativo |
 
@@ -176,13 +179,17 @@ Depois de mudar hooks, env, model ou plugins, rode antes de commitar:
 
 ```powershell
 node ~\.claude\scripts\sync\make-shared.js
+node ~\.claude\scripts\sync\check-ascii.js
 ```
 
-Numa máquina nova, depois do clone:
+Numa máquina nova, depois do clone, e depois de um `git pull` que mude
+`settings.shared.json` ou `scripts/sync/mcp-shared.json`:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File ~\.claude\scripts\sync\apply-shared.ps1
+powershell -ExecutionPolicy Bypass -File ~\.claude\scripts\sync\bootstrap.ps1
 ```
+
+`skills/synced/` e `state/` são estado local do runtime e ficam fora do git.
 
 ## Preferências do usuário
 

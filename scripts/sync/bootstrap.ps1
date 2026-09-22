@@ -14,7 +14,7 @@
 #
 # IMPORTANTE: este arquivo deve permanecer em ASCII puro. O PowerShell 5.1 le
 # .ps1 sem BOM como ANSI, e qualquer caractere acentuado ou travessao quebra o
-# parser. Ha um teste que verifica isso (tests/check-ascii.ps1).
+# parser. Ha um teste que verifica isso (scripts/sync/check-ascii.js).
 #
 # $env:CLAUDE_HOME sobrescreve o diretorio home (usado pelos testes).
 

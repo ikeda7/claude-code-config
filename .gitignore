@@ -120,3 +120,7 @@ node_modules/
 #   setup-roadmap-github.md. Se algum contiver dado sensível, adicione
 #   uma exceção específica aqui.
 # ==========================================================================
+
+# Estado local do runtime do Claude Code (por maquina)
+/skills/synced/
+/state/
