@@ -26,8 +26,29 @@ onde a config nasceu; nas outras, confira versões antes de presumir.
 | `skills/` | 284 | Skills em subdiretórios com `SKILL.md` |
 | `rules/` | 123 | Regras em 22 subdiretórios (`common/` + 21 linguagens) |
 | `scripts/` | 264 | Utilitários Node.js, implementação dos hooks e sync |
+| `prompts/` | 1 | Roteiros reutilizáveis do usuário (ex.: `setup-roadmap-github.md`, usado por `/setup-github`) |
 | `contexts/` | 3 | Arquivos de contexto (referência manual, não carregam sozinhos) |
 | `mcp-configs/` | 1 | `mcp-servers.json` — catálogo de referência, não ativo |
+
+## Comandos
+
+Este repositório não é uma aplicação: não há `package.json`, build ou suíte de
+testes. Os "comandos" são os scripts de sincronização em `scripts/sync/`:
+
+| Comando | Quando rodar |
+|---|---|
+| `node scripts\sync\make-shared.js` | Depois de mudar hooks, env, model ou plugins em `settings.json`. Regenera `settings.shared.json` e aborta se detectar segredo |
+| `node scripts\sync\check-ascii.js` | Antes de commitar qualquer mudança em `.ps1`, `.js`, `.mjs` ou `.json`. Falha (exit 1) se achar BOM ou byte não-ASCII em `.ps1` — é o verificador mais próximo de um "teste" que este repo tem |
+| `powershell -ExecutionPolicy Bypass -File scripts\sync\apply-shared.ps1` | Aplica `settings.shared.json` no `settings.json` local, preservando `permissions` |
+| `node scripts\sync\apply-mcp.js [--force]` | Injeta os MCP servers portáteis (`scripts\sync\mcp-shared.json`) em `~/.claude.json`, preservando `oauthAccount` |
+| `powershell -ExecutionPolicy Bypass -File scripts\sync\bootstrap.ps1` | Orquestra os dois acima; usar só em máquina nova, após o clone |
+
+Fluxo padrão antes de commitar mudança de config:
+
+```powershell
+node .\scripts\sync\make-shared.js
+node .\scripts\sync\check-ascii.js
+```
 
 ### Regras por linguagem (`rules/<lang>/`)
 
@@ -157,6 +178,27 @@ Via `settings.json` → `enabledPlugins`:
 
 - `context-mode@context-mode` (marketplace `mksglu/context-mode`) — já existia,
   preservado.
+- Marketplace oficial `claude-plugins-official` (`anthropics/claude-plugins-official`):
+  `claude-code-setup`, `claude-md-management`, `hookify`, `security-guidance`,
+  `jdtls-lsp`, `typescript-lsp`, `commit-commands`, `pr-review-toolkit`,
+  `session-report`, `plugin-dev`.
+
+Declarar em `enabledPlugins` + `extraKnownMarketplaces` basta: o Claude Code
+baixa os plugins ao abrir, depois de você confiar no marketplace. O cache em
+`plugins/` não é versionado.
+
+Evitados por duplicarem o que já existe: `code-review`/`feature-dev` (ECC),
+`context7` (MCP), `remember` (MCP `memory`).
+
+Plugins de terceiros avaliados, **não** ativados (rodam hooks/código externo;
+instalar manualmente com `/plugin` se quiser):
+
+| Plugin | Marketplace | Requisito extra |
+|---|---|---|
+| `cartographer@cartographer-marketplace` | `kingbootoshi/cartographer` | — |
+| `claude-mem@thedotmack` | `thedotmack/claude-mem` | worker em background |
+| `headroom@headroom-marketplace` | `headroomlabs-ai/headroom` | proxy Headroom instalado |
+| `omniroute@omniroute-claude-plugin` | `projectsaibg/omniroute-claude-plugin` | servidor OmniRoute em `localhost:20128` |
 
 ## Backup
 
@@ -175,7 +217,8 @@ feita por git: este diretório é um repositório. Ver [README.md](README.md).
 - `~/.claude.json` — fica fora deste diretório; contém `oauthAccount` e os MCP
   servers. **Nunca versionar.**
 
-Depois de mudar hooks, env, model ou plugins, rode antes de commitar:
+Depois de mudar hooks, env, model ou plugins, rode antes de commitar (ver
+tabela de Comandos acima):
 
 ```powershell
 node ~\.claude\scripts\sync\make-shared.js
@@ -188,6 +231,10 @@ Numa máquina nova, depois do clone, e depois de um `git pull` que mude
 ```powershell
 powershell -ExecutionPolicy Bypass -File ~\.claude\scripts\sync\bootstrap.ps1
 ```
+
+Todos os scripts de `scripts/sync/` aceitam `$env:CLAUDE_HOME` para
+sobrescrever o home dir — é assim que eles são exercitados sem tocar no
+`~/.claude` real da máquina.
 
 `skills/synced/` e `state/` são estado local do runtime e ficam fora do git.
 
