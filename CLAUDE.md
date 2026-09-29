@@ -41,7 +41,8 @@ testes. Os "comandos" são os scripts de sincronização em `scripts/sync/`:
 | `node scripts\sync\check-ascii.js` | Antes de commitar qualquer mudança em `.ps1`, `.js`, `.mjs` ou `.json`. Falha (exit 1) se achar BOM ou byte não-ASCII em `.ps1` — é o verificador mais próximo de um "teste" que este repo tem |
 | `powershell -ExecutionPolicy Bypass -File scripts\sync\apply-shared.ps1` | Aplica `settings.shared.json` no `settings.json` local, preservando `permissions` |
 | `node scripts\sync\apply-mcp.js [--force]` | Injeta os MCP servers portáteis (`scripts\sync\mcp-shared.json`) em `~/.claude.json`, preservando `oauthAccount` |
-| `powershell -ExecutionPolicy Bypass -File scripts\sync\bootstrap.ps1` | Orquestra os dois acima; usar só em máquina nova, após o clone |
+| `node scripts\sync\apply-plugins.js [--dry-run]` | Registra os marketplaces e instala os plugins de `settings.shared.json` via CLI do Claude Code (PATH ou binário da extensão do VS Code). Idempotente |
+| `powershell -ExecutionPolicy Bypass -File scripts\sync\bootstrap.ps1` | Orquestra os três acima; usar em máquina nova, após o clone, e após `git pull` que mude plugins/settings |
 
 Fluxo padrão antes de commitar mudança de config:
 
@@ -183,15 +184,16 @@ Via `settings.json` → `enabledPlugins`:
   `jdtls-lsp`, `typescript-lsp`, `commit-commands`, `pr-review-toolkit`,
   `session-report`, `plugin-dev`.
 
-Declarar em `enabledPlugins` + `extraKnownMarketplaces` basta: o Claude Code
-baixa os plugins ao abrir, depois de você confiar no marketplace. O cache em
-`plugins/` não é versionado.
+Declarar em `enabledPlugins` + `extraKnownMarketplaces` **não basta** na
+extensão do VS Code: ela instala sozinha só plugins de marketplace que já está
+no disco, e pula os novos em silêncio. Quem instala é `apply-plugins.js`
+(chamado pelo `bootstrap.ps1`). O cache em `plugins/` não é versionado.
 
 Evitados por duplicarem o que já existe: `code-review`/`feature-dev` (ECC),
 `context7` (MCP), `remember` (MCP `memory`).
 
 Plugins de terceiros ativados a pedido do usuário (rodam hooks/código externo;
-o Claude Code pede para confiar em cada marketplace na primeira abertura):
+instalados por `apply-plugins.js`):
 
 | Plugin | Marketplace | Requisito extra |
 |---|---|---|
