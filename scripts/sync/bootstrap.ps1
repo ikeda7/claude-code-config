@@ -8,7 +8,8 @@
 #   1. checa pre-requisitos (node, git)
 #   2. aplica settings.shared.json no settings.json local
 #   3. injeta os MCP servers portateis em ~/.claude.json
-#   4. reporta o que ficou pendente
+#   4. instala os plugins declarados (via CLI do Claude Code)
+#   5. reporta o que ficou pendente
 #
 # Nao toca em credenciais. Nao autoriza OAuth. Nao apaga nada: tudo com backup.
 #
@@ -31,7 +32,7 @@ Write-Output "=============================================="
 Write-Output ""
 
 # ---- 1. pre-requisitos -----------------------------------------------------
-Write-Output "[1/3] Pre-requisitos"
+Write-Output "[1/4] Pre-requisitos"
 
 $node = Get-Command node -ErrorAction SilentlyContinue
 if (-not $node) {
@@ -55,7 +56,7 @@ if (-not (Test-Path (Join-Path $ClaudeDir 'settings.shared.json'))) {
 Write-Output ""
 
 # ---- 2. settings -----------------------------------------------------------
-Write-Output "[2/3] Configuracao: hooks, env, model, plugins"
+Write-Output "[2/4] Configuracao: hooks, env, model, plugins"
 & powershell -ExecutionPolicy Bypass -File (Join-Path $SyncDir 'apply-shared.ps1')
 if ($LASTEXITCODE -ne 0) {
     Write-Output "  ERRO ao aplicar settings. Abortado."
@@ -64,11 +65,21 @@ if ($LASTEXITCODE -ne 0) {
 Write-Output ""
 
 # ---- 3. MCP ----------------------------------------------------------------
-Write-Output "[3/3] MCP servers"
+Write-Output "[3/4] MCP servers"
 & node (Join-Path $SyncDir 'apply-mcp.js')
 if ($LASTEXITCODE -ne 0) {
     Write-Output "  ERRO ao aplicar MCP. Abortado."
     exit 1
+}
+Write-Output ""
+
+# ---- 4. plugins ------------------------------------------------------------
+# A extensao do VS Code nao instala sozinha plugin de marketplace novo.
+# Falha aqui nao aborta: o resto do ambiente ja esta aplicado.
+Write-Output "[4/4] Plugins"
+& node (Join-Path $SyncDir 'apply-plugins.js')
+if ($LASTEXITCODE -ne 0) {
+    Write-Output "  AVISO: algum plugin nao instalou. Rode apply-plugins.js de novo depois."
 }
 Write-Output ""
 
