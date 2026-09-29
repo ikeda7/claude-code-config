@@ -190,15 +190,21 @@ baixa os plugins ao abrir, depois de você confiar no marketplace. O cache em
 Evitados por duplicarem o que já existe: `code-review`/`feature-dev` (ECC),
 `context7` (MCP), `remember` (MCP `memory`).
 
-Plugins de terceiros avaliados, **não** ativados (rodam hooks/código externo;
-instalar manualmente com `/plugin` se quiser):
+Plugins de terceiros ativados a pedido do usuário (rodam hooks/código externo;
+o Claude Code pede para confiar em cada marketplace na primeira abertura):
 
 | Plugin | Marketplace | Requisito extra |
 |---|---|---|
 | `cartographer@cartographer-marketplace` | `kingbootoshi/cartographer` | — |
-| `claude-mem@thedotmack` | `thedotmack/claude-mem` | worker em background |
-| `headroom@headroom-marketplace` | `headroomlabs-ai/headroom` | proxy Headroom instalado |
-| `omniroute@omniroute-claude-plugin` | `projectsaibg/omniroute-claude-plugin` | servidor OmniRoute em `localhost:20128` |
+| `claude-mem@thedotmack` | `thedotmack/claude-mem` | worker em background (sobe sozinho) |
+| `headroom@headroom-marketplace` | `headroomlabs-ai/headroom` | proxy Headroom instalado à parte em cada máquina |
+
+Avaliado e **não** ativado: `omniroute@omniroute-claude-plugin`
+(`projectsaibg/omniroute-claude-plugin`) — só conecta a um servidor OmniRoute
+em `localhost:20128`, gateway que repassa prompts a provedores de terceiros.
+
+`/plugin` não existe na extensão do VS Code. Para gerenciar plugins à mão, use o
+CLI embutido: `...\extensions\anthropic.claude-code-<versão>\resources\native-binary\claude.exe plugin ...`.
 
 ## Backup
 

@@ -258,7 +258,10 @@
     "commit-commands@claude-plugins-official": true,
     "pr-review-toolkit@claude-plugins-official": true,
     "session-report@claude-plugins-official": true,
-    "plugin-dev@claude-plugins-official": true
+    "plugin-dev@claude-plugins-official": true,
+    "cartographer@cartographer-marketplace": true,
+    "claude-mem@thedotmack": true,
+    "headroom@headroom-marketplace": true
   },
   "extraKnownMarketplaces": {
     "context-mode": {
@@ -271,6 +274,24 @@
       "source": {
         "source": "git",
         "url": "https://github.com/anthropics/claude-plugins-official.git"
+      }
+    },
+    "cartographer-marketplace": {
+      "source": {
+        "source": "github",
+        "repo": "kingbootoshi/cartographer"
+      }
+    },
+    "thedotmack": {
+      "source": {
+        "source": "github",
+        "repo": "thedotmack/claude-mem"
+      }
+    },
+    "headroom-marketplace": {
+      "source": {
+        "source": "github",
+        "repo": "headroomlabs-ai/headroom"
       }
     }
   },
