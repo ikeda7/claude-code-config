@@ -42,7 +42,7 @@ testes. Os "comandos" são os scripts de sincronização em `scripts/sync/`:
 | `powershell -ExecutionPolicy Bypass -File scripts\sync\apply-shared.ps1` | Aplica `settings.shared.json` no `settings.json` local, preservando `permissions` |
 | `node scripts\sync\apply-mcp.js [--force]` | Injeta os MCP servers portáteis (`scripts\sync\mcp-shared.json`) em `~/.claude.json`, preservando `oauthAccount` |
 | `node scripts\sync\apply-plugins.js [--dry-run]` | Registra os marketplaces e instala os plugins de `settings.shared.json` via CLI do Claude Code (PATH ou binário da extensão do VS Code). Idempotente |
-| `powershell -ExecutionPolicy Bypass -File scripts\sync\bootstrap.ps1` | Orquestra os três acima; usar em máquina nova, após o clone, e após `git pull` que mude plugins/settings |
+| `powershell -ExecutionPolicy Bypass -File scripts\sync\bootstrap.ps1` | Orquestra os três acima e configura o Headroom; usar em máquina nova, após o clone, e após `git pull` que mude plugins/settings |
 
 Fluxo padrão antes de commitar mudança de config:
 
@@ -199,7 +199,16 @@ instalados por `apply-plugins.js`):
 |---|---|---|
 | `cartographer@cartographer-marketplace` | `kingbootoshi/cartographer` | — |
 | `claude-mem@thedotmack` | `thedotmack/claude-mem` | worker em background (sobe sozinho) |
-| `headroom@headroom-marketplace` | `headroomlabs-ai/headroom` | proxy Headroom instalado à parte em cada máquina |
+| `headroom@headroom-marketplace` | `headroomlabs-ai/headroom` | Python 3.10+ e `pip install headroom-ai[all]` (o bootstrap faz, se houver Python) |
+
+Headroom é um proxy local (`127.0.0.1:8787`) que comprime o contexto antes de
+enviar à API. `headroom init -g claude` grava `ANTHROPIC_BASE_URL` e hooks no
+`settings.json` **local**. Isso fica fora de `settings.shared.json` de
+propósito: numa máquina sem o proxy, o Claude Code ficaria sem API. Por isso o
+bootstrap roda o `init` depois do `apply-shared` (que sobrescreve `env`/`hooks`).
+Diagnóstico: `headroom doctor`. Para desligar: remova `ANTHROPIC_BASE_URL` do
+`env` local. Efeito colateral: `/remote-control` fica indisponível enquanto
+`ANTHROPIC_BASE_URL` aponta para o proxy.
 
 Avaliado e **não** ativado: `omniroute@omniroute-claude-plugin`
 (`projectsaibg/omniroute-claude-plugin`) — só conecta a um servidor OmniRoute
