@@ -30,7 +30,8 @@ Claude Code lê no início de toda sessão.
 Só isto entra no contexto em toda sessão, de todo projeto:
 
 - `CLAUDE.md`
-- `rules/common/*.md` — 12 regras, incluindo o fluxo GitFlow e o deploy na Vercel
+- `rules/common/*.md` — 13 regras, incluindo o fluxo GitFlow, o deploy na Vercel
+  e a documentação viva
 
 O `README.md` que vinha em `rules/` foi movido para
 [docs/rules-guide.md](docs/rules-guide.md): todo `.md` em `rules/` sem
@@ -53,6 +54,11 @@ O que difere do toolkit original:
 - **`rules/common/deploy-vercel.md`** — três ambientes isolados (dev, preview,
   produção), nada de segredo em variável pública, proteção dos links de
   preview e limites do plano gratuito.
+- **`rules/common/documentacao-viva.md`** — todo projeto nasce com `docs/`
+  (visão geral, arquitetura, um arquivo por fluxo, ADRs, setup) e toda mudança
+  atualiza a doc no mesmo PR, ou justifica por que não. Cobrada pelo hook
+  `stop:docs-sync-check` (`scripts/hooks/docs-sync-check.js`), que pede a
+  atualização uma vez quando há código alterado sem doc, só em repos com `docs/`.
 - **`commands/setup-github.md`** — `/setup-github`, que executa meu roteiro de
   estruturação de repositório (`prompts/setup-roadmap-github.md`).
 - **Tabela de regras por linguagem no `CLAUDE.md`** — sem ela, as 110 regras de
