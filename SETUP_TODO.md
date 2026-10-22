@@ -117,10 +117,9 @@ Sugestão: ativar sob demanda, conforme o projeto — não todos de uma vez.
       `ECC_DISABLED_HOOKS=pre:bash:auto-tmux-dev`, para o agente conseguir ler o
       log do dev server.
 - [x] **Replicar em outras máquinas** — feito: repo `ikeda7/claude-code-config`.
-- [ ] **Headroom** (por máquina): o bootstrap instala o pacote se houver Python,
-      mas `headroom init -g claude` precisa ser rodado pelo usuário — ele grava
-      `ANTHROPIC_BASE_URL` no `settings.json` local e o agente não pode alterar
-      a própria config de API. Rodar num terminal novo:
-      `headroom init -g claude` e depois `headroom doctor`.
+- [x] **Headroom — decidido: NÃO ativar** (2026-10-22). O `init` aponta
+      `ANTHROPIC_BASE_URL` para o proxy, e isso desliga o `/remote-control`, que
+      o usuário usa. O bootstrap ainda instala o pacote se houver Python; isso é
+      inofensivo sem o `init`. Não rodar `headroom init -g claude`.
 - [ ] **`gh` CLI** (por máquina): se `gh auth status` disser "token invalid",
-      rodar `gh auth login` (interativo).
+      rodar `gh auth login` (interativo). PC principal: feito em 2026-10-22.
