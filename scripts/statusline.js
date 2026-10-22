@@ -24,9 +24,9 @@ const SEP = dim(' | ');
 function gitBranch(cwd) {
   try {
     const opts = { cwd, timeout: GIT_TIMEOUT_MS, stdio: ['ignore', 'pipe', 'ignore'], encoding: 'utf8' };
-    const branch = execFileSync('git', ['rev-parse', '--abbrev-ref', 'HEAD'], opts).trim();
+    const branch = execFileSync('git', ['--no-optional-locks', 'rev-parse', '--abbrev-ref', 'HEAD'], opts).trim();
     if (!branch) return null;
-    const dirty = execFileSync('git', ['status', '--porcelain', '-uno'], opts).trim().length > 0;
+    const dirty = execFileSync('git', ['--no-optional-locks', 'status', '--porcelain', '-uno'], opts).trim().length > 0;
     return branch + (dirty ? '*' : '');
   } catch {
     return null;

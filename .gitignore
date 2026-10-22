@@ -133,3 +133,6 @@ node_modules/
 /daemon.lock
 /daemon.status.json
 /jobs/
+/policy-limits.json*
+/remote-settings.json*
+/security/
