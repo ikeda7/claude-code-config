@@ -24,7 +24,7 @@ onde a config nasceu; nas outras, confira versões antes de presumir.
 | `agents/` | 68 | Subagents especializados (`.md` com frontmatter) |
 | `commands/` | 95 | Slash commands |
 | `skills/` | 284 | Skills em subdiretórios com `SKILL.md` |
-| `rules/` | 123 | Regras em 22 subdiretórios (`common/` + 21 linguagens) |
+| `rules/` | 124 | Regras em 22 subdiretórios (`common/` + 21 linguagens) |
 | `scripts/` | 264 | Utilitários Node.js, implementação dos hooks e sync |
 | `prompts/` | 1 | Roteiros reutilizáveis do usuário (ex.: `setup-roadmap-github.md`, usado por `/setup-github`) |
 | `contexts/` | 3 | Arquivos de contexto (referência manual, não carregam sozinhos) |
@@ -114,7 +114,7 @@ Mesclados em `~/.claude/settings.json` sob a chave `hooks`. Nenhuma configuraç�
 anterior foi sobrescrita — `permissions`, `model`, `effortLevel` e
 `enabledPlugins` seguem como estavam.
 
-Distribuição: `PreToolUse` 8 · `Stop` 7 · `SessionStart` 2 · `PostToolUse` 2 ·
+Distribuição: `PreToolUse` 8 · `Stop` 8 · `SessionStart` 2 · `PostToolUse` 2 ·
 `PostToolUseFailure` 2 · `PreCompact` 1 · `SessionEnd` 1.
 
 Os comandos dos hooks não usam caminho fixo: trazem um resolver JS inline que
@@ -155,6 +155,13 @@ contexto (amarelo ≥60, vermelho ≥80), custo e linhas +/−.
   abrindo uma janela cmd separada. Efeito colateral: o log do dev server fica
   nessa janela e não é legível pelo agente. **Desligado** via
   `ECC_DISABLED_HOOKS` (2026-10-22). Para religar, remova o id dessa env var.
+- **`docs-sync-check`** (`stop:docs-sync-check`, customização própria) — só em
+  repositório com `docs/` na raiz: se a resposta termina com código alterado e
+  nenhum doc (`docs/**` ou `*.md`) alterado, bloqueia o `Stop` **uma vez** com
+  `decision: "block"`, pedindo atualizar a doc ou justificar. Não repete para os
+  mesmos arquivos no mesmo `HEAD` (estado em `state/docs-sync-check.json`).
+  Implementa `rules/common/documentacao-viva.md`. Para desligar, acrescente
+  `stop:docs-sync-check` a `ECC_DISABLED_HOOKS` (lista separada por vírgula).
 
 ### Não é um problema nesta máquina
 
