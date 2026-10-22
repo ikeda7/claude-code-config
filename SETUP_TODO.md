@@ -110,13 +110,17 @@ Sugestão: ativar sob demanda, conforme o projeto — não todos de uma vez.
 
 ## Outras pendências
 
-- [ ] **Autorizar conectores claude.ai** (Gmail, Google Drive, Google Calendar,
-      Canva). Estão listados como precisando de autenticação. Isso é feito nas
-      configurações de conectores do claude.ai, não por arquivo local.
-- [ ] **Decidir sobre `auto-tmux-dev`.** Hoje ativo: reescreve `npm run dev`
-      para abrir uma janela cmd separada, o que esconde o log do agente. Ver
-      `CLAUDE.md` para como desligar.
-- [ ] **Replicar em outras máquinas.** Nada disso sincroniza pela conta. Se
-      quiser, dá para versionar `~/.claude/` num repositório privado e clonar
-      nas outras máquinas — me peça que eu monto o repo com `.gitignore`
-      excluindo `.credentials.json`, `history.jsonl`, `sessions/`, `projects/`.
+- [x] **Conectores claude.ai** — Gmail, Google Drive/Docs/Sheets/Slides e
+      Vercel já aparecem autorizados (2026-10-22). O conector Vercel do claude.ai
+      cobre o item 3 acima sem precisar do MCP local.
+- [x] **`auto-tmux-dev` desligado** (2026-10-22) via
+      `ECC_DISABLED_HOOKS=pre:bash:auto-tmux-dev`, para o agente conseguir ler o
+      log do dev server.
+- [x] **Replicar em outras máquinas** — feito: repo `ikeda7/claude-code-config`.
+- [ ] **Headroom** (por máquina): o bootstrap instala o pacote se houver Python,
+      mas `headroom init -g claude` precisa ser rodado pelo usuário — ele grava
+      `ANTHROPIC_BASE_URL` no `settings.json` local e o agente não pode alterar
+      a própria config de API. Rodar num terminal novo:
+      `headroom init -g claude` e depois `headroom doctor`.
+- [ ] **`gh` CLI** (por máquina): se `gh auth status` disser "token invalid",
+      rodar `gh auth login` (interativo).

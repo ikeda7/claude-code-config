@@ -29,6 +29,7 @@ const PORTABLE = [
   'enabledPlugins',
   'extraKnownMarketplaces',
   'autoUpdatesChannel',
+  'statusLine',
 ];
 
 /** Se algum destes casar no resultado, aborta sem escrever. */

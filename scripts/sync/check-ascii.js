@@ -18,9 +18,15 @@ const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..', '..');
 
+// Fora do git: codigo de terceiros (cache de plugins) e estado do runtime.
+// Sem isso, qualquer plugin com .ps1 em UTF-8 reprova o verificador.
+const SKIP_DIRS = new Set(['.git', 'node_modules']);
+const SKIP_ROOT_DIRS = new Set(['plugins', 'backups', 'projects', 'state']);
+
 function collect(dir, exts, acc = []) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-    if (entry.name === '.git' || entry.name === 'node_modules') continue;
+    if (SKIP_DIRS.has(entry.name)) continue;
+    if (dir === ROOT && SKIP_ROOT_DIRS.has(entry.name)) continue;
     const full = path.join(dir, entry.name);
     if (entry.isDirectory()) collect(full, exts, acc);
     else if (exts.some(e => entry.name.toLowerCase().endsWith(e))) acc.push(full);
