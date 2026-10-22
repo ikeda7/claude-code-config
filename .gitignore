@@ -127,3 +127,9 @@ node_modules/
 
 # Resultado do auto-update do Claude Code (por maquina)
 /.last-update-result.json
+
+# Daemon/supervisor do Claude Code (por maquina; contem chaves locais)
+/daemon/
+/daemon.lock
+/daemon.status.json
+/jobs/
