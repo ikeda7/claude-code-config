@@ -128,10 +128,16 @@ literal a substituir.
 |---|---|---|
 | `ECC_HOOK_PROFILE` | `standard` | Perfil padrão. Ativa format/typecheck no `Stop`, check de `console.log`, tracking de custo e sessão |
 | `ECC_GATEGUARD` | `off` | **Desliga o GateGuard** (ver abaixo) |
+| `ECC_DISABLED_HOOKS` | `pre:bash:auto-tmux-dev` | Desliga o `auto-tmux-dev` (ver abaixo) |
 
-Outros controles disponíveis, não usados no momento:
-`ECC_HOOKS_ENABLED=false` (mata todos os hooks) e
-`ECC_DISABLED_HOOKS=id1,id2` (desliga hooks específicos por id).
+Outro controle disponível, não usado no momento:
+`ECC_HOOKS_ENABLED=false` (mata todos os hooks).
+
+### Status line
+
+`statusLine` (versionado em `settings.shared.json`) roda
+`scripts/statusline.js`: pasta, branch git (`*` = alterações), modelo, % de
+contexto (amarelo ≥60, vermelho ≥80), custo e linhas +/−.
 
 ### Comportamentos que alteram ou bloqueiam ações
 
@@ -147,8 +153,8 @@ Outros controles disponíveis, não usados no momento:
 - **`auto-tmux-dev`** — não bloqueia, mas **reescreve** comandos de dev server.
   No Windows, `npm run dev` vira `start "DevServer-<pasta>" cmd /k "npm run dev"`,
   abrindo uma janela cmd separada. Efeito colateral: o log do dev server fica
-  nessa janela e não é legível pelo agente. Para desligar, acrescente
-  `pre:bash:auto-tmux-dev` a `ECC_DISABLED_HOOKS`.
+  nessa janela e não é legível pelo agente. **Desligado** via
+  `ECC_DISABLED_HOOKS` (2026-10-22). Para religar, remova o id dessa env var.
 
 ### Não é um problema nesta máquina
 

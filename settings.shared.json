@@ -243,7 +243,8 @@
   },
   "env": {
     "ECC_GATEGUARD": "off",
-    "ECC_HOOK_PROFILE": "standard"
+    "ECC_HOOK_PROFILE": "standard",
+    "ECC_DISABLED_HOOKS": "pre:bash:auto-tmux-dev"
   },
   "model": "opus[1m]",
   "effortLevel": "high",
@@ -295,5 +296,10 @@
       }
     }
   },
-  "autoUpdatesChannel": "latest"
+  "autoUpdatesChannel": "latest",
+  "statusLine": {
+    "type": "command",
+    "command": "node -e \"require(require('os').homedir()+'/.claude/scripts/statusline.js')\"",
+    "padding": 0
+  }
 }
