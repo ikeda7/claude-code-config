@@ -139,3 +139,7 @@ node_modules/
 
 # conteudo colado nas sessoes (runtime, pode ter dado sensivel)
 paste-cache/
+
+# runtime: cache do gh e backups automaticos de settings (tem permissoes locais)
+gh-pr-status-cache.json
+*.bak
