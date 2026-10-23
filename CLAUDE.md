@@ -137,7 +137,10 @@ Outro controle disponível, não usado no momento:
 
 `statusLine` (versionado em `settings.shared.json`) roda
 `scripts/statusline.js`: pasta, branch git (`*` = alterações), modelo, % de
-contexto (amarelo ≥60, vermelho ≥80), custo e linhas +/−.
+contexto (amarelo ≥60, vermelho ≥80), uso da assinatura (`5h 23% 14:30`,
+`sem 41% sex 09:00`: % consumido e quando reseta, mesmas cores), custo e
+linhas +/−. O uso vem de `rate_limits` no JSON do Claude Code, que só existe
+em conta Pro/Max e só chega depois da 1ª resposta da sessão.
 
 ### Comportamentos que alteram ou bloqueiam ações
 
@@ -191,7 +194,11 @@ servers). Nada ali é lido automaticamente.
 Via `settings.json` → `enabledPlugins`:
 
 - `context-mode@context-mode` (marketplace `mksglu/context-mode`) — já existia,
-  preservado.
+  preservado. Depende do módulo nativo `better-sqlite3`: **depois de trocar a
+  versão do Node**, rode `npm rebuild better-sqlite3` na pasta do plugin em
+  `plugins/cache/context-mode/` e reinicie o Claude Code. Sem isso,
+  `ctx_fetch_and_index` falha com `NODE_MODULE_VERSION` e o hook dele continua
+  bloqueando o WebFetch.
 - Marketplace oficial `claude-plugins-official` (`anthropics/claude-plugins-official`):
   `claude-code-setup`, `claude-md-management`, `hookify`, `security-guidance`,
   `jdtls-lsp`, `typescript-lsp`, `commit-commands`, `pr-review-toolkit`,

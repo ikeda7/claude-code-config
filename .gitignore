@@ -136,3 +136,6 @@ node_modules/
 /policy-limits.json*
 /remote-settings.json*
 /security/
+
+# conteudo colado nas sessoes (runtime, pode ter dado sensivel)
+paste-cache/

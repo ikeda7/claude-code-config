@@ -3,7 +3,7 @@
 /**
  * Status line do Claude Code.
  *
- *   pasta  branch*  modelo  ctx 42%  $0.31  +120 -8
+ *   pasta  branch*  modelo  ctx 42%  5h 23% 14:30  sem 41% sex 09:00  $0.31  +120 -8
  *
  * Recebe o JSON da sessao no stdin. Todo campo e opcional: versoes do Claude
  * Code que nao mandam um campo simplesmente omitem aquele segmento.
@@ -16,6 +16,7 @@ const { execFileSync } = require('child_process');
 const GIT_TIMEOUT_MS = 800;
 const CTX_WARN_PCT = 60;
 const CTX_CRIT_PCT = 80;
+const WEEKDAYS = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sab'];
 
 const c = (code, s) => `\x1b[${code}m${s}\x1b[0m`;
 const dim = s => c('2', s);
@@ -46,6 +47,37 @@ function contextPct(data) {
   return Math.round((used / cw.context_window_size) * 100);
 }
 
+function pctColor(pct) {
+  return pct >= CTX_CRIT_PCT ? '31' : pct >= CTX_WARN_PCT ? '33' : '32';
+}
+
+// resets_at vem em epoch segundos; a janela de 5h mostra a hora, a semanal o dia.
+function resetLabel(resetsAt, withDay) {
+  if (typeof resetsAt !== 'number') return '';
+  const d = new Date(resetsAt * 1000);
+  const hhmm = `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+  return withDay ? ` ${WEEKDAYS[d.getDay()]} ${hhmm}` : ` ${hhmm}`;
+}
+
+/**
+ * Uso da assinatura (Pro/Max): "5h 23% 14:30 | sem 41% sex 09:00".
+ * rate_limits so chega depois da primeira resposta da API na sessao.
+ */
+function rateLimitParts(rl) {
+  if (!rl) return null;
+  const windows = [
+    ['5h', rl.five_hour, false],
+    ['sem', rl.seven_day, true],
+  ];
+  const out = windows
+    .filter(([, w]) => w && typeof w.used_percentage === 'number')
+    .map(([label, w, withDay]) => {
+      const pct = Math.round(w.used_percentage);
+      return c(pctColor(pct), `${label} ${pct}%`) + dim(resetLabel(w.resets_at, withDay));
+    });
+  return out.length ? out.join(SEP) : null;
+}
+
 function render(data) {
   const cwd = (data.workspace && data.workspace.current_dir) || data.cwd || process.cwd();
   const parts = [c('1;36', path.basename(cwd) || cwd)];
@@ -56,10 +88,10 @@ function render(data) {
   if (data.model && data.model.display_name) parts.push(c('35', data.model.display_name));
 
   const pct = contextPct(data);
-  if (pct != null) {
-    const color = pct >= CTX_CRIT_PCT ? '31' : pct >= CTX_WARN_PCT ? '33' : '32';
-    parts.push(c(color, `ctx ${pct}%`));
-  }
+  if (pct != null) parts.push(c(pctColor(pct), `ctx ${pct}%`));
+
+  const limits = rateLimitParts(data.rate_limits);
+  if (limits) parts.push(limits);
 
   const cost = data.cost || {};
   if (typeof cost.total_cost_usd === 'number') parts.push(dim(`$${cost.total_cost_usd.toFixed(2)}`));
