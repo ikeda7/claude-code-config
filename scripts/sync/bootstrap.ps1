@@ -102,6 +102,12 @@ if (Get-Command playwright-cli -ErrorAction SilentlyContinue) {
 }
 Write-Output ""
 
+# ---- conferencia ----------------------------------------------------------
+# So le: lista o que ainda falta nesta maquina, com o comando que resolve.
+Write-Output "Conferencia da maquina (check-machine.js)"
+& node (Join-Path $SyncDir 'check-machine.js')
+Write-Output ""
+
 # ---- pendencias ------------------------------------------------------------
 Write-Output "=============================================="
 Write-Output " Pronto. Pendente nesta maquina:"

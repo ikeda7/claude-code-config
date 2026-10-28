@@ -54,9 +54,15 @@ está instalado e o que o Claude Code oferece nativamente.
   `orch-refine-code`; commands `orch-*`, `prp-plan`, `prp-implement`, `prp-pr`,
   `feature-dev`. A skill `continuous-learning` (v1) ficou porque o hook
   `evaluate-session.js` lê o `config.json` dela.
-- Pendente: `plan` e `code-review` do ECC têm o mesmo nome de comandos
-  nativos. Conferir com `/help` qual abre em cada máquina (o catálogo orienta a
-  usar `Shift+Tab` e `/review` para os nativos).
+- `plan` e `code-review` do ECC têm o nome de comandos nativos. A doc oficial
+  (skills, "Resolve skills that share a name") diz que o do usuário substitui o
+  nativo mas não os aliases: `/plan` e `/code-review` abrem os do ECC, o modo
+  plano nativo fica no `Shift+Tab` e a revisão nativa em `/review`. Mantidos
+  assim porque o `/plan` do ECC alimenta o `plan-canvas` e o `/plan-prd`.
+- `scripts/sync/check-machine.js` (só leitura) substituiu o checklist manual do
+  `SETUP_TODO.md`: confere repo, settings, plugins, MCP, ferramentas e fluxo, e
+  mostra o comando que resolve cada falta. O `bootstrap.ps1` roda no fim.
+- `docs/manual.md`: manual de uso, o que é automático e o que se aciona.
 
 ## Hooks ativos
 
@@ -159,7 +165,8 @@ Via `settings.json` → `enabledPlugins`:
   (`planner`, `tdd-guide`, `code-reviewer`); se o `/context` pesar, desligue-o
   primeiro. `claude-security` roda varredura de vulnerabilidades com
   `/claude-security`; seus hooks chamam `sh` (Git Bash) e os helpers são Python,
-  então precisa de `python` no PATH.
+  então precisa de `python3` 3.9+ no PATH (é o nome que ele chama; no Windows,
+  o alias da Microsoft Store não serve). O `check-machine.js` confere.
   `session-report` e `plugin-dev` ficam declarados como `false` (desligados em
   2026-10-28 para economizar contexto); para usar, troque para `true`.
 

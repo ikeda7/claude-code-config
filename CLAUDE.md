@@ -40,6 +40,7 @@ testes. Os "comandos" são os scripts de sincronização em `scripts/sync/`:
 |---|---|
 | `node scripts\sync\make-shared.js` | Depois de mudar hooks, env, model ou plugins em `settings.json`. Regenera `settings.shared.json` e aborta se detectar segredo |
 | `node scripts\sync\check-fluxo.js` | Depois de adicionar, remover ou renomear skill, agent ou command. Falha (exit 1) se algum não estiver em `skills/fluxo/catalogo.md` |
+| `node scripts\sync\check-machine.js` | Só lê. Confere se esta máquina está completa (repo, settings, plugins, MCP, ferramentas, fluxo) e mostra o comando que resolve cada falta. O `bootstrap.ps1` roda no fim |
 | `node scripts\sync\check-ascii.js` | Antes de commitar qualquer mudança em `.ps1`, `.js`, `.mjs` ou `.json`. Falha (exit 1) se achar BOM ou byte não-ASCII em `.ps1` — é o verificador mais próximo de um "teste" que este repo tem |
 | `powershell -ExecutionPolicy Bypass -File scripts\sync\apply-shared.ps1` | Aplica `settings.shared.json` no `settings.json` local, preservando `permissions` |
 | `node scripts\sync\apply-mcp.js [--force]` | Injeta os MCP servers portáteis (`scripts\sync\mcp-shared.json`) em `~/.claude.json`, preservando `oauthAccount` |
@@ -63,6 +64,9 @@ usar em cada fase e stack, e `skills/fluxo/catalogo.md` cobre tudo que está
 instalado (skills, agents, commands, plugins, MCP e recursos nativos).
 `/fluxo <pedido>` roda o pipeline completo; `/fluxo init` prepara um projeto.
 Só tarefa grande para para aprovação do plano.
+
+Manual de uso (o que é automático, o que acionar e como, atalhos, problemas
+comuns): [docs/manual.md](docs/manual.md).
 
 ### Regras por linguagem (`rules/<lang>/`)
 

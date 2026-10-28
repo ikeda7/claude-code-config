@@ -8,18 +8,12 @@ Tudo que precisa rodar **em cada máquina** depois do `git pull` de 2026-10-28
 | # | Passo | PC principal | Máquina 2 | Máquina 3 |
 |---|---|---|---|---|
 | 1 | `cd ~\.claude` e `git pull` | [ ] | [ ] | [ ] |
-| 2 | `powershell -ExecutionPolicy Bypass -File .\scripts\sync\bootstrap.ps1` | [ ] | [ ] | [ ] |
-| 3 | Reiniciar o Claude Code e conferir `/context` numa sessão nova | [ ] | [ ] | [ ] |
-| 4 | `playwright-cli --version` responde | [ ] | [ ] | [ ] |
-| 5 | `gh auth status` ok (senão `gh auth login`) | [x] 2026-10-22 | [ ] | [ ] |
-| 6 | Opcional: `pip uninstall headroom-ai`, se foi instalado | [ ] | [ ] | [ ] |
+| 2 | `powershell -ExecutionPolicy Bypass -File .\scripts\sync\bootstrap.ps1`. No fim ele roda o `check-machine.js` | [ ] | [ ] | [ ] |
+| 3 | Rodar `node .\scripts\sync\check-machine.js` até não sobrar `FALTA`. Cada linha que falta já mostra o comando que resolve (settings, plugins, MCP, `gh`, `playwright-cli`, `python3`, `sh`, fluxo) | [ ] | [ ] | [ ] |
+| 4 | Reiniciar o Claude Code e, numa sessão nova, conferir `/context`. Se pesar demais, desligar `superpowers` (`false` no `settings.json`, depois `make-shared.js`); o fluxo usa 6 skills dele e o `skills/fluxo/catalogo.md` indica as alternativas | [ ] | [ ] | [ ] |
+| 5 | Opcional: `pip uninstall headroom-ai`, se foi instalado | [ ] | [ ] | [ ] |
+| 6 | Opcional, para usar o `omniroute`: `npm i -g omniroute` e deixar `omniroute` rodando | [ ] | [ ] | [ ] |
 | 7 | 1º uso num projeto web: `inspect.mjs` da `design-taste-frontend` acha o Edge/Chrome | [ ] | [ ] | [ ] |
-| 8 | `python --version` e `sh --version` respondem no PowerShell (hooks e helpers do `claude-security`; `sh` vem do Git Bash) | [ ] | [ ] | [ ] |
-| 9 | Numa sessão nova, `/plugin` (ou `claude.exe plugin list`) mostra `superpowers`, `claude-security` e `omniroute` instalados | [ ] | [ ] | [ ] |
-| 10 | Opcional, para usar o `omniroute`: `npm i -g omniroute` e deixar `omniroute` rodando; `/mcp` deve mostrar o server conectado (sem isso ele só aparece como falha) | [ ] | [ ] | [ ] |
-| 11 | Se o `/context` do passo 3 pesar demais, desligar `superpowers` (`false` no `settings.json`, depois `make-shared.js`). O fluxo usa 6 skills dele; sem ele, siga as alternativas do `skills/fluxo/catalogo.md` | [ ] | [ ] | [ ] |
-| 12 | Numa sessão nova, `/fluxo` aparece no menu `/` | [ ] | [ ] | [ ] |
-| 13 | `/help`: ver se `/plan` e `/code-review` abrem o nativo ou o do ECC; anotar em `docs/config-detalhes.md` (seção Fluxo padrão) | [ ] | [ ] | [ ] |
 
 Por que o passo 2 vem **antes** de qualquer `make-shared.js`: o bootstrap roda
 o `apply-shared.ps1`, que leva para o `settings.json` local o que mudou no
@@ -31,7 +25,8 @@ compartilhado (Headroom removido de `enabledPlugins`; `model: opus` em vez de
 isso no `settings.shared.json`.
 
 Os scripts da `design-taste-frontend` só tiveram a sintaxe checada na
-instalação; o passo 7 é o primeiro teste real.
+instalação; o passo 7 é o primeiro teste real. Ele é o único que não dá para
+automatizar, porque depende de um projeto web aberto.
 
 ---
 
