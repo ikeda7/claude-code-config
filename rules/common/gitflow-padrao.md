@@ -56,4 +56,4 @@ escolha consciente.
 ## Relacionado
 
 - [git-workflow.md](git-workflow.md) — formato de mensagem de commit e fluxo de PR
-- [development-workflow.md](development-workflow.md) — processo antes do commit
+- [fluxo-padrao.md](fluxo-padrao.md) — fases antes do commit

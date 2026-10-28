@@ -79,6 +79,6 @@ Cite caminhos e nomes, não números de linha: linha muda a cada edição.
 
 ## Relacionado
 
-- [development-workflow.md](development-workflow.md): a etapa de documentação
-  entra antes do commit
+- [fluxo-padrao.md](fluxo-padrao.md): a documentação é a fase 7, antes da
+  entrega
 - [gitflow-padrao.md](gitflow-padrao.md): doc e código no mesmo PR

@@ -20,5 +20,5 @@ When creating PRs:
 4. Include test plan with TODOs
 5. Push with `-u` flag if new branch
 
-> For the full development process (planning, TDD, code review) before git operations,
-> see [development-workflow.md](./development-workflow.md).
+> Para o processo completo antes do git (planejar, TDD, revisar), veja
+> [fluxo-padrao.md](./fluxo-padrao.md) e a skill `fluxo`.
