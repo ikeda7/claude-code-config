@@ -164,3 +164,11 @@ ou `/model opus[1m]` só quando a tarefa pedir. `/clear` ao trocar de tarefa,
   merge que o repo já usa (merge commit, se o histórico mostrar
   `Merge pull request #N`). Se faltar alguma dessas condições, resolva primeiro;
   só pare e avise quando o bloqueio não for seu de resolver.
+- **Usar as skills e plugins instalados** (confirmado em 2026-10-28): antes de
+  começar uma tarefa, veja se alguma skill, command ou plugin instalado cobre
+  aquilo e use-o em vez de improvisar. Exemplos: skills de `superpowers` para
+  brainstorming, debug sistemático e TDD; `/claude-security` (scan das
+  mudanças) antes de PR que toque autenticação, entrada de usuário ou banco;
+  `pr-review-toolkit` ou o reviewer da stack antes de mergear; as skills da
+  tabela de stacks acima. Isso não libera delegação extra: subagents seguem
+  `rules/common/agents.md`.
