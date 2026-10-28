@@ -64,6 +64,26 @@ está instalado e o que o Claude Code oferece nativamente.
   mostra o comando que resolve cada falta. O `bootstrap.ps1` roda no fim.
 - `docs/manual.md`: manual de uso, o que é automático e o que se aciona.
 
+## Sessões na nuvem (2026-10-28)
+
+Na nuvem (claude.ai/code) o `~/.claude` da VM começa vazio: a doc oficial
+lista `~/.claude/CLAUDE.md`, skills, agents, commands, plugins e MCP de usuário
+como "não disponíveis", porque ficam no PC. O caminho oficial é um setup script
+que escreve em `~/.claude` na VM; o `scripts/sync/cloud-setup.sh` faz isso com
+a config inteira. Verificado numa VM de nuvem: o `~/.claude` já tem `skills/`
+do próprio ambiente e não tem `settings.json`, então o script só acrescenta
+(não apaga) e cria o `settings.json`. Testado com home falsa: copia tudo,
+mescla `hooks`, `env`, `enabledPlugins` e `extraKnownMarketplaces`, aplica o
+MCP sem `filesystem`, e o hook `block-no-verify` rodando da cópia bloqueou um
+`git commit --no-verify`. `model`, `effortLevel`, `statusLine` e
+`autoUpdatesChannel` ficam de fora (o modelo da nuvem é escolhido na
+interface). Plugins: `apply-plugins.js` com `timeout 200`, porque o cache do
+ambiente só é gravado se o setup terminar em ~5 min. O repo é privado: precisa
+estar em Repositories do ambiente para o clone no setup funcionar. Não testado
+ainda: o setup script real num ambiente novo e a instalação dos plugins na VM.
+`check-machine.js` reconhece a nuvem (`CLAUDE_CODE_REMOTE=true`) e compara só
+o que o `cloud-setup.sh` instala.
+
 ## Hooks ativos
 
 Mesclados em `~/.claude/settings.json` sob a chave `hooks`. Nenhuma configuração

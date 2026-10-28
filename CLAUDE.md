@@ -45,6 +45,7 @@ testes. Os "comandos" são os scripts de sincronização em `scripts/sync/`:
 | `powershell -ExecutionPolicy Bypass -File scripts\sync\apply-shared.ps1` | Aplica `settings.shared.json` no `settings.json` local, preservando `permissions` |
 | `node scripts\sync\apply-mcp.js [--force]` | Injeta os MCP servers portáteis (`scripts\sync\mcp-shared.json`) em `~/.claude.json`, preservando `oauthAccount` |
 | `node scripts\sync\apply-plugins.js [--dry-run]` | Registra os marketplaces e instala os plugins de `settings.shared.json` via CLI do Claude Code (PATH ou binário da extensão do VS Code). Idempotente |
+| `bash scripts/sync/cloud-setup.sh [--no-plugins]` | Na nuvem: instala esta config no `~/.claude` da VM. Vai no setup script do ambiente (texto em `docs/manual.md`, seção 9.1) |
 | `powershell -ExecutionPolicy Bypass -File scripts\sync\bootstrap.ps1` | Orquestra os três acima e instala o `playwright-cli` global (não instala nem configura o Headroom); usar em máquina nova, após o clone, e após `git pull` que mude plugins/settings |
 
 Fluxo padrão antes de commitar mudança de config:

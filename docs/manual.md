@@ -311,7 +311,8 @@ citar marca, + `image-to-code` se houver imagem); com o servidor de pé,
 
 ## 9. Várias máquinas
 
-Este repo fica clonado **direto em `~/.claude`** nas 3 máquinas.
+Este repo fica clonado **direto em `~/.claude`** nas 3 máquinas. Na nuvem, ver
+[9.1](#91-sessões-na-nuvem-claudeaicode-app-desktop-ou-celular).
 
 | Situação | Faça |
 |---|---|
@@ -324,6 +325,46 @@ O `check-machine.js` só lê. Ele confere o repo atualizado, o `settings.json`
 igual ao compartilhado, os plugins e os MCP instalados, o fluxo completo e as
 ferramentas (`gh`, `playwright-cli`, `python3`, `sh`). Para cada falta, mostra o
 comando que resolve.
+
+### 9.1 Sessões na nuvem (claude.ai/code, app desktop ou celular)
+
+Na nuvem o `~/.claude` começa vazio: nada do seu PC vai junto. Para a nuvem
+agir igual, o **setup script** do ambiente instala esta config na VM. Feito uma
+vez, vale para toda sessão nesse ambiente, em qualquer repositório.
+
+1. Em claude.ai/code, no seletor de ambiente abaixo da caixa de mensagem, crie
+   um ambiente **seu** (o "Default" não aceita repositório extra) ou edite um
+   que já seja seu.
+2. Em **Repositories**, adicione `ikeda7/claude-code-config`. Ele é privado, e
+   sem isso o setup script não consegue cloná-lo.
+3. Deixe **Network access** em **Trusted** (precisa de GitHub e npm).
+4. Em **Setup script**, cole:
+
+   ```bash
+   #!/bin/bash
+   # claude-code-config: troque a data para forcar reinstalacao
+   # versao 2026-10-28
+   git clone --depth 1 https://github.com/ikeda7/claude-code-config /opt/claude-code-config \
+     && bash /opt/claude-code-config/scripts/sync/cloud-setup.sh
+   exit 0
+   ```
+
+5. Comece uma sessão nova nesse ambiente e rode `/context`:
+   `/root/.claude/CLAUDE.md` deve aparecer em Memory files, e `/fluxo` no menu
+   `/`. `node ~/.claude/scripts/sync/check-machine.js` confere o resto.
+
+O que vai para a nuvem: `CLAUDE.md`, regras, skills, agents, commands, hooks,
+variáveis `ECC_*`, MCP (`memory`, `sequential-thinking`, `context7`) e os
+plugins (instalação com limite de tempo; um plugin que falhar fica de fora sem
+travar a sessão). O que fica de fora de propósito: `model` e `effortLevel` (na
+nuvem você escolhe na interface), status line, MCP `filesystem` (aponta para
+pastas do PC) e os scripts `.ps1`.
+
+**Atualizações.** O ambiente guarda um snapshot depois do primeiro setup e só
+roda o script de novo quando ele muda ou a cada ~7 dias. Depois de mudar a
+config no repo, troque a data na linha `versao` do setup script para a nuvem
+pegar na próxima sessão. Numa sessão já aberta, peça "rode o cloud-setup de
+novo" (`git -C /opt/claude-code-config pull` e o script).
 
 ---
 
