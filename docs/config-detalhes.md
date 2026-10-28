@@ -44,7 +44,9 @@ está instalado e o que o Claude Code oferece nativamente.
 - `skills/fluxo/catalogo.md`: inventário de skills, agents, commands, plugins,
   MCP e recursos nativos, com fase e quando usar; duplicatas têm uma escolha
   principal. `scripts/sync/check-fluxo.js` falha se algo de `skills/`,
-  `agents/` ou `commands/` não estiver nele.
+  `agents/` ou `commands/` não estiver nele. Ignora `skills/synced/` e
+  `skills/learned/`, que o próprio Claude Code cria (sync do claude.ai e
+  aprendizado contínuo) e variam por máquina.
 - Decisões: espinha dorsal própria (não o fluxo completo do `superpowers`; dele
   entram brainstorming, debug sistemático, verificação antes de concluir,
   recepção de revisão, worktrees e fechamento de branch); aprovação do usuário

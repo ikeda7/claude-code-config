@@ -19,11 +19,16 @@ const path = require('path');
 const ROOT = path.resolve(__dirname, '..', '..');
 const CATALOG = path.join(ROOT, 'skills', 'fluxo', 'catalogo.md');
 
+// Pastas que o proprio Claude Code cria em skills/ (nao vem do repo):
+// synced = skills sincronizadas do claude.ai; learned = saida do aprendizado
+// continuo. Sao conteineres, nao skills, e mudam por maquina.
+const RUNTIME_SKILL_DIRS = new Set(['synced', 'learned']);
+
 function names(dir, kind) {
   const full = path.join(ROOT, dir);
   if (!fs.existsSync(full)) return [];
   return fs.readdirSync(full, { withFileTypes: true })
-    .filter(e => (kind === 'dir' ? e.isDirectory() : e.isFile() && e.name.endsWith('.md')))
+    .filter(e => (kind === 'dir' ? e.isDirectory() && !RUNTIME_SKILL_DIRS.has(e.name) : e.isFile() && e.name.endsWith('.md')))
     .map(e => (kind === 'dir' ? e.name : e.name.slice(0, -3)));
 }
 
