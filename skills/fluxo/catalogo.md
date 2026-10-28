@@ -175,7 +175,7 @@ nativo, mas não os aliases dele**. Então:
 | `context7` | 1, 4 | Docs atualizadas de bibliotecas |
 | `sequential-thinking` | 2 | Raciocínio passo a passo em problema difícil |
 | `memory` | F | Grafo de memória; o histórico fica com `claude-mem` e as regras no `CLAUDE.md` |
-| `filesystem` | T | Acesso a `Desktop` e `TCC` fora do projeto |
+| `filesystem` | T | Acesso a pastas do PC fora do projeto (Desktop, Google Drive) |
 | GitHub (conector) | 8 | PRs, issues, CI quando o `gh` não está disponível |
 
 ## Recursos nativos do Claude Code

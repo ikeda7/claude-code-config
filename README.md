@@ -232,7 +232,11 @@ Rode `check-ascii.js` antes de commitar mudança em script.
 
 ## Segurança
 
-Este repositório é **privado**, mas foi montado para não vazar nada mesmo assim.
+Este repositório é **público** desde 2026-10-28, para o setup script das
+sessões na nuvem conseguir cloná-lo (ver `docs/manual.md`, seção 9.1). Antes de
+abrir, o estado atual e o histórico inteiro foram revisados: nenhuma chave,
+token, senha, `settings.json` ou `.claude.json` jamais foi commitado. Nunca
+versione nada disso; o `.gitignore` e o `make-shared.js` existem para isso.
 
 **`settings.json` não é versionado.** O `permissions.allow` acumula aprovações
 pontuais de cada máquina: caminhos absolutos, UUIDs de sessão temporários,

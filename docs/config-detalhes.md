@@ -78,8 +78,20 @@ MCP sem `filesystem`, e o hook `block-no-verify` rodando da cópia bloqueou um
 `git commit --no-verify`. `model`, `effortLevel`, `statusLine` e
 `autoUpdatesChannel` ficam de fora (o modelo da nuvem é escolhido na
 interface). Plugins: `apply-plugins.js` com `timeout 200`, porque o cache do
-ambiente só é gravado se o setup terminar em ~5 min. O repo é privado: precisa
-estar em Repositories do ambiente para o clone no setup funcionar. Não testado
+ambiente só é gravado se o setup terminar em ~5 min. O ambiente de nuvem
+pessoal não tem campo Repositories (verificado na tela em 2026-10-28), então o
+setup script só consegue clonar repo público: por isso o repo passou a ser
+público. Testado numa sessão: um repo público não anexado clona sem erro.
+Revisão antes de abrir (estado atual, inclusive `archive/`, e
+todo o histórico do git): nenhuma chave ou token (padrões de GitHub, Anthropic,
+OpenAI, AWS, Google, Slack, Supabase, Vercel, JWT, chave privada); nenhum
+`settings.json`, `.claude.json`, credencial, sessão ou métrica jamais
+commitado; `settings.shared.json` nunca teve `permissions` em nenhuma versão;
+e-mails, IPs e hosts encontrados são exemplos de documentação. Dado pessoal:
+o primeiro nome e uma pasta do Google Drive em caminhos de docs (trocados por
+`~` no estado atual; continuam em commits antigos) e o gmail como autor de 5
+commits. Reescrever o histórico para tirar isso exigiria force push e foi
+deixado de lado. Não testado
 ainda: o setup script real num ambiente novo e a instalação dos plugins na VM.
 `check-machine.js` reconhece a nuvem (`CLAUDE_CODE_REMOTE=true`) e compara só
 o que o `cloud-setup.sh` instala.
@@ -95,7 +107,7 @@ Distribuição: `PreToolUse` 8 · `Stop` 8 · `SessionStart` 2 · `PostToolUse` 
 
 Os comandos dos hooks não usam caminho fixo: trazem um resolver JS inline que
 localiza a raiz via `scripts/lib/resolve-ecc-root.js`. Verificado que ele
-resolve para `C:\Users\Lucas\.claude`. Por isso **não há** `${CLAUDE_PLUGIN_ROOT}`
+resolve para `~\.claude` (`%USERPROFILE%\.claude`). Por isso **não há** `${CLAUDE_PLUGIN_ROOT}`
 literal a substituir.
 
 ### Variáveis de controle (em `settings.json` → `env`)
@@ -159,7 +171,7 @@ Ativos em `~/.claude.json` → `mcpServers` (nível raiz = escopo global):
 | `memory` | não |
 | `sequential-thinking` | não |
 | `context7` | não |
-| `filesystem` | não — escopo: `C:\Users\Lucas\Desktop` e `G:\Meu Drive\TCC` |
+| `filesystem` | não — escopo: `~\Desktop` e uma pasta do Google Drive (`G:\Meu Drive\...`) |
 
 Pendências com credencial estão em `~/.claude/SETUP_TODO.md`.
 
