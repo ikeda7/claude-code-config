@@ -115,8 +115,8 @@ Copiadas para `skills/` (não são plugin; atualizar = copiar de novo do upstrea
 | Skill | Origem | Para quê |
 |---|---|---|
 | `design-taste-frontend` | `Leonxlnx/taste-skill` v2.1.5 (MIT) | Direção de arte anti-"cara de IA": sorteia direções, tipografia e paleta de uma biblioteca, e inspeciona a página num navegador real (`scripts/inspect.mjs`). Precisa de Node 22+ e Chrome/Edge/Chromium |
-| `image-to-code` | `Leonxlnx/imagegen-skills` (MIT) | Gera a imagem do design **antes** de codar e implementa a partir dela. Claude Code não gera imagem sozinho: sem uma ferramenta de imagem, use com uma imagem/print de referência dada pelo usuário |
-| `awesome-design` | `VoltAgent/awesome-design-md` (MIT) | 84 `DESIGN.md` inspirados em marcas reais (Stripe, Linear, Vercel, Notion...). Wrapper próprio com índice; os arquivos ficam em `skills/awesome-design/designs/` |
+| `image-to-code` | `Leonxlnx/imagegen-skills` (MIT) | Implementa fielmente a partir de uma imagem de design (mockup, print, export do Figma). Escrita para o Codex, que gera imagem; ganhou um bloco local de adaptação: no Claude Code usa a imagem dada pelo usuário, ou uma ferramenta de imagem se houver, ou cai para `design-taste-frontend` |
+| `awesome-design` | `VoltAgent/awesome-design-md` + `bergside/awesome-design-skills` (MIT) | 84 `DESIGN.md` inspirados em marcas reais (Stripe, Linear, Vercel, Notion...) em `designs/`, e 67 estilos genéricos (minimal, brutalism, glassmorphism, shadcn...) em `styles/`. Wrapper próprio com índice; os estilos do bergside entram como arquivos, não como 67 skills |
 | `web-design-guidelines` | `vercel-labs/agent-skills` (MIT) | Revisão de UI contra as Web Interface Guidelines da Vercel (a11y, foco, forms, motion, tipografia). Busca as regras ao vivo; se o WebFetch falhar, usa `guidelines-snapshot.md` |
 | `playwright-cli` | `microsoft/playwright-cli` (Apache-2.0) | Abrir, clicar, preencher e tirar screenshot/snapshot do app rodando. Precisa do binário: `npm install -g @playwright/cli@latest` (o bootstrap instala) |
 

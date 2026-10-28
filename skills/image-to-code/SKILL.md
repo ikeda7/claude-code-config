@@ -1,7 +1,25 @@
 ---
 name: image-to-code
-description: Elite website image-to-code skill for Codex. For visually important web tasks, it must first generate the design image(s) itself, deeply analyze them, then implement the website to match them as closely as possible. In Codex, it must prefer large, readable, section-specific images instead of tiny compressed boards, generate fresh standalone images for sections or detail views instead of cropping old ones, avoid lazy under-generation, avoid cards-inside-cards-inside-cards UI, and keep the hero clean, spacious, readable, and visible on a small laptop.
+description: Image-first website design to code. Turns a design image (a mockup, screenshot, Figma export or a generated image) into a faithful frontend implementation, section by section. Use when the user gives a reference image or screenshot of a site to build or replicate, or when an image-generation tool is available and the task is a visually important web page (landing page, hero, marketing site, portfolio). Prefers large, readable, section-specific images, avoids cards-inside-cards UI, and keeps the hero clean, spacious and visible on a small laptop.
 ---
+
+> **Adaptation for Claude Code (local, not upstream).** This skill was written
+> for Codex, which can generate images. Wherever it says "Codex", read "the
+> agent". Claude Code has no built-in image generation, so pick the source of
+> truth in this order:
+>
+> 1. **Image(s) the user provided** (mockup, screenshot, Figma export, a site
+>    to replicate): skip the generation steps and start at the deep analysis.
+>    Read every image with the Read tool before coding.
+> 2. **An image-generation tool exists in this session** (an MCP server or
+>    CLI): follow the image-first workflow below as written.
+> 3. **Neither:** do not fake the generation step. Say so in one line and use
+>    the `design-taste-frontend` skill instead, which reaches a designed result
+>    without an image.
+>
+> After implementing, use `playwright-cli` to screenshot the result at the
+> same width as the reference and compare side by side, then fix the gaps.
+
 
 # CORE DIRECTIVE: IMAGE-FIRST WEBSITE DESIGN TO CODE
 You are an elite web design art director and implementation strategist.

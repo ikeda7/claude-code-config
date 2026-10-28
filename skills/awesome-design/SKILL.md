@@ -3,10 +3,13 @@ name: awesome-design
 description: >-
   Biblioteca local de 84 DESIGN.md (tokens de cor, tipografia, espaçamento,
   componentes e regras) inspirados em sites reais: Stripe, Linear, Vercel,
-  Notion, Apple, Airbnb, Spotify, Supabase, Figma e outros. Use quando o
-  usuário pedir uma interface "no estilo de" / "parecida com" / "inspirada em"
-  uma marca ou produto, quando um projeto de frontend novo precisar de um
-  design system de partida, ou quando for criar o DESIGN.md de um projeto.
+  Notion, Apple, Airbnb, Spotify, Supabase, Figma e outros, mais 67 estilos
+  genéricos (minimal, brutalism, glassmorphism, neumorphism, editorial,
+  bento, shadcn, material, retro...). Use quando o usuário pedir uma
+  interface "no estilo de" / "parecida com" / "inspirada em" uma marca,
+  produto ou estilo visual nomeado, quando um projeto de frontend novo
+  precisar de um design system de partida, ou quando for criar o DESIGN.md de
+  um projeto.
 ---
 
 # Awesome DESIGN.md
@@ -16,16 +19,25 @@ Coleção de [VoltAgent/awesome-design-md](https://github.com/VoltAgent/awesome-
 frontmatter YAML com tokens (`colors`, `typography`, `spacing`, `radius`,
 componentes) seguido de prosa com as regras do sistema visual.
 
-Os arquivos são **análises inspiradas** nas marcas, não os design systems
-oficiais. Fontes proprietárias (Sohne, Geist, SF Pro...) aparecem com
+Os 67 estilos em `styles/` vêm de
+[bergside/awesome-design-skills](https://github.com/bergside/awesome-design-skills)
+(MIT, ver `LICENSE-styles`). Cada um tem `DESIGN.md` (tokens) e `GUIDE.md`
+(regras de uso, acessibilidade e tom de escrita; era o `SKILL.md` original,
+renomeado para não virar 67 skills separadas).
+
+Os arquivos de `designs/` são **análises inspiradas** nas marcas, não os
+design systems oficiais. Fontes proprietárias (Sohne, Geist, SF Pro...) aparecem com
 fallbacks; não copie logotipo, nome ou marca registrada para o projeto do
 usuário: use a linguagem visual, não a identidade.
 
 ## Como usar
 
-1. Escolha a referência no índice abaixo pelo pedido do usuário. Se ele não
-   nomeou marca, proponha 2 ou 3 que casem com o produto e pergunte.
-2. Leia `designs/<marca>/DESIGN.md` inteiro antes de escrever UI.
+1. Escolha a referência no índice abaixo pelo pedido do usuário: marca em
+   `designs/`, estilo genérico (ex.: "brutalista", "glassmorphism") em
+   `styles/`. Se ele não nomeou nenhum, proponha 2 ou 3 que casem com o
+   produto e pergunte.
+2. Leia o `DESIGN.md` escolhido inteiro antes de escrever UI (em `styles/`,
+   leia também o `GUIDE.md`).
 3. Copie-o para a raiz do projeto como `DESIGN.md` (ou adapte: troque nome,
    ajuste a cor primária à marca do usuário) e trate-o como fonte da verdade
    visual dali em diante. Se o projeto já tem `DESIGN.md`, ele vence; não
@@ -38,7 +50,7 @@ usuário: use a linguagem visual, não a identidade.
    - `web-design-guidelines` para revisar o resultado;
    - `playwright-cli` para abrir a página e tirar screenshot.
 
-## Índice
+## Índice: marcas (`designs/`)
 
 #### AI & LLM Platforms
 
@@ -155,4 +167,72 @@ usuário: use a linguagem visual, não a identidade.
 - **Dell (1996)** (`designs/dell-1996/DESIGN.md`) - Catalog-era enterprise web. Literal black page frame, flat color-block "ribbon cards", chunky Helvetica-Black titles over Times Roman body, and hand-cut GIF stickers (NEW! bursts, award seals, beveled product photos).
 - **Nintendo.com (2001)** (`designs/nintendo-2001/DESIGN.md`) - Y2K "console chrome" web. Brushed-periwinkle beveled metal panels, a halftone-dotted carbon nav glowing amber, outlined Arial-Black box-art wordmarks over circuit-board hero fields, and a pixel Mario welcome bubble.
 
+## Índice: estilos (`styles/`)
 
+- **agentic** (`styles/agentic/DESIGN.md`) - Conversational AI-first interface with minimal controls, clear outcomes, and delegated task flows for agentic workflows.
+- **ant** (`styles/ant/DESIGN.md`) - Structured, enterprise-focused design system emphasizing clarity, consistency, and efficiency for data-dense web applications.
+- **artistic** (`styles/artistic/DESIGN.md`) - High-contrast, expressive style with creative typography and bold color choices for visually striking interfaces.
+- **basic** (`styles/basic/DESIGN.md`) - Print-inspired visual language for books, magazines, and reports with editorial grids and expressive typography.
+- **bento** (`styles/bento/DESIGN.md`) - Modular grid layout with card-like blocks, clear hierarchy, soft spacing, and subtle visual contrast for organized, scannable interfaces.
+- **bold** (`styles/bold/DESIGN.md`) - Strong visual presence with heavyweight typography, high-contrast colors, and commanding layouts.
+- **brutalism** (`styles/brutalism/DESIGN.md`) - Raw, anti-design aesthetic inspired by concrete architecture with unadorned elements, jarring layouts, and functional minimalism.
+- **cafe** (`styles/cafe/DESIGN.md`) - Cozy cafe-inspired interface with warm tones, soft typography, and clean layouts for a relaxed browsing experience.
+- **claude** (`styles/claude/DESIGN.md`) - A research-journal aesthetic printed on warm stone — authoritative, editorial, almost achromatic. Pages live on warm ivory parchment (never pure white), with near-black slate as the dominant ink.
+- **claymorphism** (`styles/claymorphism/DESIGN.md`) - Soft, rounded 3D-like shapes mimicking malleable clay with playful, puffy elements and colorful surfaces.
+- **clean** (`styles/clean/DESIGN.md`) - Simplicity-focused design with ample whitespace, legible typography, and a limited color palette to reduce visual clutter.
+- **codex** (`styles/codex/DESIGN.md`) - A radically minimal, blank-canvas interface built as a pure edge-to-edge surface, with almost no color and typography carrying the visual weight. Black serves as the only filled color, the only divider, and the sole surface tone cards.
+- **colorful** (`styles/colorful/DESIGN.md`) - Vibrant, high-contrast palettes and gradients for engaging, memorable, and modern user experiences.
+- **contemporary** (`styles/contemporary/DESIGN.md`) - Current-era minimalist design with bento grids, dark mode support, and high-performance accessible layouts.
+- **corporate** (`styles/corporate/DESIGN.md`) - Professional, brand-aligned design with structured grids, minimalist layouts, and consistent enterprise patterns.
+- **cosmic** (`styles/cosmic/DESIGN.md`) - Futuristic sci-fi aesthetic with dark themes, vibrant neon accents, and immersive spatial elements.
+- **creative** (`styles/creative/DESIGN.md`) - Playful, character-driven design with expressive typography and bold graphics for landing pages and creative projects.
+- **dithered** (`styles/dithered/DESIGN.md`) - Dot-pattern rendering technique that simulates shades with a limited palette for nostalgic, retro, high-contrast visuals.
+- **doodle** (`styles/doodle/DESIGN.md`) - Hand-drawn, sketch-like style with doodles, handwritten fonts, and imperfect lines for a playful, informal feel.
+- **dramatic** (`styles/dramatic/DESIGN.md`) - High-contrast, theatrical design with bold layouts, immersive visuals, and unconventional compositions that command attention.
+- **editorial** (`styles/editorial/DESIGN.md`) - Magazine-inspired editorial layout with refined serif typography, structured grids, and elegant reading experiences.
+- **enterprise** (`styles/enterprise/DESIGN.md`) - Dark-themed cloud-platform aesthetic with modular grids, glass-like panels, and strong data hierarchy for productivity dashboards.
+- **expressive** (`styles/expressive/DESIGN.md`) - Vibrant, personality-driven design with bold colors, playful graphics, and dynamic layouts that balance creativity with structure.
+- **fantasy** (`styles/fantasy/DESIGN.md`) - Game-inspired fantasy aesthetic with bold, premium visuals, rich color palettes, and immersive thematic elements.
+- **fiction** (`styles/fiction/DESIGN.md`) - A playful, energetic, cartoonesque interface inspired by friendly children's-book illustrations — warm cream backgrounds, big bold custom display typography, saturated brand color blocks, thick black outlines, generously rounded shapes
+- **flat** (`styles/flat/DESIGN.md`) - Two-dimensional minimalist style with vibrant colors, clean typography, and no 3D effects for fast, user-friendly interfaces.
+- **friendly** (`styles/friendly/DESIGN.md`) - Approachable, intuitive design with rounded elements, ample whitespace, and soft pastel color palettes.
+- **futuristic** (`styles/futuristic/DESIGN.md`) - Forward-looking design with tech-inspired typography, modern layouts, and a sleek, innovation-driven aesthetic.
+- **geometric** (`styles/geometric/DESIGN.md`) - Geometric, structured design with clean typography, neutral colors, precise shapes, and intuitive layouts that stay out of the way.
+- **glassmorphism** (`styles/glassmorphism/DESIGN.md`) - Frosted glass effect with translucent layers, subtle blur, and luminous borders for depth and modern elegance.
+- **gradient** (`styles/gradient/DESIGN.md`) - Smooth color transitions and gradient-rich surfaces for modern, playful interfaces with visual depth.
+- **immersive** (`styles/immersive/DESIGN.md`) - An immersive, interactive, exhibit-style interface that blends storytelling, animation, and gamified elements to create a playful, experience-driven journey. The entire app sits on a single continuous brand-colored canvas (deep green)
+- **impeccable** (`styles/impeccable/DESIGN.md`) - A modern, graphic, editorial-poster aesthetic — warm and confident — built on alternating cream and burnt orange sections, an amber brand color.
+- **levels** (`styles/levels/DESIGN.md`) - Conversion-focused design that removes friction and guides users toward action through clarity, trust, and speed.
+- **lingo** (`styles/lingo/DESIGN.md`) - Playful, minimal design with bright colors, rounded shapes, tactile 3D borders, and friendly illustrations for approachable interfaces.
+- **material** (`styles/material/DESIGN.md`) - Google's Material Design with layered surfaces, dynamic theming, built-in motion, and responsive cross-platform patterns.
+- **matrix** (`styles/matrix/DESIGN.md`) - A cyber-slick, dark-only Matrix-inspired interface defined by minimalist fashion, high-tech digital elements
+- **minimal** (`styles/minimal/DESIGN.md`) - Stripped-back design emphasizing whitespace, clean typography, and restrained color for maximum clarity and focus.
+- **modern** (`styles/modern/DESIGN.md`) - Contemporary editorial style with serif typography, minimal palettes, and clean layouts for polished digital products.
+- **mono** (`styles/mono/DESIGN.md`) - Monospace-driven, matrix-inspired design with high-contrast elements, compact density, and a hacker-chic aesthetic.
+- **neobrutalism** (`styles/neobrutalism/DESIGN.md`) - Modern take on brutalism with bold borders, vivid accent colors, and raw, high-contrast layouts on warm surfaces.
+- **neon** (`styles/neon/DESIGN.md`) - Electric neon glow effects with high-contrast color pairings for bold, attention-grabbing interfaces.
+- **neumorphism** (`styles/neumorphism/DESIGN.md`) - Soft, extruded UI elements with inner and outer shadows on monochromatic surfaces for a tactile, embedded look.
+- **pacman** (`styles/pacman/DESIGN.md`) - Retro arcade-inspired design with pixel fonts, dotted borders, playful high-contrast colors, and 8-bit game aesthetics.
+- **paper** (`styles/paper/DESIGN.md`) - Paper-textured, print-inspired design with minimal colors, clean serif/sans typography, and tactile surface qualities.
+- **perspective** (`styles/perspective/DESIGN.md`) - Spatial depth design with isometric views, vanishing points, and layered elements that guide attention through 3D-like realism.
+- **power** (`styles/power/DESIGN.md`) - High-end dark aesthetic with bold headings, monochromatic palette, and premium feel for premium brand experiences.
+- **premium** (`styles/premium/DESIGN.md`) - Apple-inspired premium aesthetic with precise spacing, modern typography, and a refined, polished visual language.
+- **professional** (`styles/professional/DESIGN.md`) - Polished, business-ready design with modern typography, structured layouts, and a trustworthy visual identity.
+- **pulse** (`styles/pulse/DESIGN.md`) - Dynamic, vibrant style with thick borders, geometric shapes, high-contrast colors, and expressive typography conveying motion and vitality.
+- **refined** (`styles/refined/DESIGN.md`) - Carefully curated, modern minimal style with elegant serif typography and understated, sophisticated palettes.
+- **retro** (`styles/retro/DESIGN.md`) - Throwback design with vintage-inspired typography, high-contrast retro palettes, and nostalgic visual elements.
+- **riso** (`styles/riso/DESIGN.md`) - A playful, joyful, two-color risograph print aesthetic built on a single warm off-white paper surface running through every section
+- **roku** (`styles/roku/DESIGN.md`) - App dashboard with purple-themed aesthetic, top-bar navigation, card-based layouts, and developer-first workflows.
+- **sega** (`styles/sega/DESIGN.md`) - A playful, arcade-inspired interface for games — built on the VT323 pixel typeface, hard-edged 0px corners, chunky pill buttons that physically press into solid offset blocks
+- **shadcn** (`styles/shadcn/DESIGN.md`) - Shadcn/ui-inspired design with minimal, clean components, monochrome palette, and utility-first patterns.
+- **sketch** (`styles/sketch/DESIGN.md`) - A friendly, hand-drawn sketch interface inspired by pencil illustrations on warm cream paper. Soft teal brand accents, hand-written display headings, rounded pill controls.
+- **skeumorphism** (`styles/skeumorphism/DESIGN.md`) - Real-world mimicry with textured surfaces, 3D effects, and familiar physical metaphors for intuitive digital interfaces.
+- **sleek** (`styles/sleek/DESIGN.md`) - Modern minimalist aesthetic with clean lines, intentional color palette, subtle interactions, and consistent spacing.
+- **spacious** (`styles/spacious/DESIGN.md`) - Generous whitespace, consistent padding, and grid-based layouts for clean, readable, and breathing interfaces.
+- **square** (`styles/square/DESIGN.md`) - Graceful, refined aesthetic with delicate typography, minimal palettes, and polished layouts that exude sophistication.
+- **stitch** (`styles/stitch/DESIGN.md`) - Clean, high-contrast enterprise design for data-driven workflows with intuitive drag-and-drop patterns and structured layouts.
+- **storytelling** (`styles/storytelling/DESIGN.md`) - Narrative-driven design using visuals, copy, and interaction to guide users through engaging, emotionally resonant journeys.
+- **terracotta** (`styles/terracotta/DESIGN.md`) - A sun-baked, clay-toned editorial interface built on warm cream surfaces, ink-brown headlines set in a display serif, and a single terracotta accent.
+- **tetris** (`styles/tetris/DESIGN.md`) - Classic block-game inspired design with playful colors, bold display fonts, and compact, high-energy layouts.
+- **vibrant** (`styles/vibrant/DESIGN.md`) - Lively, colorful design with bold playful typography, warm accents, and dynamic visual energy.
+- **vintage** (`styles/vintage/DESIGN.md`) - 1950s-1990s nostalgia with skeuomorphic touches, grainy textures, retro color palettes, and pixel-style typography.

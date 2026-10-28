@@ -123,3 +123,10 @@ Sugestão: ativar sob demanda, conforme o projeto — não todos de uma vez.
       inofensivo sem o `init`. Não rodar `headroom init -g claude`.
 - [ ] **`gh` CLI** (por máquina): se `gh auth status` disser "token invalid",
       rodar `gh auth login` (interativo). PC principal: feito em 2026-10-22.
+- [ ] **Skills de frontend** (por máquina, adicionadas em 2026-10-28): depois
+      do `git pull`, rodar o `bootstrap.ps1` para instalar o `playwright-cli`
+      (ou só `npm install -g @playwright/cli@latest`). Conferir com
+      `playwright-cli --version`. Os scripts da `design-taste-frontend` não
+      foram executados na instalação (só checagem de sintaxe); no primeiro uso
+      num projeto web, confirmar que `inspect.mjs` acha o Edge/Chrome.
+      PC principal: [ ] · Máquina 2: [ ] · Máquina 3: [ ]
