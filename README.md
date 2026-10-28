@@ -16,10 +16,10 @@ agente, com as mesmas regras, os mesmos comandos e os mesmos automatismos.
 | `commands/` | 46 | Slash commands (`/plan`, `/pr`, `/setup-github`, …) |
 | `skills/` | 53 | Conhecimento sob demanda, carregado quando a tarefa casa |
 | `archive/` | 236 skills · 42 agents · 49 commands | Fora das stacks em uso; **não carregam**. Para reativar, mova de volta para `skills/`, `agents/` ou `commands/` |
-| `rules/` | 123 | Regras: `common/` sempre ativo, 21 linguagens sob demanda |
-| `scripts/` | 264 | Implementação dos hooks e utilitários de sync |
+| `rules/` | 124 | Regras: `common/` sempre ativo, 21 linguagens sob demanda |
+| `scripts/` | 267 | Implementação dos hooks e utilitários de sync |
 | `prompts/` | 1 | Roteiros reutilizáveis meus |
-| `docs/` | 1 | Guia de instalação das regras do toolkit original (referência) |
+| `docs/` | 2 | `config-detalhes.md` (detalhes e histórico da config) e `rules-guide.md` (guia de instalação das regras do toolkit original) |
 | `contexts/` | 3 | Referência manual |
 | `mcp-configs/` | 1 | Catálogo de MCP servers (referência, não ativo) |
 
@@ -90,6 +90,11 @@ e é fácil esquecer um dos dois.
 | PC principal (Windows 11, este repo nasceu nele) | Sim, nada a rodar |
 | Máquina 2 | Rodar o passo 1 abaixo |
 | Máquina 3 | Rodar o passo 1 abaixo |
+
+**Pendente nas 3 máquinas** (mudanças de 2026-10-28): siga o
+[checklist por máquina do `SETUP_TODO.md`](SETUP_TODO.md#checklist-por-máquina-fazer-nas-3).
+Em resumo: `git pull`, rodar o `bootstrap.ps1` **antes** de qualquer
+`make-shared.js` e reiniciar o Claude Code.
 
 ### 1. Máquina nova (uma vez só)
 

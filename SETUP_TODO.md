@@ -1,5 +1,35 @@
 # Pendências de setup
 
+## Checklist por máquina (fazer nas 3)
+
+Tudo que precisa rodar **em cada máquina** depois do `git pull` de 2026-10-28
+(PRs #7 a #10). Marque a coluna da máquina ao terminar.
+
+| # | Passo | PC principal | Máquina 2 | Máquina 3 |
+|---|---|---|---|---|
+| 1 | `cd ~\.claude` e `git pull` | [ ] | [ ] | [ ] |
+| 2 | `powershell -ExecutionPolicy Bypass -File .\scripts\sync\bootstrap.ps1` | [ ] | [ ] | [ ] |
+| 3 | Reiniciar o Claude Code e conferir `/context` numa sessão nova | [ ] | [ ] | [ ] |
+| 4 | `playwright-cli --version` responde | [ ] | [ ] | [ ] |
+| 5 | `gh auth status` ok (senão `gh auth login`) | [x] 2026-10-22 | [ ] | [ ] |
+| 6 | Opcional: `pip uninstall headroom-ai`, se foi instalado | [ ] | [ ] | [ ] |
+| 7 | 1º uso num projeto web: `inspect.mjs` da `design-taste-frontend` acha o Edge/Chrome | [ ] | [ ] | [ ] |
+
+Por que o passo 2 vem **antes** de qualquer `make-shared.js`: o bootstrap roda
+o `apply-shared.ps1`, que leva para o `settings.json` local o que mudou no
+compartilhado (Headroom removido de `enabledPlugins`; `model: opus` em vez de
+`opus[1m]`; `effortLevel: medium`; `ECC_SESSION_START_CONTEXT=off`;
+`session-report`/`plugin-dev` desligados) e instala o `playwright-cli`. Se o
+`make-shared.js` rodar antes, ele lê o `settings.json` antigo e desfaz tudo
+isso no `settings.shared.json`.
+
+Os scripts da `design-taste-frontend` só tiveram a sintaxe checada na
+instalação; o passo 7 é o primeiro teste real.
+
+---
+
+## MCP servers com credencial
+
 Criado em 2026-08-14. MCP servers que você marcou como desejados mas que
 precisam de credencial. Nenhum deles foi ativado — todos estão aqui aguardando
 a chave.
@@ -117,32 +147,9 @@ Sugestão: ativar sob demanda, conforme o projeto — não todos de uma vez.
       `ECC_DISABLED_HOOKS=pre:bash:auto-tmux-dev`, para o agente conseguir ler o
       log do dev server.
 - [x] **Replicar em outras máquinas** — feito: repo `ikeda7/claude-code-config`.
+      O que falta rodar em cada uma está no checklist no topo.
 - [x] **Headroom — decidido: NÃO ativar** (2026-10-22). O `init` aponta
       `ANTHROPIC_BASE_URL` para o proxy, e isso desliga o `/remote-control`, que
       o usuário usa. O plugin saiu de `settings.shared.json` e o bootstrap não
       instala o pacote nem roda o `init` (2026-10-28). Não rodar
       `headroom init -g claude`.
-- [ ] **Aplicar a remoção do Headroom** (por máquina, após o `git pull` do
-      PR #8, 2026-10-28): rodar `apply-shared.ps1` (ou o `bootstrap.ps1`)
-      **antes** do próximo `make-shared.js`. O `settings.json` local ainda tem
-      `headroom@headroom-marketplace` em `enabledPlugins`, e o `make-shared.js`
-      o recolocaria no `settings.shared.json`. Se o pacote foi instalado, dá
-      para tirar com `pip uninstall headroom-ai`. PC principal: pendente.
-- [ ] **`gh` CLI** (por máquina): se `gh auth status` disser "token invalid",
-      rodar `gh auth login` (interativo). PC principal: feito em 2026-10-22.
-- [ ] **Skills de frontend** (por máquina, adicionadas em 2026-10-28): depois
-      do `git pull`, rodar `npm install -g @playwright/cli@latest` (ou o
-      `bootstrap.ps1`, que faz isso no passo 5) e conferir com
-      `playwright-cli --version`. Os scripts da `design-taste-frontend` não
-      foram executados na instalação (só checagem de sintaxe); no primeiro uso
-      num projeto web, confirmar que `inspect.mjs` acha o Edge/Chrome.
-      PC principal: [ ] · Máquina 2: [ ] · Máquina 3: [ ]
-- [ ] **Aplicar a economia de tokens** (por máquina, após o `git pull`,
-      2026-10-28): rodar `apply-shared.ps1` (ou o `bootstrap.ps1`) **antes** do
-      próximo `make-shared.js`. Ele leva para o `settings.json` local o
-      `model: opus` (era `opus[1m]`), `effortLevel: medium` (era `high`),
-      `ECC_SESSION_START_CONTEXT=off` e `session-report`/`plugin-dev`
-      desligados; sem isso o `make-shared.js` reverteria tudo a partir do
-      `settings.json` antigo. Reiniciar o Claude Code e conferir com `/context`
-      numa sessão nova. As skills/agents/commands arquivados vêm pelo próprio
-      `git pull` (`archive/`). PC principal: [ ] · Máquina 2: [ ] · Máquina 3: [ ]
