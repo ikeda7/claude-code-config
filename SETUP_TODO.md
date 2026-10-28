@@ -3,7 +3,7 @@
 ## Checklist por máquina (fazer nas 3)
 
 Tudo que precisa rodar **em cada máquina** depois do `git pull` de 2026-10-28
-(PRs #7 a #10). Marque a coluna da máquina ao terminar.
+(PRs #7 a #10 e #13). Marque a coluna da máquina ao terminar.
 
 | # | Passo | PC principal | Máquina 2 | Máquina 3 |
 |---|---|---|---|---|
@@ -14,12 +14,17 @@ Tudo que precisa rodar **em cada máquina** depois do `git pull` de 2026-10-28
 | 5 | `gh auth status` ok (senão `gh auth login`) | [x] 2026-10-22 | [ ] | [ ] |
 | 6 | Opcional: `pip uninstall headroom-ai`, se foi instalado | [ ] | [ ] | [ ] |
 | 7 | 1º uso num projeto web: `inspect.mjs` da `design-taste-frontend` acha o Edge/Chrome | [ ] | [ ] | [ ] |
+| 8 | `python --version` e `sh --version` respondem no PowerShell (hooks e helpers do `claude-security`; `sh` vem do Git Bash) | [ ] | [ ] | [ ] |
+| 9 | Numa sessão nova, `/plugin` (ou `claude.exe plugin list`) mostra `superpowers`, `claude-security` e `omniroute` instalados | [ ] | [ ] | [ ] |
+| 10 | Opcional, para usar o `omniroute`: `npm i -g omniroute` e deixar `omniroute` rodando; `/mcp` deve mostrar o server conectado (sem isso ele só aparece como falha) | [ ] | [ ] | [ ] |
+| 11 | Se o `/context` do passo 3 pesar demais, desligar `superpowers` (`false` no `settings.json`, depois `make-shared.js`) | [ ] | [ ] | [ ] |
 
 Por que o passo 2 vem **antes** de qualquer `make-shared.js`: o bootstrap roda
 o `apply-shared.ps1`, que leva para o `settings.json` local o que mudou no
 compartilhado (Headroom removido de `enabledPlugins`; `model: opus` em vez de
 `opus[1m]`; `effortLevel: medium`; `ECC_SESSION_START_CONTEXT=off`;
-`session-report`/`plugin-dev` desligados) e instala o `playwright-cli`. Se o
+`session-report`/`plugin-dev` desligados; `superpowers`, `claude-security` e
+`omniroute` ligados) e instala o `playwright-cli`. Se o
 `make-shared.js` rodar antes, ele lê o `settings.json` antigo e desfaz tudo
 isso no `settings.shared.json`.
 

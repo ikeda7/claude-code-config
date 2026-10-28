@@ -145,7 +145,8 @@ ou `/model opus[1m]` só quando a tarefa pedir. `/clear` ao trocar de tarefa,
 
 - MCP ativos (`~/.claude.json`): `memory`, `sequential-thinking`, `context7`,
   `filesystem`. Pendências com credencial: `SETUP_TODO.md`.
-- Plugins: `context-mode`, `claude-mem`, `cartographer` e os oficiais listados
+- Plugins: `context-mode`, `claude-mem`, `cartographer`, `omniroute` (exige
+  servidor OmniRoute local) e os oficiais listados
   em `settings.shared.json`. **Não** rodar `headroom init -g claude` (desliga o
   `/remote-control`).
 - `settings.shared.json` é versionado; `settings.json` e `~/.claude.json` não.
@@ -154,5 +155,12 @@ ou `/model opus[1m]` só quando a tarefa pedir. `/clear` ao trocar de tarefa,
 
 ## Preferências do usuário
 
-<!-- Vazio de propósito. Nada aqui foi presumido.
-     Adicione preferências conforme forem confirmadas. -->
+<!-- Só preferências confirmadas pelo usuário. Nada aqui foi presumido. -->
+
+- **Merge de PR sem perguntar** (confirmado em 2026-10-28, vale para todos os
+  repositórios): não pergunte se pode mergear. Num PR que você abriu, analise
+  e mergeie quando estiver pronto: sem conflito, CI verde (ou sem CI), nenhum
+  thread de revisão aberto esperando resposta e o diff relido. Use o método de
+  merge que o repo já usa (merge commit, se o histórico mostrar
+  `Merge pull request #N`). Se faltar alguma dessas condições, resolva primeiro;
+  só pare e avise quando o bloqueio não for seu de resolver.
