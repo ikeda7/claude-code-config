@@ -189,3 +189,11 @@ ou `/model opus[1m]` só quando a tarefa pedir. `/clear` ao trocar de tarefa,
   `pr-review-toolkit` ou o reviewer da stack antes de mergear; as skills da
   tabela de stacks acima. Isso não libera delegação extra: subagents seguem
   `rules/common/agents.md`.
+- **Lembrete da nuvem** (pedido em 2026-10-28): sempre que um PR mergeado
+  neste repo mudar algo que o `cloud-setup.sh` leva para a nuvem (`CLAUDE.md`,
+  `rules/`, `skills/`, `agents/`, `commands/`, `scripts/`, `prompts/`,
+  `contexts/`, `settings.shared.json`), termine a resposta com o lembrete de
+  trocar a linha `# versao` do setup script do ambiente de nuvem, já com o
+  valor novo pronto para colar: a data do dia (`2026-10-29`) ou, se já houve
+  troca no mesmo dia, a próxima letra (`2026-10-28c`). Mudança só em `docs/`,
+  `README.md` ou `SETUP_TODO.md` não precisa. Última versão usada: `2026-10-28c`.
