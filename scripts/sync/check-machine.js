@@ -69,10 +69,14 @@ if (!IS_CLOUD) {
     'clone o repo em ~/.claude (ver README, "Maquina nova")');
 }
 
-sh('git', ['fetch', '--quiet', 'origin'], ROOT);
-const behind = sh('git', ['rev-list', '--count', 'HEAD..@{u}'], ROOT);
+// Na nuvem o ~/.claude nao e repo git: o clone fica em /opt/claude-code-config.
+const CLOUD_CLONE = '/opt/claude-code-config';
+const REPO = IS_CLOUD && fs.existsSync(path.join(CLOUD_CLONE, '.git')) ? CLOUD_CLONE : ROOT;
+sh('git', ['fetch', '--quiet', 'origin'], REPO);
+const behind = sh('git', ['rev-list', '--count', 'HEAD..@{u}'], REPO);
 check('Repo atualizado com o GitHub', behind.ok && behind.out === '0',
-  'git -C ~/.claude pull, depois rode o bootstrap.ps1');
+  IS_CLOUD ? 'abra uma sessao nova no ambiente claude-code-config (o setup script clona e instala)'
+    : 'git -C ~/.claude pull, depois rode o bootstrap.ps1');
 
 // ---- 2. settings ------------------------------------------------------------
 const shared = readJson(path.join(ROOT, 'settings.shared.json')) || {};

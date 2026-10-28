@@ -351,7 +351,10 @@ vez, vale para toda sessão nesse ambiente, em qualquer repositório.
    exit 0
    ```
 
-5. Comece uma sessão nova nesse ambiente e rode `/context`:
+5. Ao abrir uma sessão, **escolha esse ambiente** no seletor abaixo da caixa de
+   mensagem: o setup script só roda nele. Sessão no "Default" não recebe a
+   config.
+6. Comece uma sessão nova nesse ambiente e rode `/context`:
    `/root/.claude/CLAUDE.md` deve aparecer em Memory files, e `/fluxo` no menu
    `/`. `node ~/.claude/scripts/sync/check-machine.js` confere o resto.
 
