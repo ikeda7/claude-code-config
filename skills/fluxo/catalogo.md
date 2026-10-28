@@ -211,6 +211,7 @@ nativo, mas não os aliases dele**. Então:
 | `/hooks`, `/mcp`, `/plugin`, `/reload-skills`, `/reload-plugins` | T | Inspecionar e recarregar extensões |
 | `/statusline`, `/output-style`, `/config`, `/keybindings` | F | Preferência de interface, fora do fluxo |
 | `update-config`, `/workflow-authoring`, `/plugin-authoring` | F | Mexer na própria config; usar quando o assunto for ela |
+| `session-start-hook` | F | Só na nuvem (o ambiente cria em `skills/`); hook `SessionStart` versionado no repo, quando pedido |
 | Artifacts (`/artifacts`) | 7 | Relatório visual para compartilhar |
 
 ## Arquivados nesta mudança (2026-10-28)
