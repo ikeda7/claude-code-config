@@ -106,7 +106,8 @@ Copy-Item $env:USERPROFILE\.claude.old\projects $env:USERPROFILE\.claude\ -Recur
 ```
 
 O `bootstrap.ps1` faz tudo: confere pré-requisitos, aplica a configuração
-compartilhada e injeta os MCP servers.
+compartilhada, injeta os MCP servers e instala os plugins. **Não** instala nem
+configura o Headroom: ele desligaria o `/remote-control` (ver `SETUP_TODO.md`).
 
 O que ele **preserva** naquela máquina:
 
