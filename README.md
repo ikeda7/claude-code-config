@@ -87,7 +87,7 @@ e é fácil esquecer um dos dois.
 
 | Máquina | Configurada? |
 |---|---|
-| PC principal (Windows 11, este repo nasceu nele) | Sim, nada a rodar |
+| PC principal (Windows 11, este repo nasceu nele) | Sim; falta só o checklist de 2026-10-28 abaixo |
 | Máquina 2 | Rodar o passo 1 abaixo |
 | Máquina 3 | Rodar o passo 1 abaixo |
 
