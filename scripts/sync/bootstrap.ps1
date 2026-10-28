@@ -9,7 +9,8 @@
 #   2. aplica settings.shared.json no settings.json local
 #   3. injeta os MCP servers portateis em ~/.claude.json
 #   4. instala os plugins declarados (via CLI do Claude Code)
-#   5. reporta o que ficou pendente
+#   5. instala o playwright-cli global (usado pela skill playwright-cli)
+#   6. reporta o que ficou pendente
 #
 # Headroom NAO e instalado nem configurado (decisao de 2026-10-22, ver
 # SETUP_TODO.md): `headroom init` aponta ANTHROPIC_BASE_URL para o proxy
@@ -36,7 +37,7 @@ Write-Output "=============================================="
 Write-Output ""
 
 # ---- 1. pre-requisitos -----------------------------------------------------
-Write-Output "[1/4] Pre-requisitos"
+Write-Output "[1/5] Pre-requisitos"
 
 $node = Get-Command node -ErrorAction SilentlyContinue
 if (-not $node) {
@@ -60,7 +61,7 @@ if (-not (Test-Path (Join-Path $ClaudeDir 'settings.shared.json'))) {
 Write-Output ""
 
 # ---- 2. settings -----------------------------------------------------------
-Write-Output "[2/4] Configuracao: hooks, env, model, plugins"
+Write-Output "[2/5] Configuracao: hooks, env, model, plugins"
 & powershell -ExecutionPolicy Bypass -File (Join-Path $SyncDir 'apply-shared.ps1')
 if ($LASTEXITCODE -ne 0) {
     Write-Output "  ERRO ao aplicar settings. Abortado."
@@ -69,7 +70,7 @@ if ($LASTEXITCODE -ne 0) {
 Write-Output ""
 
 # ---- 3. MCP ----------------------------------------------------------------
-Write-Output "[3/4] MCP servers"
+Write-Output "[3/5] MCP servers"
 & node (Join-Path $SyncDir 'apply-mcp.js')
 if ($LASTEXITCODE -ne 0) {
     Write-Output "  ERRO ao aplicar MCP. Abortado."
@@ -80,10 +81,24 @@ Write-Output ""
 # ---- 4. plugins ------------------------------------------------------------
 # A extensao do VS Code nao instala sozinha plugin de marketplace novo.
 # Falha aqui nao aborta: o resto do ambiente ja esta aplicado.
-Write-Output "[4/4] Plugins"
+Write-Output "[4/5] Plugins"
 & node (Join-Path $SyncDir 'apply-plugins.js')
 if ($LASTEXITCODE -ne 0) {
     Write-Output "  AVISO: algum plugin nao instalou. Rode apply-plugins.js de novo depois."
+}
+Write-Output ""
+
+# ---- 5. playwright-cli -----------------------------------------------------
+# A skill skills/playwright-cli chama o binario `playwright-cli`. Falha aqui
+# nao aborta: sem ele, a skill cai para `npx playwright` quando o projeto tem.
+Write-Output "[5/5] playwright-cli (automacao de navegador para as skills de frontend)"
+if (Get-Command playwright-cli -ErrorAction SilentlyContinue) {
+    Write-Output "  ja instalado"
+} else {
+    & npm install -g "@playwright/cli@latest"
+    if ($LASTEXITCODE -ne 0) {
+        Write-Output "  AVISO: falhou. Rode depois: npm install -g @playwright/cli@latest"
+    }
 }
 Write-Output ""
 
