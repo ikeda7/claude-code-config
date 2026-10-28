@@ -22,14 +22,14 @@ onde a config nasceu; nas outras, confira versões antes de presumir.
 | Diretório | Qtd | Conteúdo |
 |---|---|---|
 | `agents/` | 26 | Subagents das stacks em uso e transversais |
-| `commands/` | 46 | Slash commands |
-| `skills/` | 53 | Skills em subdiretórios com `SKILL.md` |
+| `commands/` | 38 | Slash commands |
+| `skills/` | 48 | Skills em subdiretórios com `SKILL.md`, incluindo `fluxo` (o fluxo padrão) |
 | `rules/` | 124 | Regras em 22 subdiretórios (`common/` + 21 linguagens) |
 | `scripts/` | 267 | Utilitários Node.js, implementação dos hooks e sync |
 | `prompts/` | 1 | Roteiros reutilizáveis do usuário (ex.: `setup-roadmap-github.md`, usado por `/setup-github`) |
 | `contexts/` | 3 | Arquivos de contexto (referência manual, não carregam sozinhos) |
 | `mcp-configs/` | 1 | `mcp-servers.json` — catálogo de referência, não ativo |
-| `archive/` | 236 · 42 · 49 | Skills, agents e commands de outras stacks. **Não carregam.** Para usar um, mova de volta para `skills/`, `agents/` ou `commands/` |
+| `archive/` | 241 · 42 · 57 | Skills, agents e commands de outras stacks. **Não carregam.** Para usar um, mova de volta para `skills/`, `agents/` ou `commands/` |
 
 ## Comandos
 
@@ -39,6 +39,7 @@ testes. Os "comandos" são os scripts de sincronização em `scripts/sync/`:
 | Comando | Quando rodar |
 |---|---|
 | `node scripts\sync\make-shared.js` | Depois de mudar hooks, env, model ou plugins em `settings.json`. Regenera `settings.shared.json` e aborta se detectar segredo |
+| `node scripts\sync\check-fluxo.js` | Depois de adicionar, remover ou renomear skill, agent ou command. Falha (exit 1) se algum não estiver em `skills/fluxo/catalogo.md` |
 | `node scripts\sync\check-ascii.js` | Antes de commitar qualquer mudança em `.ps1`, `.js`, `.mjs` ou `.json`. Falha (exit 1) se achar BOM ou byte não-ASCII em `.ps1` — é o verificador mais próximo de um "teste" que este repo tem |
 | `powershell -ExecutionPolicy Bypass -File scripts\sync\apply-shared.ps1` | Aplica `settings.shared.json` no `settings.json` local, preservando `permissions` |
 | `node scripts\sync\apply-mcp.js [--force]` | Injeta os MCP servers portáteis (`scripts\sync\mcp-shared.json`) em `~/.claude.json`, preservando `oauthAccount` |
@@ -49,8 +50,19 @@ Fluxo padrão antes de commitar mudança de config:
 
 ```powershell
 node .\scripts\sync\make-shared.js
+node .\scripts\sync\check-fluxo.js
 node .\scripts\sync\check-ascii.js
 ```
+
+## Fluxo padrão
+
+Todo projeto segue `rules/common/fluxo-padrao.md` (sempre carregado): classificar
+tipo e tamanho, depois as fases entender → planejar → branch → TDD → verificar →
+revisar → documentar → entregar → aprender. A skill `fluxo` diz qual ferramenta
+usar em cada fase e stack, e `skills/fluxo/catalogo.md` cobre tudo que está
+instalado (skills, agents, commands, plugins, MCP e recursos nativos).
+`/fluxo <pedido>` roda o pipeline completo; `/fluxo init` prepara um projeto.
+Só tarefa grande para para aprovação do plano.
 
 ### Regras por linguagem (`rules/<lang>/`)
 

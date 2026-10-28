@@ -30,6 +30,34 @@ Fluxo ao construir ou mexer em UI web (landing, página, tela de app):
 Não se aplica a backend, nem a Flutter (as três primeiras são para web). Em
 Angular, os tokens do `DESIGN.md` vão para o tema/SCSS do projeto.
 
+## Fluxo padrão (2026-10-28)
+
+Pedido do usuário: um fluxo único, igual em todo projeto, que use tudo o que
+está instalado e o que o Claude Code oferece nativamente.
+
+- `rules/common/fluxo-padrao.md` (sempre carregado, curto): classificação por
+  tipo e tamanho e as 9 fases. Substituiu `development-workflow.md`, texto
+  genérico do ECC que mandava usar `gh search` e Exa.
+- Skill `fluxo`: ferramenta por fase e stack, modos `/fluxo <pedido>` e
+  `/fluxo init`. Fica numa skill para o detalhe só entrar no contexto quando a
+  tarefa é de código.
+- `skills/fluxo/catalogo.md`: inventário de skills, agents, commands, plugins,
+  MCP e recursos nativos, com fase e quando usar; duplicatas têm uma escolha
+  principal. `scripts/sync/check-fluxo.js` falha se algo de `skills/`,
+  `agents/` ou `commands/` não estiver nele.
+- Decisões: espinha dorsal própria (não o fluxo completo do `superpowers`; dele
+  entram brainstorming, debug sistemático, verificação antes de concluir,
+  recepção de revisão, worktrees e fechamento de branch); aprovação do usuário
+  só no plano de tarefa grande; commit e merge sem portão.
+- Arquivados por duplicarem o `fluxo`: skills `orch-pipeline`,
+  `orch-add-feature`, `orch-change-feature`, `orch-fix-defect`,
+  `orch-refine-code`; commands `orch-*`, `prp-plan`, `prp-implement`, `prp-pr`,
+  `feature-dev`. A skill `continuous-learning` (v1) ficou porque o hook
+  `evaluate-session.js` lê o `config.json` dela.
+- Pendente: `plan` e `code-review` do ECC têm o mesmo nome de comandos
+  nativos. Conferir com `/help` qual abre em cada máquina (o catálogo orienta a
+  usar `Shift+Tab` e `/review` para os nativos).
+
 ## Hooks ativos
 
 Mesclados em `~/.claude/settings.json` sob a chave `hooks`. Nenhuma configuração
@@ -140,7 +168,7 @@ extensão do VS Code: ela instala sozinha só plugins de marketplace que já est
 no disco, e pula os novos em silêncio. Quem instala é `apply-plugins.js`
 (chamado pelo `bootstrap.ps1`). O cache em `plugins/` não é versionado.
 
-Evitados por duplicarem o que já existe: `code-review`/`feature-dev` (ECC),
+Evitados por duplicarem o que já existe: `code-review` (ECC e nativo), `feature-dev` (coberto pela skill `fluxo`),
 `context7` (MCP), `remember` (MCP `memory`).
 
 Plugins de terceiros ativados a pedido do usuário (rodam hooks/código externo;

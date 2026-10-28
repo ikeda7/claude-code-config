@@ -13,9 +13,9 @@ agente, com as mesmas regras, os mesmos comandos e os mesmos automatismos.
 | Diretório | Qtd | O que é |
 |---|---|---|
 | `agents/` | 26 | Subagents das stacks em uso (Java/Spring, Angular/TS, Flutter) e transversais |
-| `commands/` | 46 | Slash commands (`/plan`, `/pr`, `/setup-github`, …) |
-| `skills/` | 53 | Conhecimento sob demanda, carregado quando a tarefa casa |
-| `archive/` | 236 skills · 42 agents · 49 commands | Fora das stacks em uso; **não carregam**. Para reativar, mova de volta para `skills/`, `agents/` ou `commands/` |
+| `commands/` | 38 | Slash commands (`/plan`, `/pr`, `/setup-github`, …) |
+| `skills/` | 48 | Conhecimento sob demanda, carregado quando a tarefa casa; `fluxo` é o fluxo padrão |
+| `archive/` | 241 skills · 42 agents · 57 commands | Fora das stacks em uso; **não carregam**. Para reativar, mova de volta para `skills/`, `agents/` ou `commands/` |
 | `rules/` | 124 | Regras: `common/` sempre ativo, 21 linguagens sob demanda |
 | `scripts/` | 267 | Implementação dos hooks e utilitários de sync |
 | `prompts/` | 1 | Roteiros reutilizáveis meus |
@@ -63,6 +63,13 @@ O que difere do toolkit original:
   atualiza a doc no mesmo PR, ou justifica por que não. Cobrada pelo hook
   `stop:docs-sync-check` (`scripts/hooks/docs-sync-check.js`), que pede a
   atualização uma vez quando há código alterado sem doc, só em repos com `docs/`.
+- **Fluxo padrão** — `rules/common/fluxo-padrao.md` (sempre ativo) classifica a
+  tarefa e define as fases; a skill `fluxo` (`/fluxo <pedido>`, `/fluxo init`)
+  liga cada fase e stack à ferramenta certa, e `skills/fluxo/catalogo.md` cobre
+  tudo que está instalado, inclusive os recursos nativos do Claude Code.
+  `scripts/sync/check-fluxo.js` falha se algo instalado ficar fora do catálogo.
+  Substituiu `development-workflow.md`, a família `orch-*`, `/prp-*` e
+  `/feature-dev` (estes foram para `archive/`).
 - **`commands/setup-github.md`** — `/setup-github`, que executa meu roteiro de
   estruturação de repositório (`prompts/setup-roadmap-github.md`).
 - **Tabela de regras por linguagem no `CLAUDE.md`** — sem ela, as 110 regras de
