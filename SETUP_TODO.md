@@ -142,6 +142,14 @@ Sugestão: ativar sob demanda, conforme o projeto — não todos de uma vez.
 
 ## Outras pendências
 
+- [ ] **Decidir sobre o plugin `omniroute`** (adiado em 2026-10-28). Hoje só
+      registra um MCP em `localhost:20128`, sem benefício, e na nuvem aparece como
+      falha no `/mcp`. O modo gateway (que troca de modelo quando a cota acaba)
+      exige `ANTHROPIC_BASE_URL`, o que desliga o `/remote-control`, e passar a
+      assinatura Claude por ele contraria os termos. Opções: desligar em
+      `settings.shared.json` ou manter. Detalhes na conversa de 2026-10-28.
+- [ ] **Faxina da nuvem**: arquivar o ambiente `claude-code-config` (o setup
+      script ficou no Default) e a sessão "Context" de 2026-10-28 18:40.
 - [x] **Conectores claude.ai** — Gmail, Google Drive/Docs/Sheets/Slides e
       Vercel já aparecem autorizados (2026-10-22). O conector Vercel do claude.ai
       cobre o item 3 acima sem precisar do MCP local.
