@@ -365,7 +365,9 @@ pastas do PC) e os scripts `.ps1`.
 **Atualizações.** O ambiente guarda um snapshot depois do primeiro setup e só
 roda o script de novo quando ele muda ou a cada ~7 dias. Depois de mudar a
 config no repo, troque a data na linha `versao` do setup script para a nuvem
-pegar na próxima sessão. Numa sessão já aberta, peça "rode o cloud-setup de
+pegar na próxima sessão. O agente lembra disso sozinho: ao mergear um PR
+que mude o que vai para a nuvem, ele termina a resposta com a linha `# versao`
+nova pronta para colar (preferência registrada no `CLAUDE.md`). Numa sessão já aberta, peça "rode o cloud-setup de
 novo" (`git -C /opt/claude-code-config pull` e o script).
 
 ---
