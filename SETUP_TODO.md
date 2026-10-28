@@ -122,5 +122,11 @@ Sugestão: ativar sob demanda, conforme o projeto — não todos de uma vez.
       o usuário usa. O plugin saiu de `settings.shared.json` e o bootstrap não
       instala o pacote nem roda o `init` (2026-10-28). Não rodar
       `headroom init -g claude`.
+- [ ] **Aplicar a remoção do Headroom** (por máquina, após o `git pull` do
+      PR #8, 2026-10-28): rodar `apply-shared.ps1` (ou o `bootstrap.ps1`)
+      **antes** do próximo `make-shared.js`. O `settings.json` local ainda tem
+      `headroom@headroom-marketplace` em `enabledPlugins`, e o `make-shared.js`
+      o recolocaria no `settings.shared.json`. Se o pacote foi instalado, dá
+      para tirar com `pip uninstall headroom-ai`. PC principal: pendente.
 - [ ] **`gh` CLI** (por máquina): se `gh auth status` disser "token invalid",
       rodar `gh auth login` (interativo). PC principal: feito em 2026-10-22.
