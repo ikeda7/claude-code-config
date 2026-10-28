@@ -270,8 +270,7 @@
     "session-report@claude-plugins-official": true,
     "plugin-dev@claude-plugins-official": true,
     "cartographer@cartographer-marketplace": true,
-    "claude-mem@thedotmack": true,
-    "headroom@headroom-marketplace": true
+    "claude-mem@thedotmack": true
   },
   "extraKnownMarketplaces": {
     "context-mode": {
@@ -296,12 +295,6 @@
       "source": {
         "source": "github",
         "repo": "thedotmack/claude-mem"
-      }
-    },
-    "headroom-marketplace": {
-      "source": {
-        "source": "github",
-        "repo": "headroomlabs-ai/headroom"
       }
     }
   },

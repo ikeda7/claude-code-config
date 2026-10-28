@@ -119,7 +119,8 @@ Sugestão: ativar sob demanda, conforme o projeto — não todos de uma vez.
 - [x] **Replicar em outras máquinas** — feito: repo `ikeda7/claude-code-config`.
 - [x] **Headroom — decidido: NÃO ativar** (2026-10-22). O `init` aponta
       `ANTHROPIC_BASE_URL` para o proxy, e isso desliga o `/remote-control`, que
-      o usuário usa. O bootstrap ainda instala o pacote se houver Python; isso é
-      inofensivo sem o `init`. Não rodar `headroom init -g claude`.
+      o usuário usa. O plugin saiu de `settings.shared.json` e o bootstrap não
+      instala o pacote nem roda o `init` (2026-10-28). Não rodar
+      `headroom init -g claude`.
 - [ ] **`gh` CLI** (por máquina): se `gh auth status` disser "token invalid",
       rodar `gh auth login` (interativo). PC principal: feito em 2026-10-22.

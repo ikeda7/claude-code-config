@@ -106,7 +106,8 @@ Copy-Item $env:USERPROFILE\.claude.old\projects $env:USERPROFILE\.claude\ -Recur
 ```
 
 O `bootstrap.ps1` faz tudo: confere pré-requisitos, aplica a configuração
-compartilhada e injeta os MCP servers.
+compartilhada, injeta os MCP servers e instala os plugins. **Não** instala nem
+configura o Headroom: ele desligaria o `/remote-control` (ver `SETUP_TODO.md`).
 
 O que ele **preserva** naquela máquina:
 
@@ -183,9 +184,10 @@ bootstrap.
 
 | Script | O que faz |
 |---|---|
-| `bootstrap.ps1` | Setup completo de máquina nova. Orquestra os dois abaixo |
+| `bootstrap.ps1` | Setup completo de máquina nova. Orquestra os três abaixo |
 | `apply-shared.ps1` | Mescla `settings.shared.json` no `settings.json` local |
 | `apply-mcp.js` | Injeta MCP servers em `~/.claude.json` |
+| `apply-plugins.js` | Registra marketplaces e instala os plugins de `settings.shared.json` (`--dry-run` só mostra) |
 | `make-shared.js` | Regenera `settings.shared.json` (com varredura de segredos) |
 | `check-ascii.js` | Barra BOM e caractere não-ASCII em `.ps1` |
 
