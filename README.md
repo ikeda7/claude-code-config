@@ -215,6 +215,7 @@ bootstrap.
 | `check-ascii.js` | Barra BOM e caractere não-ASCII em `.ps1` |
 | `check-fluxo.js` | Barra skill, agent ou command fora do `skills/fluxo/catalogo.md` |
 | `check-machine.js` | Só lê: confere se a máquina está completa e mostra o comando que resolve cada falta |
+| `cloud-setup.sh` | Equivalente Linux do bootstrap para o setup script do ambiente de nuvem (ver `docs/manual.md`, seção 9.1) |
 
 ### Por que o `check-ascii.js` existe
 

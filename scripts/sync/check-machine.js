@@ -22,6 +22,10 @@ const ROOT = path.resolve(__dirname, '..', '..');
 const HOME = process.env.CLAUDE_HOME || os.homedir();
 const CLAUDE_DIR = path.join(HOME, '.claude');
 const IS_WIN = process.platform === 'win32';
+// Sessao na nuvem: instalada pelo cloud-setup.sh, que de proposito nao copia
+// model/effortLevel/statusLine nem o MCP filesystem, e nao usa o repo em ~/.claude.
+const IS_CLOUD = process.env.CLAUDE_CODE_REMOTE === 'true';
+const CLOUD_KEYS = ['hooks', 'env', 'enabledPlugins', 'extraKnownMarketplaces'];
 
 const results = [];
 function check(label, ok, fix, optional) {
@@ -60,8 +64,10 @@ function sameJson(a, b) {
 
 // ---- 1. repositorio ---------------------------------------------------------
 const sameDir = path.resolve(ROOT).toLowerCase() === path.resolve(CLAUDE_DIR).toLowerCase();
-check('Repo clonado direto em ~/.claude', sameDir,
-  'clone o repo em ~/.claude (ver README, "Maquina nova")');
+if (!IS_CLOUD) {
+  check('Repo clonado direto em ~/.claude', sameDir,
+    'clone o repo em ~/.claude (ver README, "Maquina nova")');
+}
 
 sh('git', ['fetch', '--quiet', 'origin'], ROOT);
 const behind = sh('git', ['rev-list', '--count', 'HEAD..@{u}'], ROOT);
@@ -71,12 +77,14 @@ check('Repo atualizado com o GitHub', behind.ok && behind.out === '0',
 // ---- 2. settings ------------------------------------------------------------
 const shared = readJson(path.join(ROOT, 'settings.shared.json')) || {};
 const local = readJson(path.join(CLAUDE_DIR, 'settings.json'));
+const keys = IS_CLOUD ? CLOUD_KEYS.filter(k => k in shared) : Object.keys(shared);
 const drift = local
-  ? Object.keys(shared).filter(k => !sameJson(shared[k], local[k]))
+  ? keys.filter(k => !sameJson(shared[k], local[k]))
   : ['settings.json ausente'];
 check('settings.json igual ao settings.shared.json' + (drift.length ? ' (difere: ' + drift.join(', ') + ')' : ''),
   drift.length === 0,
-  'powershell -ExecutionPolicy Bypass -File ~/.claude/scripts/sync/apply-shared.ps1');
+  IS_CLOUD ? 'bash ' + path.join(__dirname, 'cloud-setup.sh')
+    : 'powershell -ExecutionPolicy Bypass -File ~/.claude/scripts/sync/apply-shared.ps1');
 
 // ---- 3. plugins -------------------------------------------------------------
 const installedFile = readJson(path.join(CLAUDE_DIR, 'plugins', 'installed_plugins.json'));
@@ -92,7 +100,9 @@ check('Plugins instalados (' + (wanted.length - missingPlugins.length) + '/' + w
 const mcpShared = readJson(path.join(__dirname, 'mcp-shared.json')) || { mcpServers: {} };
 const claudeJson = readJson(path.join(HOME, '.claude.json')) || {};
 const mcpLocal = Object.keys(claudeJson.mcpServers || {});
-const missingMcp = Object.keys(mcpShared.mcpServers).filter(n => !mcpLocal.includes(n));
+const missingMcp = Object.keys(mcpShared.mcpServers)
+  .filter(n => !(IS_CLOUD && n === 'filesystem'))
+  .filter(n => !mcpLocal.includes(n));
 check('MCP servers globais' + (missingMcp.length ? ': faltam ' + missingMcp.join(', ') : ''),
   missingMcp.length === 0,
   'node ~/.claude/scripts/sync/apply-mcp.js');
