@@ -184,9 +184,10 @@ bootstrap.
 
 | Script | O que faz |
 |---|---|
-| `bootstrap.ps1` | Setup completo de máquina nova. Orquestra os dois abaixo |
+| `bootstrap.ps1` | Setup completo de máquina nova. Orquestra os três abaixo |
 | `apply-shared.ps1` | Mescla `settings.shared.json` no `settings.json` local |
 | `apply-mcp.js` | Injeta MCP servers em `~/.claude.json` |
+| `apply-plugins.js` | Registra marketplaces e instala os plugins de `settings.shared.json` (`--dry-run` só mostra) |
 | `make-shared.js` | Regenera `settings.shared.json` (com varredura de segredos) |
 | `check-ascii.js` | Barra BOM e caractere não-ASCII em `.ps1` |
 

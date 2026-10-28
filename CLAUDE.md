@@ -25,7 +25,7 @@ onde a config nasceu; nas outras, confira versões antes de presumir.
 | `commands/` | 95 | Slash commands |
 | `skills/` | 284 | Skills em subdiretórios com `SKILL.md` |
 | `rules/` | 124 | Regras em 22 subdiretórios (`common/` + 21 linguagens) |
-| `scripts/` | 264 | Utilitários Node.js, implementação dos hooks e sync |
+| `scripts/` | 267 | Utilitários Node.js, implementação dos hooks e sync |
 | `prompts/` | 1 | Roteiros reutilizáveis do usuário (ex.: `setup-roadmap-github.md`, usado por `/setup-github`) |
 | `contexts/` | 3 | Arquivos de contexto (referência manual, não carregam sozinhos) |
 | `mcp-configs/` | 1 | `mcp-servers.json` — catálogo de referência, não ativo |
