@@ -333,12 +333,14 @@ agir igual, o **setup script** do ambiente instala esta config na VM. Feito uma
 vez, vale para toda sessão nesse ambiente, em qualquer repositório.
 
 1. Em claude.ai/code, no seletor de ambiente abaixo da caixa de mensagem, crie
-   um ambiente **seu** (o "Default" não aceita repositório extra) ou edite um
-   que já seja seu.
-2. Em **Repositories**, adicione `ikeda7/claude-code-config`. Ele é privado, e
-   sem isso o setup script não consegue cloná-lo.
-3. Deixe **Network access** em **Trusted** (precisa de GitHub e npm).
-4. Em **Setup script**, cole:
+   um ambiente **seu** ou edite um que já seja seu.
+2. **Acesso à rede**: qualquer nível com os gerenciadores de pacotes ativados
+   serve ("Limitado · gerenciadores de pacotes ativados" ou "Trusted"). O
+   GitHub passa por um proxy próprio em qualquer nível; o npm precisa dos
+   gerenciadores de pacotes para os MCP e plugins.
+3. O repositório `ikeda7/claude-code-config` precisa ser **público**: o ambiente
+   não tem como dar ao setup script acesso a repositório privado.
+4. Em **Script de configuração** (Setup script), cole:
 
    ```bash
    #!/bin/bash
