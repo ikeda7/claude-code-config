@@ -19,7 +19,7 @@ agente, com as mesmas regras, os mesmos comandos e os mesmos automatismos.
 | `rules/` | 124 | Regras: `common/` sempre ativo, 21 linguagens sob demanda |
 | `scripts/` | 267 | Implementação dos hooks e utilitários de sync |
 | `prompts/` | 1 | Roteiros reutilizáveis meus |
-| `docs/` | 2 | `config-detalhes.md` (detalhes e histórico da config) e `rules-guide.md` (guia de instalação das regras do toolkit original) |
+| `docs/` | 3 | `manual.md` (**como usar tudo**: o que é automático, o que acionar, atalhos, problemas comuns), `config-detalhes.md` (detalhes e histórico da config) e `rules-guide.md` (guia de instalação das regras do toolkit original) |
 | `contexts/` | 3 | Referência manual |
 | `mcp-configs/` | 1 | Catálogo de MCP servers (referência, não ativo) |
 
@@ -101,7 +101,8 @@ e é fácil esquecer um dos dois.
 **Pendente nas 3 máquinas** (mudanças de 2026-10-28): siga o
 [checklist por máquina do `SETUP_TODO.md`](SETUP_TODO.md#checklist-por-máquina-fazer-nas-3).
 Em resumo: `git pull`, rodar o `bootstrap.ps1` **antes** de qualquer
-`make-shared.js` e reiniciar o Claude Code.
+`make-shared.js`, resolver o que o `check-machine.js` apontar e reiniciar o
+Claude Code.
 
 ### 1. Máquina nova (uma vez só)
 
@@ -126,7 +127,8 @@ Copy-Item $env:USERPROFILE\.claude.old\projects $env:USERPROFILE\.claude\ -Recur
 ```
 
 O `bootstrap.ps1` faz tudo: confere pré-requisitos, aplica a configuração
-compartilhada, injeta os MCP servers, instala os plugins e o `playwright-cli`.
+compartilhada, injeta os MCP servers, instala os plugins e o `playwright-cli`,
+e no fim roda o `check-machine.js`, que lista o que ainda falta e como resolver.
 **Não** instala nem configura o Headroom: ele desligaria o `/remote-control`
 (ver `SETUP_TODO.md`).
 
@@ -211,6 +213,8 @@ bootstrap.
 | `apply-plugins.js` | Registra marketplaces e instala os plugins de `settings.shared.json` (`--dry-run` só mostra) |
 | `make-shared.js` | Regenera `settings.shared.json` (com varredura de segredos) |
 | `check-ascii.js` | Barra BOM e caractere não-ASCII em `.ps1` |
+| `check-fluxo.js` | Barra skill, agent ou command fora do `skills/fluxo/catalogo.md` |
+| `check-machine.js` | Só lê: confere se a máquina está completa e mostra o comando que resolve cada falta |
 
 ### Por que o `check-ascii.js` existe
 

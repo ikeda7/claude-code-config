@@ -139,10 +139,15 @@ Duplicatas têm uma escolha **principal**; a outra fica como alternativa.
 | `cost-report` | T | Relatório de custo do ECC |
 | `aside` | F | Duplica o `/btw` nativo; use `/btw` |
 
-**Colisões com comandos nativos.** `plan` e `code-review` têm o mesmo nome de
-comandos nativos. Para o modo plano nativo use `Shift+Tab`; para a revisão
-nativa use `/review` (alias). Na primeira sessão de cada máquina, confira com
-`/help` qual versão cada nome abre e registre em `docs/config-detalhes.md`.
+**Colisões com comandos nativos.** Pela regra documentada do Claude Code, um
+command ou skill do usuário com o nome de um comando nativo **substitui o
+nativo, mas não os aliases dele**. Então:
+
+- `/plan` abre o do ECC (plano em `.claude/plans/` com confirmação, integrado
+  ao `plan-canvas` e ao `/plan-prd`). O modo plano nativo continua no
+  `Shift+Tab`.
+- `/code-review` abre o do ECC. A revisão nativa (níveis `low`..`max`,
+  `--fix`, PR) continua em `/review`, que é alias e não é substituído.
 
 ## Plugins ativos
 
@@ -157,7 +162,7 @@ nativa use `/review` (alias). Na primeira sessão de cada máquina, confira com
 | `cartographer` | Mapa do código em `docs/` | 1, 7 |
 | `claude-mem` | Memória entre sessões, busca no histórico | 1, 9 |
 | `context-mode` | Indexa saídas grandes fora do contexto | T |
-| `claude-md-management` | `/revise-claude-md` e melhoria do `CLAUDE.md` | 9 |
+| `claude-md-management` | `/claude-md-management:revise-claude-md` e melhoria do `CLAUDE.md` | 9 |
 | `claude-code-setup` | Recomenda automações (hooks, skills, MCP) para o projeto | 1 (`/fluxo init`) |
 | `hookify` | Hooks a partir de conversa | 9 |
 | `omniroute` | MCP gateway para outros provedores; exige servidor local | F, só se for rotear modelo |

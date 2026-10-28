@@ -145,8 +145,7 @@ está em [catalogo.md](catalogo.md).
 
 ### 9. Aprender (fim de tarefa relevante)
 
-- Erro repetido do agente: regra no `CLAUDE.md` (`/revise-claude-md` do
-  `claude-md-management`) ou hook que bloqueia (`/hookify`).
+- Erro repetido do agente: regra no `CLAUDE.md` (`/claude-md-management:revise-claude-md`) ou hook que bloqueia (`/hookify`).
 - Padrão reutilizável: `/learn`; instintos com `continuous-learning-v2`
   (`/instinct-status`, `/evolve`, `/promote`).
 - Pausar para continuar em outra máquina: `/save-session` e
