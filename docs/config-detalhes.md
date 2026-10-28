@@ -124,7 +124,14 @@ Via `settings.json` → `enabledPlugins`:
   bloqueando o WebFetch.
 - Marketplace oficial `claude-plugins-official` (`anthropics/claude-plugins-official`):
   `claude-code-setup`, `claude-md-management`, `hookify`, `security-guidance`,
-  `jdtls-lsp`, `typescript-lsp`, `commit-commands`, `pr-review-toolkit`.
+  `jdtls-lsp`, `typescript-lsp`, `commit-commands`, `pr-review-toolkit`,
+  `superpowers` e `claude-security` (estes dois a pedido do usuário em 2026-10-28).
+  `superpowers` (de `obra/superpowers`, listado no marketplace oficial) injeta
+  uma skill de uso no início de cada sessão e se sobrepõe em parte ao ECC
+  (`planner`, `tdd-guide`, `code-reviewer`); se o `/context` pesar, desligue-o
+  primeiro. `claude-security` roda varredura de vulnerabilidades com
+  `/claude-security`; seus hooks chamam `sh` (Git Bash) e os helpers são Python,
+  então precisa de `python` no PATH.
   `session-report` e `plugin-dev` ficam declarados como `false` (desligados em
   2026-10-28 para economizar contexto); para usar, troque para `true`.
 
@@ -143,6 +150,7 @@ instalados por `apply-plugins.js`):
 |---|---|---|
 | `cartographer@cartographer-marketplace` | `kingbootoshi/cartographer` | — |
 | `claude-mem@thedotmack` | `thedotmack/claude-mem` | worker em background (sobe sozinho) |
+| `omniroute@omniroute-claude-plugin` | `projectsaibg/omniroute-claude-plugin` | servidor OmniRoute rodando (`npm i -g omniroute` e `omniroute`) em `localhost:20128` |
 
 Avaliado e **não** ativado (decisão de 2026-10-22, ver `SETUP_TODO.md`):
 `headroom@headroom-marketplace` (`headroomlabs-ai/headroom`). É um proxy local
@@ -153,9 +161,17 @@ desliga o `/remote-control`, que o usuário usa. Por isso o plugin saiu de
 `init`. Não rodar `headroom init -g claude`. Numa máquina onde ele já rodou,
 `apply-shared.ps1` sobrescreve `env`/`hooks` e remove o `ANTHROPIC_BASE_URL`.
 
-Avaliado e **não** ativado: `omniroute@omniroute-claude-plugin`
-(`projectsaibg/omniroute-claude-plugin`) — só conecta a um servidor OmniRoute
-em `localhost:20128`, gateway que repassa prompts a provedores de terceiros.
+`omniroute` (ativado a pedido do usuário em 2026-10-28; antes estava só
+avaliado) não traz commands, skills nem hooks: só registra o MCP em
+`http://localhost:20128/api/mcp/stream`. Sem o servidor OmniRoute de pé, o MCP
+aparece como falha de conexão no `/mcp` e nada mais quebra. O OmniRoute é um
+gateway que repassa prompts a provedores de terceiros; o plugin não muda o
+`ANTHROPIC_BASE_URL`, então o `/remote-control` continua funcionando.
+
+Avaliado e **não** ativado: `caveman` (respostas telegráficas). Corta tokens
+de saída em prosa, que são uma fração pequena do custo numa sessão de código
+(o grosso é contexto de entrada: arquivos, tool results, histórico), e piora a
+leitura das respostas.
 
 `/plugin` não existe na extensão do VS Code. Para gerenciar plugins à mão, use o
 CLI embutido: `...\extensions\anthropic.claude-code-<versão>\resources\native-binary\claude.exe plugin ...`.

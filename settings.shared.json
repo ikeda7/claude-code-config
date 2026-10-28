@@ -268,10 +268,13 @@
     "typescript-lsp@claude-plugins-official": true,
     "commit-commands@claude-plugins-official": true,
     "pr-review-toolkit@claude-plugins-official": true,
+    "superpowers@claude-plugins-official": true,
+    "claude-security@claude-plugins-official": true,
     "session-report@claude-plugins-official": false,
     "plugin-dev@claude-plugins-official": false,
     "cartographer@cartographer-marketplace": true,
-    "claude-mem@thedotmack": true
+    "claude-mem@thedotmack": true,
+    "omniroute@omniroute-claude-plugin": true
   },
   "extraKnownMarketplaces": {
     "context-mode": {
@@ -296,6 +299,12 @@
       "source": {
         "source": "github",
         "repo": "thedotmack/claude-mem"
+      }
+    },
+    "omniroute-claude-plugin": {
+      "source": {
+        "source": "github",
+        "repo": "projectsaibg/omniroute-claude-plugin"
       }
     }
   },

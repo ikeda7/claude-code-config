@@ -14,6 +14,7 @@ Tudo que precisa rodar **em cada máquina** depois do `git pull` de 2026-10-28
 | 5 | `gh auth status` ok (senão `gh auth login`) | [x] 2026-10-22 | [ ] | [ ] |
 | 6 | Opcional: `pip uninstall headroom-ai`, se foi instalado | [ ] | [ ] | [ ] |
 | 7 | 1º uso num projeto web: `inspect.mjs` da `design-taste-frontend` acha o Edge/Chrome | [ ] | [ ] | [ ] |
+| 8 | Para usar o plugin `omniroute`: `npm i -g omniroute` e deixar `omniroute` rodando (senão o MCP só falha ao conectar) | [ ] | [ ] | [ ] |
 
 Por que o passo 2 vem **antes** de qualquer `make-shared.js`: o bootstrap roda
 o `apply-shared.ps1`, que leva para o `settings.json` local o que mudou no

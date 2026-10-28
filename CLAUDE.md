@@ -145,7 +145,8 @@ ou `/model opus[1m]` só quando a tarefa pedir. `/clear` ao trocar de tarefa,
 
 - MCP ativos (`~/.claude.json`): `memory`, `sequential-thinking`, `context7`,
   `filesystem`. Pendências com credencial: `SETUP_TODO.md`.
-- Plugins: `context-mode`, `claude-mem`, `cartographer` e os oficiais listados
+- Plugins: `context-mode`, `claude-mem`, `cartographer`, `omniroute` (exige
+  servidor OmniRoute local) e os oficiais listados
   em `settings.shared.json`. **Não** rodar `headroom init -g claude` (desliga o
   `/remote-control`).
 - `settings.shared.json` é versionado; `settings.json` e `~/.claude.json` não.
