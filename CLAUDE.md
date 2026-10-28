@@ -23,7 +23,7 @@ onde a config nasceu; nas outras, confira versões antes de presumir.
 |---|---|---|
 | `agents/` | 68 | Subagents especializados (`.md` com frontmatter) |
 | `commands/` | 95 | Slash commands |
-| `skills/` | 284 | Skills em subdiretórios com `SKILL.md` |
+| `skills/` | 289 | Skills em subdiretórios com `SKILL.md` |
 | `rules/` | 124 | Regras em 22 subdiretórios (`common/` + 21 linguagens) |
 | `scripts/` | 264 | Utilitários Node.js, implementação dos hooks e sync |
 | `prompts/` | 1 | Roteiros reutilizáveis do usuário (ex.: `setup-roadmap-github.md`, usado por `/setup-github`) |
@@ -42,7 +42,7 @@ testes. Os "comandos" são os scripts de sincronização em `scripts/sync/`:
 | `powershell -ExecutionPolicy Bypass -File scripts\sync\apply-shared.ps1` | Aplica `settings.shared.json` no `settings.json` local, preservando `permissions` |
 | `node scripts\sync\apply-mcp.js [--force]` | Injeta os MCP servers portáteis (`scripts\sync\mcp-shared.json`) em `~/.claude.json`, preservando `oauthAccount` |
 | `node scripts\sync\apply-plugins.js [--dry-run]` | Registra os marketplaces e instala os plugins de `settings.shared.json` via CLI do Claude Code (PATH ou binário da extensão do VS Code). Idempotente |
-| `powershell -ExecutionPolicy Bypass -File scripts\sync\bootstrap.ps1` | Orquestra os três acima e configura o Headroom; usar em máquina nova, após o clone, e após `git pull` que mude plugins/settings |
+| `powershell -ExecutionPolicy Bypass -File scripts\sync\bootstrap.ps1` | Orquestra os três acima, configura o Headroom e instala o `playwright-cli` global; usar em máquina nova, após o clone, e após `git pull` que mude plugins/settings |
 
 Fluxo padrão antes de commitar mudança de config:
 
@@ -107,6 +107,32 @@ Flutter/Dart — essas três são as que mais vão disparar a tabela.
 `angular-developer`, `dart-flutter-patterns`, `flutter-dart-code-review`,
 `postgres-patterns`, `database-migrations`, `docker-patterns`, `github-ops`,
 `e2e-testing`, `git-workflow`
+
+### Skills de frontend e design (instaladas de terceiros, 2026-10-28)
+
+Copiadas para `skills/` (não são plugin; atualizar = copiar de novo do upstream):
+
+| Skill | Origem | Para quê |
+|---|---|---|
+| `design-taste-frontend` | `Leonxlnx/taste-skill` v2.1.5 (MIT) | Direção de arte anti-"cara de IA": sorteia direções, tipografia e paleta de uma biblioteca, e inspeciona a página num navegador real (`scripts/inspect.mjs`). Precisa de Node 22+ e Chrome/Edge/Chromium |
+| `image-to-code` | `Leonxlnx/imagegen-skills` (MIT) | Gera a imagem do design **antes** de codar e implementa a partir dela. Claude Code não gera imagem sozinho: sem uma ferramenta de imagem, use com uma imagem/print de referência dada pelo usuário |
+| `awesome-design` | `VoltAgent/awesome-design-md` (MIT) | 84 `DESIGN.md` inspirados em marcas reais (Stripe, Linear, Vercel, Notion...). Wrapper próprio com índice; os arquivos ficam em `skills/awesome-design/designs/` |
+| `web-design-guidelines` | `vercel-labs/agent-skills` (MIT) | Revisão de UI contra as Web Interface Guidelines da Vercel (a11y, foco, forms, motion, tipografia). Busca as regras ao vivo; se o WebFetch falhar, usa `guidelines-snapshot.md` |
+| `playwright-cli` | `microsoft/playwright-cli` (Apache-2.0) | Abrir, clicar, preencher e tirar screenshot/snapshot do app rodando. Precisa do binário: `npm install -g @playwright/cli@latest` (o bootstrap instala) |
+
+Fluxo ao construir ou mexer em UI web (landing, página, tela de app):
+
+1. **Antes de codar:** `design-taste-frontend`. Se o usuário citar uma marca
+   como referência ou o projeto não tiver identidade visual, `awesome-design`
+   para fixar os tokens em `DESIGN.md`. Se houver imagem de referência (ou
+   ferramenta de gerar imagem), `image-to-code`.
+2. **Com o dev server de pé:** `playwright-cli` para abrir a página, navegar
+   e tirar screenshot em desktop e mobile. Olhe o resultado antes de dizer
+   que terminou.
+3. **Antes do PR:** `web-design-guidelines` nos arquivos de UI alterados.
+
+Não se aplica a backend, nem a Flutter (as três primeiras são para web). Em
+Angular, os tokens do `DESIGN.md` vão para o tema/SCSS do projeto.
 
 ## Hooks ativos
 

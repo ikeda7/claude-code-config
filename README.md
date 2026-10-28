@@ -14,7 +14,7 @@ agente, com as mesmas regras, os mesmos comandos e os mesmos automatismos.
 |---|---|---|
 | `agents/` | 68 | Subagents especializados por linguagem e por função |
 | `commands/` | 95 | Slash commands (`/plan`, `/pr`, `/setup-github`, …) |
-| `skills/` | 284 | Conhecimento sob demanda, carregado quando a tarefa casa |
+| `skills/` | 289 | Conhecimento sob demanda, carregado quando a tarefa casa |
 | `rules/` | 123 | Regras: `common/` sempre ativo, 21 linguagens sob demanda |
 | `scripts/` | 264 | Implementação dos hooks e utilitários de sync |
 | `prompts/` | 1 | Roteiros reutilizáveis meus |
@@ -39,7 +39,7 @@ O `README.md` que vinha em `rules/` foi movido para
 de instalação do toolkit. As regras por linguagem têm `paths:` (ex.:
 `**/*.java`) e só entram quando um arquivo daquele tipo é tocado.
 
-Todo o resto é **sob demanda**, e isso é proposital: 284 skills carregadas de
+Todo o resto é **sob demanda**, e isso é proposital: 289 skills carregadas de
 uma vez destruiriam a janela de contexto. Skills entram quando a descrição casa
 com a tarefa, agents quando são delegados, commands quando digitados, e as
 regras por linguagem seguem a tabela de marcadores no `CLAUDE.md`.
@@ -63,6 +63,10 @@ O que difere do toolkit original:
   estruturação de repositório (`prompts/setup-roadmap-github.md`).
 - **Tabela de regras por linguagem no `CLAUDE.md`** — sem ela, as 110 regras de
   Java/Angular/Dart/etc. ficariam inertes, porque não são autocarregadas.
+- **Skills de frontend de terceiros** — `design-taste-frontend`, `image-to-code`,
+  `awesome-design`, `web-design-guidelines` e `playwright-cli`, copiadas dos
+  repositórios originais (origem e fluxo de uso no `CLAUDE.md`). O bootstrap
+  instala o binário `playwright-cli` via npm.
 - **GateGuard desligado** (`ECC_GATEGUARD=off`) — por padrão ele nega o primeiro
   Bash de cada sessão e o primeiro Edit de cada arquivo, exigindo justificativa.
   Atrito alto demais para o ganho.
@@ -106,7 +110,7 @@ Copy-Item $env:USERPROFILE\.claude.old\projects $env:USERPROFILE\.claude\ -Recur
 ```
 
 O `bootstrap.ps1` faz tudo: confere pré-requisitos, aplica a configuração
-compartilhada e injeta os MCP servers.
+compartilhada, injeta os MCP servers, instala os plugins e o `playwright-cli`.
 
 O que ele **preserva** naquela máquina:
 

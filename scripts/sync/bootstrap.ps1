@@ -10,7 +10,8 @@
 #   3. injeta os MCP servers portateis em ~/.claude.json
 #   4. instala os plugins declarados (via CLI do Claude Code)
 #   5. instala e configura o proxy Headroom (se houver Python)
-#   6. reporta o que ficou pendente
+#   6. instala o playwright-cli global (usado pela skill playwright-cli)
+#   7. reporta o que ficou pendente
 #
 # Nao toca em credenciais. Nao autoriza OAuth. Nao apaga nada: tudo com backup.
 #
@@ -33,7 +34,7 @@ Write-Output "=============================================="
 Write-Output ""
 
 # ---- 1. pre-requisitos -----------------------------------------------------
-Write-Output "[1/5] Pre-requisitos"
+Write-Output "[1/6] Pre-requisitos"
 
 $node = Get-Command node -ErrorAction SilentlyContinue
 if (-not $node) {
@@ -57,7 +58,7 @@ if (-not (Test-Path (Join-Path $ClaudeDir 'settings.shared.json'))) {
 Write-Output ""
 
 # ---- 2. settings -----------------------------------------------------------
-Write-Output "[2/5] Configuracao: hooks, env, model, plugins"
+Write-Output "[2/6] Configuracao: hooks, env, model, plugins"
 & powershell -ExecutionPolicy Bypass -File (Join-Path $SyncDir 'apply-shared.ps1')
 if ($LASTEXITCODE -ne 0) {
     Write-Output "  ERRO ao aplicar settings. Abortado."
@@ -66,7 +67,7 @@ if ($LASTEXITCODE -ne 0) {
 Write-Output ""
 
 # ---- 3. MCP ----------------------------------------------------------------
-Write-Output "[3/5] MCP servers"
+Write-Output "[3/6] MCP servers"
 & node (Join-Path $SyncDir 'apply-mcp.js')
 if ($LASTEXITCODE -ne 0) {
     Write-Output "  ERRO ao aplicar MCP. Abortado."
@@ -77,7 +78,7 @@ Write-Output ""
 # ---- 4. plugins ------------------------------------------------------------
 # A extensao do VS Code nao instala sozinha plugin de marketplace novo.
 # Falha aqui nao aborta: o resto do ambiente ja esta aplicado.
-Write-Output "[4/5] Plugins"
+Write-Output "[4/6] Plugins"
 & node (Join-Path $SyncDir 'apply-plugins.js')
 if ($LASTEXITCODE -ne 0) {
     Write-Output "  AVISO: algum plugin nao instalou. Rode apply-plugins.js de novo depois."
@@ -89,7 +90,7 @@ Write-Output ""
 # ANTHROPIC_BASE_URL e hooks no settings.json local, por isso roda DEPOIS do
 # passo 2 (que sobrescreve env e hooks). Nao vai para settings.shared.json:
 # sem o proxy rodando, o Claude Code ficaria sem API.
-Write-Output "[5/5] Headroom (proxy de compressao de contexto)"
+Write-Output "[5/6] Headroom (proxy de compressao de contexto)"
 $headroom = Get-Command headroom -ErrorAction SilentlyContinue
 if (-not $headroom) {
     $py = Get-Command python -ErrorAction SilentlyContinue
@@ -112,6 +113,20 @@ if (-not $headroom) {
     & headroom init -g claude
     if ($LASTEXITCODE -ne 0) {
         Write-Output "  AVISO: headroom init falhou. Rode 'headroom doctor' para diagnosticar."
+    }
+}
+Write-Output ""
+
+# ---- 6. playwright-cli -----------------------------------------------------
+# A skill skills/playwright-cli chama o binario `playwright-cli`. Falha aqui
+# nao aborta: sem ele, a skill cai para `npx playwright` quando o projeto tem.
+Write-Output "[6/6] playwright-cli (automacao de navegador para as skills de frontend)"
+if (Get-Command playwright-cli -ErrorAction SilentlyContinue) {
+    Write-Output "  ja instalado"
+} else {
+    & npm install -g "@playwright/cli@latest"
+    if ($LASTEXITCODE -ne 0) {
+        Write-Output "  AVISO: falhou. Rode depois: npm install -g @playwright/cli@latest"
     }
 }
 Write-Output ""
