@@ -196,4 +196,4 @@ ou `/model opus[1m]` só quando a tarefa pedir. `/clear` ao trocar de tarefa,
   trocar a linha `# versao` do setup script do ambiente de nuvem, já com o
   valor novo pronto para colar: a data do dia (`2026-10-29`) ou, se já houve
   troca no mesmo dia, a próxima letra (`2026-10-28c`). Mudança só em `docs/`,
-  `README.md` ou `SETUP_TODO.md` não precisa. Última versão usada: `2026-10-28c`.
+  `README.md` ou `SETUP_TODO.md` não precisa. Última versão usada: `2026-10-28d`.
