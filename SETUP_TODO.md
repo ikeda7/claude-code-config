@@ -137,3 +137,12 @@ Sugestão: ativar sob demanda, conforme o projeto — não todos de uma vez.
       foram executados na instalação (só checagem de sintaxe); no primeiro uso
       num projeto web, confirmar que `inspect.mjs` acha o Edge/Chrome.
       PC principal: [ ] · Máquina 2: [ ] · Máquina 3: [ ]
+- [ ] **Aplicar a economia de tokens** (por máquina, após o `git pull`,
+      2026-10-28): rodar `apply-shared.ps1` (ou o `bootstrap.ps1`) **antes** do
+      próximo `make-shared.js`. Ele leva para o `settings.json` local o
+      `model: opus` (era `opus[1m]`), `effortLevel: medium` (era `high`),
+      `ECC_SESSION_START_CONTEXT=off` e `session-report`/`plugin-dev`
+      desligados; sem isso o `make-shared.js` reverteria tudo a partir do
+      `settings.json` antigo. Reiniciar o Claude Code e conferir com `/context`
+      numa sessão nova. As skills/agents/commands arquivados vêm pelo próprio
+      `git pull` (`archive/`). PC principal: [ ] · Máquina 2: [ ] · Máquina 3: [ ]

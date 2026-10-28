@@ -12,9 +12,10 @@ agente, com as mesmas regras, os mesmos comandos e os mesmos automatismos.
 
 | Diretório | Qtd | O que é |
 |---|---|---|
-| `agents/` | 68 | Subagents especializados por linguagem e por função |
-| `commands/` | 95 | Slash commands (`/plan`, `/pr`, `/setup-github`, …) |
-| `skills/` | 289 | Conhecimento sob demanda, carregado quando a tarefa casa |
+| `agents/` | 26 | Subagents das stacks em uso (Java/Spring, Angular/TS, Flutter) e transversais |
+| `commands/` | 46 | Slash commands (`/plan`, `/pr`, `/setup-github`, …) |
+| `skills/` | 53 | Conhecimento sob demanda, carregado quando a tarefa casa |
+| `archive/` | 236 skills · 42 agents · 49 commands | Fora das stacks em uso; **não carregam**. Para reativar, mova de volta para `skills/`, `agents/` ou `commands/` |
 | `rules/` | 123 | Regras: `common/` sempre ativo, 21 linguagens sob demanda |
 | `scripts/` | 264 | Implementação dos hooks e utilitários de sync |
 | `prompts/` | 1 | Roteiros reutilizáveis meus |
@@ -22,7 +23,7 @@ agente, com as mesmas regras, os mesmos comandos e os mesmos automatismos.
 | `contexts/` | 3 | Referência manual |
 | `mcp-configs/` | 1 | Catálogo de MCP servers (referência, não ativo) |
 
-Detalhamento completo em [CLAUDE.md](CLAUDE.md), que é o arquivo que o próprio
+Resumo em [CLAUDE.md](CLAUDE.md), que é o arquivo que o próprio
 Claude Code lê no início de toda sessão.
 
 ## O que é carregado automaticamente
@@ -30,8 +31,10 @@ Claude Code lê no início de toda sessão.
 Só isto entra no contexto em toda sessão, de todo projeto:
 
 - `CLAUDE.md`
-- `rules/common/*.md` — 13 regras, incluindo o fluxo GitFlow, o deploy na Vercel
-  e a documentação viva
+- `rules/common/*.md` — 12 regras, incluindo o fluxo GitFlow e a documentação
+  viva (`deploy-vercel.md` tem `paths:` e só entra em projeto com `vercel.json`)
+- **o nome e a descrição de cada skill, agent e command** instalado — por isso
+  o que não é das stacks em uso fica em `archive/` (ver abaixo)
 
 O `README.md` que vinha em `rules/` foi movido para
 [docs/rules-guide.md](docs/rules-guide.md): todo `.md` em `rules/` sem
@@ -39,8 +42,9 @@ O `README.md` que vinha em `rules/` foi movido para
 de instalação do toolkit. As regras por linguagem têm `paths:` (ex.:
 `**/*.java`) e só entram quando um arquivo daquele tipo é tocado.
 
-Todo o resto é **sob demanda**, e isso é proposital: 289 skills carregadas de
-uma vez destruiriam a janela de contexto. Skills entram quando a descrição casa
+O corpo de cada skill é **sob demanda**, mas as descrições não: com 289 skills
+elas somavam ~78 KB (~20k tokens) em todo turno de toda sessão. Em 2026-10-28
+as fora das stacks em uso foram para `archive/`, baixando para ~13 KB. Skills entram quando a descrição casa
 com a tarefa, agents quando são delegados, commands quando digitados, e as
 regras por linguagem seguem a tabela de marcadores no `CLAUDE.md`.
 
