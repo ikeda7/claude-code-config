@@ -25,7 +25,7 @@ onde a config nasceu; nas outras, confira versões antes de presumir.
 | `commands/` | 95 | Slash commands |
 | `skills/` | 289 | Skills em subdiretórios com `SKILL.md` |
 | `rules/` | 124 | Regras em 22 subdiretórios (`common/` + 21 linguagens) |
-| `scripts/` | 264 | Utilitários Node.js, implementação dos hooks e sync |
+| `scripts/` | 267 | Utilitários Node.js, implementação dos hooks e sync |
 | `prompts/` | 1 | Roteiros reutilizáveis do usuário (ex.: `setup-roadmap-github.md`, usado por `/setup-github`) |
 | `contexts/` | 3 | Arquivos de contexto (referência manual, não carregam sozinhos) |
 | `mcp-configs/` | 1 | `mcp-servers.json` — catálogo de referência, não ativo |
@@ -42,7 +42,7 @@ testes. Os "comandos" são os scripts de sincronização em `scripts/sync/`:
 | `powershell -ExecutionPolicy Bypass -File scripts\sync\apply-shared.ps1` | Aplica `settings.shared.json` no `settings.json` local, preservando `permissions` |
 | `node scripts\sync\apply-mcp.js [--force]` | Injeta os MCP servers portáteis (`scripts\sync\mcp-shared.json`) em `~/.claude.json`, preservando `oauthAccount` |
 | `node scripts\sync\apply-plugins.js [--dry-run]` | Registra os marketplaces e instala os plugins de `settings.shared.json` via CLI do Claude Code (PATH ou binário da extensão do VS Code). Idempotente |
-| `powershell -ExecutionPolicy Bypass -File scripts\sync\bootstrap.ps1` | Orquestra os três acima, configura o Headroom e instala o `playwright-cli` global; usar em máquina nova, após o clone, e após `git pull` que mude plugins/settings |
+| `powershell -ExecutionPolicy Bypass -File scripts\sync\bootstrap.ps1` | Orquestra os três acima e instala o `playwright-cli` global (não instala nem configura o Headroom); usar em máquina nova, após o clone, e após `git pull` que mude plugins/settings |
 
 Fluxo padrão antes de commitar mudança de config:
 
@@ -245,16 +245,15 @@ instalados por `apply-plugins.js`):
 |---|---|---|
 | `cartographer@cartographer-marketplace` | `kingbootoshi/cartographer` | — |
 | `claude-mem@thedotmack` | `thedotmack/claude-mem` | worker em background (sobe sozinho) |
-| `headroom@headroom-marketplace` | `headroomlabs-ai/headroom` | Python 3.10+ e `pip install headroom-ai[all]` (o bootstrap faz, se houver Python) |
 
-Headroom é um proxy local (`127.0.0.1:8787`) que comprime o contexto antes de
-enviar à API. `headroom init -g claude` grava `ANTHROPIC_BASE_URL` e hooks no
-`settings.json` **local**. Isso fica fora de `settings.shared.json` de
-propósito: numa máquina sem o proxy, o Claude Code ficaria sem API. Por isso o
-bootstrap roda o `init` depois do `apply-shared` (que sobrescreve `env`/`hooks`).
-Diagnóstico: `headroom doctor`. Para desligar: remova `ANTHROPIC_BASE_URL` do
-`env` local. Efeito colateral: `/remote-control` fica indisponível enquanto
-`ANTHROPIC_BASE_URL` aponta para o proxy.
+Avaliado e **não** ativado (decisão de 2026-10-22, ver `SETUP_TODO.md`):
+`headroom@headroom-marketplace` (`headroomlabs-ai/headroom`). É um proxy local
+(`127.0.0.1:8787`) que comprime o contexto antes de enviar à API, mas
+`headroom init -g claude` aponta `ANTHROPIC_BASE_URL` para o proxy, e isso
+desliga o `/remote-control`, que o usuário usa. Por isso o plugin saiu de
+`settings.shared.json` e o `bootstrap.ps1` não instala o pacote nem roda o
+`init`. Não rodar `headroom init -g claude`. Numa máquina onde ele já rodou,
+`apply-shared.ps1` sobrescreve `env`/`hooks` e remove o `ANTHROPIC_BASE_URL`.
 
 Avaliado e **não** ativado: `omniroute@omniroute-claude-plugin`
 (`projectsaibg/omniroute-claude-plugin`) — só conecta a um servidor OmniRoute

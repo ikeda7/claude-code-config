@@ -119,15 +119,15 @@ Sugestão: ativar sob demanda, conforme o projeto — não todos de uma vez.
 - [x] **Replicar em outras máquinas** — feito: repo `ikeda7/claude-code-config`.
 - [x] **Headroom — decidido: NÃO ativar** (2026-10-22). O `init` aponta
       `ANTHROPIC_BASE_URL` para o proxy, e isso desliga o `/remote-control`, que
-      o usuário usa. O bootstrap ainda instala o pacote se houver Python; isso é
-      inofensivo sem o `init`. Não rodar `headroom init -g claude`.
+      o usuário usa. O plugin saiu de `settings.shared.json` e o bootstrap não
+      instala o pacote nem roda o `init` (2026-10-28). Não rodar
+      `headroom init -g claude`.
 - [ ] **`gh` CLI** (por máquina): se `gh auth status` disser "token invalid",
       rodar `gh auth login` (interativo). PC principal: feito em 2026-10-22.
 - [ ] **Skills de frontend** (por máquina, adicionadas em 2026-10-28): depois
-      do `git pull`, rodar `npm install -g @playwright/cli@latest` e conferir
-      com `playwright-cli --version`. Não rode o `bootstrap.ps1` inteiro só
-      para isso: o passo 5 dele ainda roda `headroom init`, contra a decisão
-      registrada acima. Os scripts da `design-taste-frontend` não
+      do `git pull`, rodar `npm install -g @playwright/cli@latest` (ou o
+      `bootstrap.ps1`, que faz isso no passo 5) e conferir com
+      `playwright-cli --version`. Os scripts da `design-taste-frontend` não
       foram executados na instalação (só checagem de sintaxe); no primeiro uso
       num projeto web, confirmar que `inspect.mjs` acha o Edge/Chrome.
       PC principal: [ ] · Máquina 2: [ ] · Máquina 3: [ ]
