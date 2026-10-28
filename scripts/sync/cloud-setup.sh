@@ -16,8 +16,8 @@
 #     ~/.claude/settings.json; model, effortLevel e statusLine ficam de fora,
 #     porque na nuvem o modelo e escolhido na interface
 #   - injeta os MCP servers portateis (apply-mcp.js)
-#   - instala os plugins (apply-plugins.js), com limite de tempo; pule com
-#     --no-plugins
+#   - instala o playwright-cli e os plugins (apply-plugins.js), com limite
+#     de tempo; pule os plugins com --no-plugins
 #
 # Nunca sai com erro: setup script com exit != 0 impede a sessao de abrir.
 # CLAUDE_CLOUD_HOME troca o destino (usado em teste).
@@ -76,7 +76,14 @@ EOF
 CLAUDE_HOME="$HOME_DIR" node "$SRC/scripts/sync/apply-mcp.js" \
   || echo "[cloud-setup] AVISO: falhou aplicar MCP"
 
-# ---- 4. plugins ------------------------------------------------------------
+# ---- 4. playwright-cli -----------------------------------------------------
+# A skill playwright-cli chama o binario; o bootstrap.ps1 faz o mesmo no PC.
+if [ -z "${CLAUDE_CLOUD_HOME:-}" ] && ! command -v playwright-cli >/dev/null 2>&1; then
+  timeout 90 npm install -g @playwright/cli@latest >/dev/null 2>&1 \
+    || echo "[cloud-setup] AVISO: playwright-cli nao instalou"
+fi
+
+# ---- 5. plugins ------------------------------------------------------------
 # O cache do ambiente so e gravado se o setup terminar em ~5 min; por isso o
 # limite. Plugin que nao instalar fica de fora, sem travar a sessao.
 if [ "$PLUGINS" = "1" ] && [ -z "${CLAUDE_CLOUD_HOME:-}" ]; then

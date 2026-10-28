@@ -117,7 +117,8 @@ check('Catalogo do fluxo completo', sh(process.execPath, [path.join(__dirname, '
 const nodeMajor = Number(process.versions.node.split('.')[0]);
 check('Node.js 18+ (atual ' + process.versions.node + ')', nodeMajor >= 18, 'instale Node.js LTS');
 check('git no PATH', sh('git', ['--version']).ok, 'instale o Git for Windows');
-check('gh autenticado', sh('gh', ['auth', 'status']).ok, 'gh auth login');
+// Na nuvem o GitHub passa pelo proxy do ambiente; `gh auth` nao se aplica.
+if (!IS_CLOUD) check('gh autenticado', sh('gh', ['auth', 'status']).ok, 'gh auth login');
 check('playwright-cli instalado', sh('playwright-cli', ['--version']).ok,
   'npm install -g @playwright/cli@latest');
 // O claude-security chama `python3` (3.9+). No Windows, `python3` pode ser o
