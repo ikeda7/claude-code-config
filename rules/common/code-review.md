@@ -66,9 +66,8 @@ Use these agents for code review:
 | **code-reviewer** | General code quality, patterns, best practices |
 | **security-reviewer** | Security vulnerabilities, OWASP Top 10 |
 | **typescript-reviewer** | TypeScript/JavaScript specific issues |
-| **python-reviewer** | Python specific issues |
-| **go-reviewer** | Go specific issues |
-| **rust-reviewer** | Rust specific issues |
+| **java-reviewer** | Java/Spring specific issues |
+| **flutter-reviewer** | Flutter/Dart specific issues |
 
 ## Review Workflow
 

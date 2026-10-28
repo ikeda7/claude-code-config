@@ -253,10 +253,11 @@
   "env": {
     "ECC_GATEGUARD": "off",
     "ECC_HOOK_PROFILE": "standard",
-    "ECC_DISABLED_HOOKS": "pre:bash:auto-tmux-dev"
+    "ECC_DISABLED_HOOKS": "pre:bash:auto-tmux-dev",
+    "ECC_SESSION_START_CONTEXT": "off"
   },
-  "model": "opus[1m]",
-  "effortLevel": "high",
+  "model": "opus",
+  "effortLevel": "medium",
   "enabledPlugins": {
     "context-mode@context-mode": true,
     "claude-code-setup@claude-plugins-official": true,
@@ -267,8 +268,8 @@
     "typescript-lsp@claude-plugins-official": true,
     "commit-commands@claude-plugins-official": true,
     "pr-review-toolkit@claude-plugins-official": true,
-    "session-report@claude-plugins-official": true,
-    "plugin-dev@claude-plugins-official": true,
+    "session-report@claude-plugins-official": false,
+    "plugin-dev@claude-plugins-official": false,
     "cartographer@cartographer-marketplace": true,
     "claude-mem@thedotmack": true
   },

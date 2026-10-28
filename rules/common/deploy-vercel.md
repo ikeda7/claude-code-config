@@ -1,3 +1,8 @@
+---
+paths:
+  - "**/vercel.json"
+  - "**/.vercel/**"
+---
 # Deploy na Vercel
 
 Meus projetos web são publicados na Vercel com integração GitHub: todo push
