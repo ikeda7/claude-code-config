@@ -47,7 +47,7 @@ testes. Os "comandos" são os scripts de sincronização em `scripts/sync/`:
 | `node scripts\sync\apply-mcp.js [--force]` | Injeta os MCP servers portáteis (`scripts\sync\mcp-shared.json`) em `~/.claude.json`, preservando `oauthAccount` |
 | `node scripts\sync\apply-plugins.js [--dry-run]` | Registra os marketplaces e instala os plugins de `settings.shared.json` via CLI do Claude Code (PATH ou binário da extensão do VS Code). Idempotente |
 | `node scripts\sync\apply-terminal.js [--dry-run] [--set-default]` | Funde `terminal/windows-terminal.json` (perfil "Claude Code" padrão, Git Bash, tema, `Ctrl+Alt+C`) no Windows Terminal, com backup. Não tira o padrão de um perfil WSL sem `--set-default` |
-| `node scripts\syncpply-claude-mem.js [--dry-run]` | Aplica `claude-mem-shared.json` no `~/.claude-mem/settings.json` (economia de cota), com backup |
+| `node scripts\sync\apply-claude-mem.js [--dry-run]` | Aplica `claude-mem-shared.json` no `~/.claude-mem/settings.json` (economia de cota), com backup |
 | `bash scripts/sync/cloud-setup.sh [--no-plugins]` | Na nuvem: instala esta config no `~/.claude` da VM. Vai no setup script do ambiente (texto em `docs/manual.md`, seção 9.1) |
 | `powershell -ExecutionPolicy Bypass -File scripts\sync\bootstrap.ps1` | Orquestra `apply-shared.ps1`, `apply-mcp.js`, `apply-plugins.js`, `apply-terminal.js` e `apply-claude-mem.js`, instala o `playwright-cli` global (não instala nem configura o Headroom); usar em máquina nova, após o clone, e após `git pull` que mude plugins/settings |
 
