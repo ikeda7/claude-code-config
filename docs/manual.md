@@ -95,8 +95,9 @@ eventos de governança (segredo detectado etc.), métricas de uso de
 ferramentas e skills, custo por sessão em `~/.claude/metrics/costs.jsonl`,
 gravação da sessão e observação para aprendizado contínuo.
 
-Desligados de propósito: `gateguard-fact-force` (pedia justificativa a cada
-primeiro Bash/Edit), `auto-tmux-dev` (sem tmux no Windows) e a injeção de
+Desligados ou removidos de propósito: `gateguard-fact-force` (pedia justificativa a cada
+primeiro Bash/Edit), `governance-capture` e `observe-runner` (rodavam a cada
+ferramenta sem efeito), `auto-tmux-dev` (sem tmux no Windows) e a injeção de
 contexto da sessão anterior no início (a memória fica com o `claude-mem`).
 `tmux-reminder`, `git-push-reminder` e `commit-quality` só rodam no perfil
 `strict`.
@@ -360,11 +361,10 @@ vez, vale para toda sessão nesse ambiente, em qualquer repositório.
    `/`. `node ~/.claude/scripts/sync/check-machine.js` confere o resto.
 
 O que vai para a nuvem: `CLAUDE.md`, regras, skills, agents, commands, hooks,
-variáveis `ECC_*`, MCP (`memory`, `sequential-thinking`, `context7`) e os
+variáveis `ECC_*`, MCP (`context7`) e os
 plugins (instalação com limite de tempo; um plugin que falhar fica de fora sem
 travar a sessão). O que fica de fora de propósito: `model` e `effortLevel` (na
-nuvem você escolhe na interface), status line, MCP `filesystem` (aponta para
-pastas do PC) e os scripts `.ps1`.
+nuvem você escolhe na interface), status line e os scripts `.ps1`.
 
 **Atualizações.** O ambiente guarda um snapshot depois do primeiro setup e só
 roda o script de novo quando ele muda ou a cada ~7 dias. Depois de mudar a

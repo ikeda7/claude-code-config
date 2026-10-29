@@ -8,7 +8,9 @@
  * Preserva TODO o resto do arquivo, inclusive `oauthAccount` e `projects`.
  * Por padrao nao sobrescreve server ja existente; use --force para isso.
  *
- * Os roots do `filesystem` sao resolvidos por maquina: so entram diretorios
+ * Servers listados em "retired" no mcp-shared.json sao removidos.
+ *
+ * Os roots do `filesystem` (se ele voltar ao mcp-shared.json) sao resolvidos por maquina: so entram diretorios
  * que existem de fato ali. Caminhos extras podem vir por argumento.
  *
  * CLAUDE_HOME sobrescreve o diretorio home (usado pelos testes).
@@ -79,7 +81,9 @@ function main() {
     process.exit(1);
   }
 
-  const shared = readJsonTolerant(SHARED).mcpServers || {};
+  const sharedFile = readJsonTolerant(SHARED);
+  const shared = sharedFile.mcpServers || {};
+  const retired = (sharedFile.retired || []).filter(n => !(n in shared));
   const roots = resolveRoots();
 
   let target = {};
@@ -126,6 +130,10 @@ function main() {
     target.mcpServers[name] = cfg;
   }
 
+  // Servers aposentados do repo: saem de toda maquina no proximo bootstrap.
+  const removed = retired.filter(name => name in target.mcpServers);
+  for (const name of removed) delete target.mcpServers[name];
+
   fs.writeFileSync(TARGET, JSON.stringify(target, null, 2) + '\n', 'utf8');
 
   // verificacao pos-escrita
@@ -140,6 +148,7 @@ function main() {
   console.log('  roots:       ' + (roots.join(' | ') || '(nenhum)'));
   console.log('  adicionados: ' + (added.join(', ') || '(nenhum)'));
   if (replaced.length) console.log('  substituidos:' + replaced.join(', '));
+  if (removed.length) console.log('  removidos:   ' + removed.join(', ') + '  (aposentados em mcp-shared.json)');
   if (kept.length) console.log('  preservados: ' + kept.join(', ') + '  (use --force para sobrescrever)');
   console.log('  chaves no arquivo: ' + keyCountBefore + ' -> ' + Object.keys(after).length);
   console.log('  oauthAccount: ' + (after.oauthAccount ? 'intacto' : 'ausente (nao havia)'));

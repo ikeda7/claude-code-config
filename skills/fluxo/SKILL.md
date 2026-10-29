@@ -52,7 +52,7 @@ está em [catalogo.md](catalogo.md).
   `docs-lookup` se a pesquisa for longa). Nunca de memória.
 - Antes de escrever utilitário: `search-first` (lib pronta > código novo).
 - Pergunta externa ampla, com várias fontes: `/deep-research` (workflow nativo).
-- Problema de raciocínio difícil: MCP `sequential-thinking`, ou `/effort high`.
+- Problema de raciocínio difícil: `/effort high`.
 - Dúvida paralela sem poluir o contexto: `/btw`.
 
 ### 2. Decidir e planejar (médio e grande)

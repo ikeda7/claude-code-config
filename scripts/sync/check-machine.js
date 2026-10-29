@@ -122,8 +122,10 @@ const mcpLocal = Object.keys(claudeJson.mcpServers || {});
 const missingMcp = Object.keys(mcpShared.mcpServers)
   .filter(n => !(IS_CLOUD && n === 'filesystem'))
   .filter(n => !mcpLocal.includes(n));
-check('MCP servers globais' + (missingMcp.length ? ': faltam ' + missingMcp.join(', ') : ''),
-  missingMcp.length === 0,
+const leftoverMcp = (mcpShared.retired || []).filter(n => mcpLocal.includes(n));
+check('MCP servers globais' + (missingMcp.length ? ': faltam ' + missingMcp.join(', ') : '') +
+  (leftoverMcp.length ? ': sobraram aposentados ' + leftoverMcp.join(', ') : ''),
+  missingMcp.length === 0 && leftoverMcp.length === 0,
   'node ~/.claude/scripts/sync/apply-mcp.js');
 
 // ---- 5. fluxo padrao ------------------------------------------------------
@@ -154,6 +156,10 @@ check('sh no PATH (hooks do claude-security)', sh('sh', ['--version']).ok || sh(
   'instale o Git for Windows e ponha o Git\\bin no PATH');
 
 // ---- 7. opcionais -----------------------------------------------------------
+if (wanted.some(id => id.startsWith('claude-mem@'))) {
+  check('claude-mem com os ajustes de cota do repo (opcional)', require('./apply-claude-mem.js').isApplied(),
+    'node ~/.claude/scripts/sync/apply-claude-mem.js (precisa ter rodado uma sessao com o claude-mem)', true);
+}
 if (IS_WIN && !IS_CLOUD) {
   const terminal = require('./apply-terminal.js');
   check('Windows Terminal com o perfil Claude Code (opcional)', terminal.isApplied(),

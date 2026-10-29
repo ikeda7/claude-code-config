@@ -132,8 +132,8 @@ marquei porque estava agrupado com vercel/cloudflare/railway na pergunta.
 
 O próprio catálogo do toolkit recomenda **manter menos de 10 servers ativos**,
 porque cada um injeta as definições das suas ferramentas no contexto de toda
-sessão. Hoje você tem 4 ativos (`memory`, `sequential-thinking`, `context7`,
-`filesystem`) mais o plugin `context-mode`. Ativar os 6 acima levaria a ~13 e
+sessão. Hoje você tem 1 ativo (`context7`) mais o plugin `context-mode`. Ativar os 6
+acima levaria a ~8 e
 comeria contexto de forma perceptível.
 
 Sugestão: ativar sob demanda, conforme o projeto — não todos de uma vez.
