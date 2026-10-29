@@ -319,6 +319,7 @@ Este repo fica clonado **direto em `~/.claude`** nas 3 máquinas. Na nuvem, ver
 | Máquina nova | clone em `~/.claude` e rode `bootstrap.ps1` (README, "Máquina nova") |
 | Depois de `git pull` | `bootstrap.ps1` se mudou plugin ou settings; na dúvida, rode |
 | Conferir se está tudo certo | `node ~/.claude/scripts/sync/check-machine.js` |
+| Quero o Windows Terminal igual ao do PC pessoal | `node ~/.claude/scripts/sync/apply-terminal.js` (o bootstrap já roda; README, "Windows Terminal") |
 | Mudei hook, env, model ou plugin no `settings.json` | `make-shared.js`, `check-fluxo.js`, `check-ascii.js`, commit e push |
 
 O `check-machine.js` só lê. Ele confere o repo atualizado, o `settings.json`

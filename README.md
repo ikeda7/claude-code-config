@@ -128,7 +128,8 @@ Copy-Item $env:USERPROFILE\.claude.old\projects $env:USERPROFILE\.claude\ -Recur
 
 O `bootstrap.ps1` faz tudo: confere pré-requisitos, aplica a configuração
 compartilhada, injeta os MCP servers, instala os plugins e o `playwright-cli`,
-e no fim roda o `check-machine.js`, que lista o que ainda falta e como resolver.
+aplica a personalização do Windows Terminal (ver abaixo) e no fim roda o
+`check-machine.js`, que lista o que ainda falta e como resolver.
 **Não** instala nem configura o Headroom: ele desligaria o `/remote-control`
 (ver `SETUP_TODO.md`).
 
@@ -145,6 +146,33 @@ não tenha esse drive.
 Se a máquina já tiver um `~/.claude/` com coisas suas, clone em outro lugar e
 copie o que interessa — o bootstrap preserva config, mas o clone por cima
 sobrescreveria arquivos.
+
+#### Windows Terminal
+
+`terminal/windows-terminal.json` guarda o terminal do PC pessoal, e o
+`apply-terminal.js` funde esse arquivo no Terminal da máquina. O bootstrap já
+chama o script, e dá para rodar sozinho:
+
+```powershell
+node $env:USERPROFILE\.claude\scripts\sync\apply-terminal.js --dry-run   # só mostra
+node $env:USERPROFILE\.claude\scripts\sync\apply-terminal.js             # aplica, com backup
+```
+
+- Perfil **Claude Code** (abre `cmd /k claude`, aba laranja, ícone 🤖) como
+  padrão, e perfil **Git Bash** quando o Git está em `C:\Program Files\Git`.
+- Em todos os perfis: Cascadia Code 11, One Half Dark, cursor em barra,
+  50 mil linhas de histórico, opacidade 97, sino pisca a barra de tarefas.
+- Copiar ao selecionar, colar várias linhas sem aviso, janela 140×38.
+- `Ctrl+Alt+C` abre uma aba nova do Claude Code.
+
+Os perfis que já existem ficam intactos (o Ubuntu do WSL, por exemplo). Um
+"Claude Code" antigo com outro guid é trocado pelo do repo. Se o padrão atual é
+um perfil WSL, ele continua padrão; `--set-default` troca mesmo assim. O
+original fica em `settings.json.bak-<data>`, na pasta do Terminal.
+
+Mudou o terminal e quer levar para as outras máquinas? Edite
+`terminal/windows-terminal.json` (as chaves têm o mesmo nome do `settings.json`
+do Terminal), commite e rode o script nelas.
 
 ### 2. Antes de começar a trabalhar (todo dia)
 
@@ -183,6 +211,7 @@ Onde cada tipo de mudança vive:
 | Hooks, env, model, plugins | `settings.json`, depois `make-shared.js` | Sim, via `settings.shared.json` |
 | Regras, agents, skills, commands | Os `.md` nas pastas | Sim |
 | MCP servers | `scripts/sync/mcp-shared.json` | Sim, via bootstrap |
+| Windows Terminal | `terminal/windows-terminal.json` | Sim, via bootstrap ou `apply-terminal.js` |
 | Permissões aprovadas | Nada: ficam por máquina | Não, de propósito |
 | Login do Claude, chaves de MCP | `~/.claude.json` | Não, nunca |
 
@@ -211,6 +240,7 @@ bootstrap.
 | `apply-shared.ps1` | Mescla `settings.shared.json` no `settings.json` local |
 | `apply-mcp.js` | Injeta MCP servers em `~/.claude.json` |
 | `apply-plugins.js` | Registra marketplaces e instala os plugins de `settings.shared.json` (`--dry-run` só mostra) |
+| `apply-terminal.js` | Funde `terminal/windows-terminal.json` no Windows Terminal, com backup (`--dry-run`, `--set-default`) |
 | `make-shared.js` | Regenera `settings.shared.json` (com varredura de segredos) |
 | `check-ascii.js` | Barra BOM e caractere não-ASCII em `.ps1` |
 | `check-fluxo.js` | Barra skill, agent ou command fora do `skills/fluxo/catalogo.md` |

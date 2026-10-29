@@ -136,6 +136,11 @@ check('sh no PATH (hooks do claude-security)', sh('sh', ['--version']).ok || sh(
   'instale o Git for Windows e ponha o Git\\bin no PATH');
 
 // ---- 7. opcionais -----------------------------------------------------------
+if (IS_WIN && !IS_CLOUD) {
+  const terminal = require('./apply-terminal.js');
+  check('Windows Terminal com o perfil Claude Code (opcional)', terminal.isApplied(),
+    'node ~/.claude/scripts/sync/apply-terminal.js', true);
+}
 if (wanted.some(id => id.startsWith('omniroute@'))) {
   check('omniroute instalado (opcional, so para rotear modelos)', sh('omniroute', ['--version']).ok,
     'npm i -g omniroute e deixe "omniroute" rodando', true);

@@ -28,6 +28,7 @@ onde a config nasceu; nas outras, confira versões antes de presumir.
 | `scripts/` | 267 | Utilitários Node.js, implementação dos hooks e sync |
 | `prompts/` | 1 | Roteiros reutilizáveis do usuário (ex.: `setup-roadmap-github.md`, usado por `/setup-github`) |
 | `contexts/` | 3 | Arquivos de contexto (referência manual, não carregam sozinhos) |
+| `terminal/` | 1 | `windows-terminal.json`: o Windows Terminal padrão, aplicado por `apply-terminal.js` |
 | `mcp-configs/` | 1 | `mcp-servers.json` — catálogo de referência, não ativo |
 | `archive/` | 241 · 42 · 57 | Skills, agents e commands de outras stacks. **Não carregam.** Para usar um, mova de volta para `skills/`, `agents/` ou `commands/` |
 
@@ -45,8 +46,9 @@ testes. Os "comandos" são os scripts de sincronização em `scripts/sync/`:
 | `powershell -ExecutionPolicy Bypass -File scripts\sync\apply-shared.ps1` | Aplica `settings.shared.json` no `settings.json` local, preservando `permissions` |
 | `node scripts\sync\apply-mcp.js [--force]` | Injeta os MCP servers portáteis (`scripts\sync\mcp-shared.json`) em `~/.claude.json`, preservando `oauthAccount` |
 | `node scripts\sync\apply-plugins.js [--dry-run]` | Registra os marketplaces e instala os plugins de `settings.shared.json` via CLI do Claude Code (PATH ou binário da extensão do VS Code). Idempotente |
+| `node scripts\sync\apply-terminal.js [--dry-run] [--set-default]` | Funde `terminal/windows-terminal.json` (perfil "Claude Code" padrão, Git Bash, tema, `Ctrl+Alt+C`) no Windows Terminal, com backup. Não tira o padrão de um perfil WSL sem `--set-default` |
 | `bash scripts/sync/cloud-setup.sh [--no-plugins]` | Na nuvem: instala esta config no `~/.claude` da VM. Vai no setup script do ambiente (texto em `docs/manual.md`, seção 9.1) |
-| `powershell -ExecutionPolicy Bypass -File scripts\sync\bootstrap.ps1` | Orquestra os três acima e instala o `playwright-cli` global (não instala nem configura o Headroom); usar em máquina nova, após o clone, e após `git pull` que mude plugins/settings |
+| `powershell -ExecutionPolicy Bypass -File scripts\sync\bootstrap.ps1` | Orquestra os três acima, o `apply-terminal.js` e instala o `playwright-cli` global (não instala nem configura o Headroom); usar em máquina nova, após o clone, e após `git pull` que mude plugins/settings |
 
 Fluxo padrão antes de commitar mudança de config:
 

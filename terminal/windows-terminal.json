@@ -1,0 +1,67 @@
+{
+    "_comment": "Personalizacao do Windows Terminal aplicada por scripts/sync/apply-terminal.js. Cada bloco e fundido no settings.json do Terminal sem apagar o que ja existe. Origem: PC pessoal, 2026-10-29.",
+    "settings": {
+        "copyFormatting": "none",
+        "copyOnSelect": true,
+        "firstWindowPreference": "defaultProfile",
+        "initialCols": 140,
+        "initialRows": 38,
+        "launchMode": "default",
+        "tabWidthMode": "titleLength",
+        "theme": "dark",
+        "warning.multiLinePaste": "never"
+    },
+    "defaults": {
+        "antialiasingMode": "cleartype",
+        "bellStyle": "taskbar",
+        "colorScheme": "One Half Dark",
+        "cursorShape": "bar",
+        "font": {
+            "face": "Cascadia Code",
+            "features": {
+                "calt": 1
+            },
+            "size": 11
+        },
+        "historySize": 50000,
+        "opacity": 97,
+        "padding": "8, 6, 8, 6",
+        "startingDirectory": "%USERPROFILE%",
+        "useAcrylic": false
+    },
+    "defaultProfile": "{8f3c1a52-6b1e-4c7d-9a2e-c1a0de000001}",
+    "profiles": [
+        {
+            "guid": "{8f3c1a52-6b1e-4c7d-9a2e-c1a0de000001}",
+            "name": "Claude Code",
+            "commandline": "%SystemRoot%\\System32\\cmd.exe /k claude",
+            "icon": "🤖",
+            "tabTitle": "Claude Code",
+            "suppressApplicationTitle": true,
+            "tabColor": "#D97757"
+        },
+        {
+            "guid": "{8f3c1a52-6b1e-4c7d-9a2e-c1a0de000002}",
+            "name": "Git Bash",
+            "commandline": "\"C:\\Program Files\\Git\\bin\\bash.exe\" --login -i",
+            "icon": "C:\\Program Files\\Git\\mingw64\\share\\git\\git-for-windows.ico",
+            "hidden": false,
+            "_requires": "C:\\Program Files\\Git\\bin\\bash.exe"
+        }
+    ],
+    "actions": [
+        {
+            "id": "User.newTab.2F400C0F",
+            "command": {
+                "action": "newTab",
+                "profile": "Claude Code"
+            }
+        }
+    ],
+    "keybindings": [
+        {
+            "id": "User.newTab.2F400C0F",
+            "keys": "ctrl+alt+c"
+        }
+    ]
+}
