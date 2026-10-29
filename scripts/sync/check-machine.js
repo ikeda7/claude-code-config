@@ -82,8 +82,23 @@ check('Repo atualizado com o GitHub', behind.ok && behind.out === '0',
 const shared = readJson(path.join(ROOT, 'settings.shared.json')) || {};
 const local = readJson(path.join(CLAUDE_DIR, 'settings.json'));
 const keys = IS_CLOUD ? CLOUD_KEYS.filter(k => k in shared) : Object.keys(shared);
+// O plugin context-mode injeta sozinho, a cada sessao, um hook SessionStart
+// apontando para ~/.claude/hooks/context-mode-cache-heal.mjs. Nao e drift.
+const PLUGIN_HOOK = /context-mode-cache-heal/;
+function withoutPluginHooks(hooks) {
+  if (!hooks || typeof hooks !== 'object') return hooks;
+  const out = {};
+  for (const [ev, matchers] of Object.entries(hooks)) {
+    const kept = (matchers || [])
+      .map(m => ({ ...m, hooks: (m.hooks || []).filter(h => !PLUGIN_HOOK.test(String(h.command || ''))) }))
+      .filter(m => m.hooks.length);
+    if (kept.length) out[ev] = kept;
+  }
+  return out;
+}
+const normalize = (k, v) => (k === 'hooks' ? withoutPluginHooks(v) : v);
 const drift = local
-  ? keys.filter(k => !sameJson(shared[k], local[k]))
+  ? keys.filter(k => !sameJson(normalize(k, shared[k]), normalize(k, local[k])))
   : ['settings.json ausente'];
 check('settings.json igual ao settings.shared.json' + (drift.length ? ' (difere: ' + drift.join(', ') + ')' : ''),
   drift.length === 0,

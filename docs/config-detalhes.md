@@ -52,6 +52,14 @@ Uso está no README ("Windows Terminal").
   o do PC pessoal: `cmd` + Cascadia Code, que vem com o Windows 11. A status
   line é a do repo (`scripts/statusline.js`), sem ícones de Nerd Font.
 
+### Hook injetado pelo context-mode (2026-10-29)
+
+A cada início de sessão, o plugin `context-mode` grava no `settings.json`
+**local** um hook `SessionStart` que roda `~/.claude/hooks/context-mode-cache-heal.mjs`
+(caminho absoluto da máquina). Ele não vai para o `settings.shared.json`
+porque não é portátil e o plugin o recria sozinho. O `check-machine.js` ignora
+esse hook ao comparar `hooks`, e o arquivo está no `.gitignore`.
+
 ## Fluxo padrão (2026-10-28)
 
 Pedido do usuário: um fluxo único, igual em todo projeto, que use tudo o que
