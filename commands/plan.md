@@ -190,11 +190,11 @@ After planning:
 - Use the `tdd-workflow` skill to implement with test-driven development
 - Use `/build-fix` if build errors occur
 - Use `/code-review` to review completed implementation
-- Use `/pr` or `/prp-pr` to open a pull request
+- Use `/pr` to open a pull request
 
 > **Need requirements first?** Use `/plan-prd` for a lean PRD at `.claude/prds/{name}.prd.md`.
 >
-> **Need the legacy PRP flow?** Use `/prp-plan` for deep PRP planning with `.claude/PRPs/` artifacts. Use `/prp-implement` to execute those plans with rigorous validation loops.
+> **Need the full pipeline?** Use `/fluxo <pedido>`. The legacy PRP flow (`/prp-plan`, `/prp-implement`) was moved to `archive/commands/`; move it back if you need it.
 
 ## Optional Planner Agent
 
