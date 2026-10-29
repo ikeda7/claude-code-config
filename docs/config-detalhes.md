@@ -30,6 +30,28 @@ Fluxo ao construir ou mexer em UI web (landing, página, tela de app):
 Não se aplica a backend, nem a Flutter (as três primeiras são para web). Em
 Angular, os tokens do `DESIGN.md` vão para o tema/SCSS do projeto.
 
+## Windows Terminal padronizado (2026-10-29)
+
+Pedido do usuário: o terminal do PC pessoal virar o padrão nas 3 máquinas.
+Uso está no README ("Windows Terminal").
+
+- **Fonte:** `terminal/windows-terminal.json`, copiado do `settings.json` do
+  Terminal do PC pessoal. Aplicado por `scripts/sync/apply-terminal.js`, que o
+  bootstrap chama no passo 6, e conferido (como opcional) pelo `check-machine.js`.
+- **Script em Node, não em `.ps1`:** o perfil tem o emoji 🤖, e o
+  `ConvertTo-Json` do PowerShell 5.1 escapa e reordena o JSON. Em Node, a ordem
+  das chaves se mantém.
+- **Funde, não substitui:** cada máquina tem perfis próprios (o Ubuntu do WSL
+  no note do serviço, perfis do Visual Studio). Só os perfis com os guids do repo
+  são criados ou atualizados.
+- **WSL continua padrão onde já é:** no note do serviço, o WSL fica reservado a
+  outro projeto e o Ubuntu é o padrão de propósito. O script não troca isso
+  sem `--set-default`.
+- **Fora do escopo, de propósito:** PowerShell 7, Nerd Font e perfil do pwsh
+  (aliases `ccc`, `ccr` etc.), que foram testados no note do serviço. O padrão é
+  o do PC pessoal: `cmd` + Cascadia Code, que vem com o Windows 11. A status
+  line é a do repo (`scripts/statusline.js`), sem ícones de Nerd Font.
+
 ## Fluxo padrão (2026-10-28)
 
 Pedido do usuário: um fluxo único, igual em todo projeto, que use tudo o que
