@@ -86,9 +86,13 @@ O que difere do toolkit original:
 ## Uso em várias máquinas
 
 Trabalho em 3 máquinas. Todas usam este mesmo repositório, clonado **direto em
-`~/.claude`**, que é a pasta que o Claude Code lê. Não mantenha um segundo clone
-em outro lugar (ex.: no Desktop): editar lá não muda nada até dar push e pull,
-e é fácil esquecer um dos dois.
+`~/.claude`**, que é a pasta que o Claude Code lê.
+
+No PC pessoal há também um clone de trabalho em
+`Desktop\projects\pessoal\claude-code-config`, que é onde as mudanças são
+feitas (branch, PR, merge). O `~/.claude` só recebe: depois de cada merge, rode
+`git -C $env:USERPROFILE\.claude pull` (e o bootstrap, se mudou settings ou
+plugins). Editar direto no `~/.claude` mexe na config em uso no meio da sessão.
 
 ### Estado atual
 
