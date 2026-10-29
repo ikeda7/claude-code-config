@@ -68,10 +68,19 @@ Revisão geral pedida pelo usuário. Medido no PC pessoal:
   pela assinatura do usuário, uma chamada por ferramenta (batch 1). Foram ~180
   chamadas num dia, e ele se pausou com o uso semanal em 94%.
   `scripts/sync/claude-mem-shared.json` passa o batch para 10 e faz ele pausar
-  com 80% do uso semanal (85% da janela de 5h). Também desliga o Chroma, que
-  precisa do `uvx` (não instalado) e só registrava falha a cada gravação; para a
-  busca semântica voltar, instale o `uv` e ponha `CLAUDE_MEM_CHROMA_ENABLED` em
-  `true`.
+  com 80% do uso semanal (85% da janela de 5h). A redação de segredos
+  (`CLAUDE_MEM_REDACT_ENABLED`) foi ligada: tokens e chaves saem das observações
+  antes de irem ao modelo e ao banco. A busca semântica (Chroma) precisa do
+  `uvx`; sem ele, só registrava falha a cada gravação. O bootstrap instala o `uv`
+  via winget (`astral-sh.uv`) e o Chroma fica ligado.
+- **Duplicatas do `hookify`:** os commands `hookify*`, o agent
+  `conversation-analyzer` e a skill `hookify-rules` do ECC foram para `archive/`.
+  O plugin `hookify` traz os mesmos (`/hookify`, `/hookify:list`, ...,
+  `hookify:writing-rules`, `hookify:conversation-analyzer`), e as cópias
+  apareciam em dobro na lista de skills e agents de toda sessão.
+- **`omniroute` desligado:** ver a seção Plugins.
+- **`/deep-research` confirmado:** é um workflow embutido no binário do Claude
+  Code (junto de `autopilot`, `bugfix`, `dashboard`, `docs` e `investigate`).
 - **Hooks sem efeito:** cada processo Node custa ~60–80 ms aqui. Saíram três
   que rodavam a cada chamada de ferramenta: `gateguard-fact-force` (desligado
   por env), `governance-capture` (só age com `ECC_GOVERNANCE_CAPTURE=1`) e
@@ -273,7 +282,7 @@ instalados por `apply-plugins.js`):
 |---|---|---|
 | `cartographer@cartographer-marketplace` | `kingbootoshi/cartographer` | — |
 | `claude-mem@thedotmack` | `thedotmack/claude-mem` | worker em background (sobe sozinho) |
-| `omniroute@omniroute-claude-plugin` | `projectsaibg/omniroute-claude-plugin` | servidor OmniRoute rodando (`npm i -g omniroute` e `omniroute`) em `localhost:20128` |
+| `omniroute@omniroute-claude-plugin` | `projectsaibg/omniroute-claude-plugin` | **desligado** desde 2026-10-29 (ver abaixo) |
 
 Avaliado e **não** ativado (decisão de 2026-10-22, ver `SETUP_TODO.md`):
 `headroom@headroom-marketplace` (`headroomlabs-ai/headroom`). É um proxy local
@@ -284,8 +293,12 @@ desliga o `/remote-control`, que o usuário usa. Por isso o plugin saiu de
 `init`. Não rodar `headroom init -g claude`. Numa máquina onde ele já rodou,
 `apply-shared.ps1` sobrescreve `env`/`hooks` e remove o `ANTHROPIC_BASE_URL`.
 
-`omniroute` (ativado a pedido do usuário em 2026-10-28; antes estava só
-avaliado) não traz commands, skills nem hooks: só registra o MCP em
+`omniroute` foi ativado a pedido do usuário em 2026-10-28 e **desligado** em
+2026-10-29 (`false` em `enabledPlugins`): o servidor não roda em nenhuma
+máquina, então só gerava falha no `/mcp`; o modo gateway exige
+`ANTHROPIC_BASE_URL` (desliga o `/remote-control`) e passar a assinatura por ele
+contraria os termos. Para religar: `true` em `enabledPlugins` e `npm i -g
+omniroute`. O plugin não traz commands, skills nem hooks: só registra o MCP em
 `http://localhost:20128/api/mcp/stream`. Sem o servidor OmniRoute de pé, o MCP
 aparece como falha de conexão no `/mcp` e nada mais quebra. O OmniRoute é um
 gateway que repassa prompts a provedores de terceiros; o plugin não muda o

@@ -400,7 +400,7 @@ repo: os dois precisam passar antes de commitar.
 | Edição em `.eslintrc`, `biome.json` etc. bloqueada | Hook `config-protection`. Corrija o código, não a regra |
 | O agente não encerra e pede doc | Hook `docs-sync-check`. Atualize a doc ou justifique; ele só segura uma vez |
 | `context-mode` falha com `NODE_MODULE_VERSION` | Trocou a versão do Node: `npm rebuild better-sqlite3` na pasta do plugin e reinicie |
-| `omniroute` aparece como falha no `/mcp` | O servidor OmniRoute não está rodando; é opcional |
+| `omniroute` aparece como falha no `/mcp` | Ele foi desligado em 2026-10-29; rode o `bootstrap.ps1` para aplicar o `settings.shared.json` atual |
 | `/remote-control` parou | Alguém rodou `headroom init -g claude`; rode `apply-shared.ps1` para remover o `ANTHROPIC_BASE_URL` |
 | Plugin declarado não aparece | `apply-plugins.js` (a extensão do VS Code não instala marketplace novo sozinha) |
 | Algo estranho no Claude Code em si | `/doctor`; problema de execução: `/debug` |

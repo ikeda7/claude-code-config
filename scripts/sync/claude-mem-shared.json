@@ -1,11 +1,12 @@
 {
-  "_comment": "Chaves do ~/.claude-mem/settings.json aplicadas por apply-claude-mem.js. O claude-mem resume as observacoes chamando o Claude pela assinatura do usuario: com batch 1 eram ~180 chamadas por dia e ele pausou com o uso semanal em 94%. Batch 10 corta as chamadas por ~10x; os limites fazem ele pausar antes de apertar o uso interativo. Chroma desligado: precisa do uvx, que nao esta instalado, e so gerava falha a cada gravacao. Ver docs/config-detalhes.md.",
+  "_comment": "Chaves do ~/.claude-mem/settings.json aplicadas por apply-claude-mem.js. O claude-mem resume as observacoes chamando o Claude pela assinatura do usuario: com batch 1 eram ~180 chamadas por dia e ele pausou com o uso semanal em 94%. Batch 10 corta as chamadas por ~10x; os limites fazem ele pausar antes de apertar o uso interativo. Redacao ligada: tira segredos (tokens, chaves) das observacoes antes de mandar ao modelo e gravar no banco. Chroma (busca semantica) precisa do uvx, que o bootstrap instala via winget (pacote astral-sh.uv). Ver docs/config-detalhes.md.",
   "settings": {
     "CLAUDE_MEM_CLAUDE_OBSERVATION_BATCH_SIZE": "10",
     "CLAUDE_MEM_QUOTA_THRESHOLD_FIVE_HOUR": "0.85",
     "CLAUDE_MEM_QUOTA_THRESHOLD_SEVEN_DAY": "0.80",
     "CLAUDE_MEM_QUOTA_THRESHOLD_SEVEN_DAY_OPUS": "0.80",
     "CLAUDE_MEM_QUOTA_THRESHOLD_SEVEN_DAY_SONNET": "0.80",
-    "CLAUDE_MEM_CHROMA_ENABLED": "false"
+    "CLAUDE_MEM_REDACT_ENABLED": "true",
+    "CLAUDE_MEM_CHROMA_ENABLED": "true"
   }
 }

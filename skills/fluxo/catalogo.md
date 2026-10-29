@@ -58,7 +58,6 @@ Duplicatas têm uma escolha **principal**; a outra fica como alternativa.
 | `github-ops` | 8 | Issues, PRs, CI, releases |
 | `continuous-learning-v2` | 9 | Instintos aprendidos por sessão |
 | `continuous-learning` | F | v1 obsoleta; fica só porque o hook `evaluate-session.js` lê o `config.json` dela |
-| `hookify-rules` | 9 | Escrever regra do `hookify` |
 | `strategic-compact` | T | `/compact` em fronteira de fase |
 | `context-budget` | T | Auditar o que pesa no contexto |
 | `token-budget-advisor` | T | Escolher profundidade da resposta pelo custo |
@@ -94,7 +93,6 @@ Duplicatas têm uma escolha **principal**; a outra fica como alternativa.
 | `code-simplifier` | 6 | Simplificar depois de verde |
 | `refactor-cleaner` | 6 | Código morto |
 | `doc-updater` | 7 | Atualizar docs em lote |
-| `conversation-analyzer` | 9 | Usado pelo `/hookify` para achar comportamento a bloquear |
 
 ## Commands do repo (`commands/`)
 
@@ -130,10 +128,6 @@ Duplicatas têm uma escolha **principal**; a outra fica como alternativa.
 | `instinct-status` | 9 | Ver instintos |
 | `evolve` | 9 | Evoluir instintos em skills |
 | `promote` | 9 | Instinto de projeto para global |
-| `hookify` | 9 | Criar hook a partir de comportamento indesejado |
-| `hookify-list` | 9 | Listar regras |
-| `hookify-configure` | 9 | Ligar/desligar regras |
-| `hookify-help` | 9 | Ajuda |
 | `save-session` | T | Salvar estado para outra máquina |
 | `resume-session` | T | Retomar estado salvo |
 | `cost-report` | T | Relatório de custo do ECC |
@@ -164,8 +158,8 @@ nativo, mas não os aliases dele**. Então:
 | `context-mode` | Indexa saídas grandes fora do contexto | T |
 | `claude-md-management` | `/claude-md-management:revise-claude-md` e melhoria do `CLAUDE.md` | 9 |
 | `claude-code-setup` | Recomenda automações (hooks, skills, MCP) para o projeto | 1 (`/fluxo init`) |
-| `hookify` | Hooks a partir de conversa | 9 |
-| `omniroute` | MCP gateway para outros provedores; exige servidor local | F, só se for rotear modelo |
+| `hookify` | Hooks a partir de conversa: `/hookify` (criar), `/hookify:list`, `/hookify:configure`, `/hookify:help`, skill `hookify:writing-rules` e agent `hookify:conversation-analyzer`. As cópias do ECC foram para `archive/` em 2026-10-29 por duplicarem o plugin | 9 |
+| `omniroute` | Desligado em 2026-10-29: o servidor local não roda nas máquinas. Religar = `true` em `enabledPlugins` + `npm i -g omniroute` | F |
 | `session-report`, `plugin-dev` | Desligados para economizar contexto | F |
 
 ## MCP servers
