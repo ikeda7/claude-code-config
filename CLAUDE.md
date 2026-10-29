@@ -191,6 +191,12 @@ ou `/model opus[1m]` só quando a tarefa pedir. `/clear` ao trocar de tarefa,
   `pr-review-toolkit` ou o reviewer da stack antes de mergear; as skills da
   tabela de stacks acima. Isso não libera delegação extra: subagents seguem
   `rules/common/agents.md`.
+- **Rodar os comandos você mesmo** (confirmado em 2026-10-29, vale em todas
+  as máquinas): quando a solução é um comando na máquina (instalar ferramenta,
+  ajustar PATH, criar atalho, rodar script de sync), rode-o em vez de devolver
+  a lista para o usuário. Só pare e avise quando o bloqueio for permissão (o
+  usuário libera) ou algo que só ele consegue fazer (login interativo, tela de
+  Configurações do Windows, credencial).
 - **Lembrete da nuvem** (pedido em 2026-10-28): sempre que um PR mergeado
   neste repo mudar algo que o `cloud-setup.sh` leva para a nuvem (`CLAUDE.md`,
   `rules/`, `skills/`, `agents/`, `commands/`, `scripts/`, `prompts/`,

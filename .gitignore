@@ -124,6 +124,8 @@ node_modules/
 # Estado local do runtime do Claude Code (por maquina)
 /skills/synced/
 /state/
+# Gerado pelo plugin context-mode a cada sessao (hook cache-heal)
+/hooks/context-mode-cache-heal.mjs
 
 # Resultado do auto-update do Claude Code (por maquina)
 /.last-update-result.json
