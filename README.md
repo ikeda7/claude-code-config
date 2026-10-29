@@ -144,9 +144,8 @@ O que ele **preserva** naquela máquina:
 - `oauthAccount` e `projects` do `~/.claude.json` — sua autenticação
 - MCP servers customizados que já existirem (use `--force` para sobrescrever)
 
-Os roots do `filesystem` são resolvidos por máquina: só entram diretórios que
-existem de fato ali. `G:\Meu Drive` entra aqui, mas é ignorado numa máquina que
-não tenha esse drive.
+MCP aposentados (lista `retired` do `mcp-shared.json`: `memory`,
+`sequential-thinking`, `filesystem`) são **removidos** do `~/.claude.json`.
 
 Se a máquina já tiver um `~/.claude/` com coisas suas, clone em outro lugar e
 copie o que interessa — o bootstrap preserva config, mas o clone por cima
@@ -245,6 +244,7 @@ bootstrap.
 | `apply-shared.ps1` | Mescla `settings.shared.json` no `settings.json` local |
 | `apply-mcp.js` | Injeta MCP servers em `~/.claude.json` |
 | `apply-plugins.js` | Registra marketplaces e instala os plugins de `settings.shared.json` (`--dry-run` só mostra) |
+| `apply-claude-mem.js` | Aplica `claude-mem-shared.json` (batch e limites de cota do claude-mem) no `~/.claude-mem/settings.json` |
 | `apply-terminal.js` | Funde `terminal/windows-terminal.json` no Windows Terminal, com backup (`--dry-run`, `--set-default`) |
 | `make-shared.js` | Regenera `settings.shared.json` (com varredura de segredos) |
 | `check-ascii.js` | Barra BOM e caractere não-ASCII em `.ps1` |

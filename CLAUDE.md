@@ -47,8 +47,9 @@ testes. Os "comandos" são os scripts de sincronização em `scripts/sync/`:
 | `node scripts\sync\apply-mcp.js [--force]` | Injeta os MCP servers portáteis (`scripts\sync\mcp-shared.json`) em `~/.claude.json`, preservando `oauthAccount` |
 | `node scripts\sync\apply-plugins.js [--dry-run]` | Registra os marketplaces e instala os plugins de `settings.shared.json` via CLI do Claude Code (PATH ou binário da extensão do VS Code). Idempotente |
 | `node scripts\sync\apply-terminal.js [--dry-run] [--set-default]` | Funde `terminal/windows-terminal.json` (perfil "Claude Code" padrão, Git Bash, tema, `Ctrl+Alt+C`) no Windows Terminal, com backup. Não tira o padrão de um perfil WSL sem `--set-default` |
+| `node scripts\syncpply-claude-mem.js [--dry-run]` | Aplica `claude-mem-shared.json` no `~/.claude-mem/settings.json` (economia de cota), com backup |
 | `bash scripts/sync/cloud-setup.sh [--no-plugins]` | Na nuvem: instala esta config no `~/.claude` da VM. Vai no setup script do ambiente (texto em `docs/manual.md`, seção 9.1) |
-| `powershell -ExecutionPolicy Bypass -File scripts\sync\bootstrap.ps1` | Orquestra `apply-shared.ps1`, `apply-mcp.js`, `apply-plugins.js` e `apply-terminal.js`, instala o `playwright-cli` global (não instala nem configura o Headroom); usar em máquina nova, após o clone, e após `git pull` que mude plugins/settings |
+| `powershell -ExecutionPolicy Bypass -File scripts\sync\bootstrap.ps1` | Orquestra `apply-shared.ps1`, `apply-mcp.js`, `apply-plugins.js`, `apply-terminal.js` e `apply-claude-mem.js`, instala o `playwright-cli` global (não instala nem configura o Headroom); usar em máquina nova, após o clone, e após `git pull` que mude plugins/settings |
 
 Fluxo padrão antes de commitar mudança de config:
 
@@ -150,9 +151,11 @@ histórico de decisões: [docs/config-detalhes.md](docs/config-detalhes.md).
   corrija o código, não afrouxe a regra.
 - **`docs-sync-check`** (repo com `docs/`): bloqueia o `Stop` uma vez se houve
   código alterado sem doc alterada. Atualize a doc ou justifique.
-- Desligados: `gateguard-fact-force` (`ECC_GATEGUARD=off`), `auto-tmux-dev`
-  (`ECC_DISABLED_HOOKS`) e a injeção de contexto no início da sessão
-  (`ECC_SESSION_START_CONTEXT=off`; a memória entre sessões é do `claude-mem`).
+- Desligados: `auto-tmux-dev` (`ECC_DISABLED_HOOKS`) e a injeção de contexto no
+  início da sessão (`ECC_SESSION_START_CONTEXT=off`; a memória entre sessões é do
+  `claude-mem`). Removidos do `settings.shared.json` em 2026-10-29 por rodarem um
+  Node a cada ferramenta sem efeito: `gateguard-fact-force`, `governance-capture`
+  e `observe-runner`.
 
 ## Economia de tokens
 
@@ -162,8 +165,11 @@ ou `/model opus[1m]` só quando a tarefa pedir. `/clear` ao trocar de tarefa,
 
 ## MCP, plugins e sincronização
 
-- MCP ativos (`~/.claude.json`): `memory`, `sequential-thinking`, `context7`,
-  `filesystem`. Pendências com credencial: `SETUP_TODO.md`.
+- MCP ativo (`~/.claude.json`): `context7`. `memory`, `sequential-thinking` e
+  `filesystem` foram aposentados em 2026-10-29 (duplicavam recursos nativos); o
+  `apply-mcp.js` os remove. Pendências com credencial: `SETUP_TODO.md`.
+- claude-mem: `scripts/sync/claude-mem-shared.json` (batch 10, pausa com 80% do
+  uso semanal) aplicado por `apply-claude-mem.js`, que o bootstrap chama.
 - Plugins: `context-mode`, `claude-mem`, `cartographer`, `omniroute` (exige
   servidor OmniRoute local) e os oficiais listados
   em `settings.shared.json`. **Não** rodar `headroom init -g claude` (desliga o

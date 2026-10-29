@@ -60,6 +60,26 @@ A cada início de sessão, o plugin `context-mode` grava no `settings.json`
 porque não é portátil e o plugin o recria sozinho. O `check-machine.js` ignora
 esse hook ao comparar `hooks`, e o arquivo está no `.gitignore`.
 
+## Otimização de uso (2026-10-29)
+
+Revisão geral pedida pelo usuário. Medido no PC pessoal:
+
+- **claude-mem gastava cota:** resume cada observação chamando o Claude (Haiku)
+  pela assinatura do usuário, uma chamada por ferramenta (batch 1). Foram ~180
+  chamadas num dia, e ele se pausou com o uso semanal em 94%.
+  `scripts/sync/claude-mem-shared.json` passa o batch para 10 e faz ele pausar
+  com 80% do uso semanal (85% da janela de 5h). Também desliga o Chroma, que
+  precisa do `uvx` (não instalado) e só registrava falha a cada gravação; para a
+  busca semântica voltar, instale o `uv` e ponha `CLAUDE_MEM_CHROMA_ENABLED` em
+  `true`.
+- **Hooks sem efeito:** cada processo Node custa ~60–80 ms aqui. Saíram três
+  que rodavam a cada chamada de ferramenta: `gateguard-fact-force` (desligado
+  por env), `governance-capture` (só age com `ECC_GOVERNANCE_CAPTURE=1`) e
+  `observe-runner` (não gravava nada; o diretório `homunculus` nem existia).
+  Os do `plan-canvas` ficaram: alimentam o `/plan-canvas` e só rodam no início
+  e no fim da sessão.
+- **MCP redundantes:** ver a seção "MCP servers".
+
 ## Fluxo padrão (2026-10-28)
 
 Pedido do usuário: um fluxo único, igual em todo projeto, que use tudo o que
@@ -172,8 +192,9 @@ em conta Pro/Max e só chega depois da 1ª resposta da sessão.
   o código em vez de afrouxar a regra.
 - **`gateguard-fact-force`** — negaria o primeiro `Bash` da sessão e o primeiro
   `Edit` de cada arquivo, exigindo declaração de fatos antes. Usa
-  `permissionDecision: "deny"`, não `exit 2`. **Desligado** via `ECC_GATEGUARD=off`.
-  Para religar, remova essa env var.
+  `permissionDecision: "deny"`, não `exit 2`. **Removido** do `settings.shared.json`
+  em 2026-10-29 (antes ficava só desligado por `ECC_GATEGUARD=off`, mas o Node
+  subia a cada Edit/Write). Para religar, restaure a entrada do histórico do git.
 - **`auto-tmux-dev`** — não bloqueia, mas **reescreve** comandos de dev server.
   No Windows, `npm run dev` vira `start "DevServer-<pasta>" cmd /k "npm run dev"`,
   abrindo uma janela cmd separada. Efeito colateral: o log do dev server fica
@@ -196,14 +217,17 @@ tmux, mas está **inerte** por dois motivos independentes: tem guarda
 
 ## MCP servers
 
-Ativos em `~/.claude.json` → `mcpServers` (nível raiz = escopo global):
+Ativo em `~/.claude.json` → `mcpServers` (nível raiz = escopo global): só
+`context7` (não precisa de chave).
 
-| Server | Precisa de chave |
+Aposentados em 2026-10-29 (lista `retired` do `mcp-shared.json`, que o
+`apply-mcp.js` remove de cada máquina):
+
+| Server | Por quê |
 |---|---|
-| `memory` | não |
-| `sequential-thinking` | não |
-| `context7` | não |
-| `filesystem` | não — escopo: `~\Desktop` e uma pasta do Google Drive (`G:\Meu Drive\...`) |
+| `memory` | 4º sistema de memória (já há a nativa, o `claude-mem` e o `context-mode`); o grafo estava vazio |
+| `sequential-thinking` | O modelo já raciocina sozinho; para problema difícil, `/effort high` |
+| `filesystem` | Duplica `Read`/`Write`/`Glob`, que leem qualquer caminho absoluto (Desktop, `G:\Meu Drive`) com permissão |
 
 Pendências com credencial estão em `~/.claude/SETUP_TODO.md`.
 

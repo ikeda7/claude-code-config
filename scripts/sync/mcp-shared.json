@@ -1,21 +1,10 @@
 {
-  "_comment": "MCP servers portateis: nenhum exige chave. Aplicados por apply-mcp.js em ~/.claude.json (escopo global). Servers que exigem credencial ficam em SETUP_TODO.md e nunca entram aqui.",
+  "_comment": "MCP servers portateis: nenhum exige chave. Aplicados por apply-mcp.js em ~/.claude.json (escopo global). Servers que exigem credencial ficam em SETUP_TODO.md e nunca entram aqui. 'retired' lista servers que o apply-mcp.js remove: memory, sequential-thinking e filesystem sairam em 2026-10-29 por duplicarem recursos nativos (ver docs/config-detalhes.md).",
   "mcpServers": {
-    "memory": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-memory"]
-    },
-    "sequential-thinking": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"]
-    },
     "context7": {
       "command": "npx",
       "args": ["-y", "@upstash/context7-mcp@latest"]
-    },
-    "filesystem": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-filesystem", "__ROOTS__"]
     }
-  }
+  },
+  "retired": ["memory", "sequential-thinking", "filesystem"]
 }
