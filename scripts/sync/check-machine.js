@@ -114,7 +114,10 @@ check('MCP servers globais' + (missingMcp.length ? ': faltam ' + missingMcp.join
 // ---- 5. fluxo padrao ------------------------------------------------------
 check('Skill fluxo presente', fs.existsSync(path.join(ROOT, 'skills', 'fluxo', 'SKILL.md')),
   'git -C ~/.claude pull');
-check('Catalogo do fluxo completo', sh(process.execPath, [path.join(__dirname, 'check-fluxo.js')]).ok,
+// Sem shell: process.execPath costuma ser "C:\Program Files\nodejs\node.exe",
+// e o espaco quebra a chamada pelo cmd.
+const fluxo = spawnSync(process.execPath, [path.join(__dirname, 'check-fluxo.js')], { encoding: 'utf8', timeout: 20000 });
+check('Catalogo do fluxo completo', fluxo.status === 0,
   'node ~/.claude/scripts/sync/check-fluxo.js e inclua o que faltar em skills/fluxo/catalogo.md');
 
 // ---- 6. ferramentas ---------------------------------------------------------
