@@ -13,9 +13,9 @@ onde a config nasceu; nas outras, confira versões antes de presumir.
 
 - SO: Windows 11 Enterprise (`win32`)
 - Shell primário: PowerShell 5.1; Bash (Git Bash) também disponível
-- Node.js v24.17.0 · git 2.54.0
+- Node.js v24.22.1 · git 2.54.0
 - **tmux não está instalado.** Binário `wsl` presente, mas o Claude Code roda nativo no Windows
-- Instalação por **cópia de arquivos** para `~/.claude/`, não como plugin de marketplace
+- `~/.claude/` é um **clone git** deste repo (não plugin de marketplace); no PC pessoal as mudanças são feitas no clone de trabalho do Desktop (ver Preferências)
 
 ## O que está instalado
 
@@ -23,9 +23,9 @@ onde a config nasceu; nas outras, confira versões antes de presumir.
 |---|---|---|
 | `agents/` | 26 | Subagents das stacks em uso e transversais |
 | `commands/` | 38 | Slash commands |
-| `skills/` | 48 | Skills em subdiretórios com `SKILL.md`, incluindo `fluxo` (o fluxo padrão) |
+| `skills/` | 49 | Skills em subdiretórios com `SKILL.md`, incluindo `fluxo` (o fluxo padrão) |
 | `rules/` | 124 | Regras em 22 subdiretórios (`common/` + 21 linguagens) |
-| `scripts/` | 267 | Utilitários Node.js, implementação dos hooks e sync |
+| `scripts/` | 271 | Utilitários Node.js, implementação dos hooks e sync |
 | `prompts/` | 1 | Roteiros reutilizáveis do usuário (ex.: `setup-roadmap-github.md`, usado por `/setup-github`) |
 | `contexts/` | 3 | Arquivos de contexto (referência manual, não carregam sozinhos) |
 | `terminal/` | 1 | `windows-terminal.json`: o Windows Terminal padrão, aplicado por `apply-terminal.js` |
@@ -48,7 +48,7 @@ testes. Os "comandos" são os scripts de sincronização em `scripts/sync/`:
 | `node scripts\sync\apply-plugins.js [--dry-run]` | Registra os marketplaces e instala os plugins de `settings.shared.json` via CLI do Claude Code (PATH ou binário da extensão do VS Code). Idempotente |
 | `node scripts\sync\apply-terminal.js [--dry-run] [--set-default]` | Funde `terminal/windows-terminal.json` (perfil "Claude Code" padrão, Git Bash, tema, `Ctrl+Alt+C`) no Windows Terminal, com backup. Não tira o padrão de um perfil WSL sem `--set-default` |
 | `bash scripts/sync/cloud-setup.sh [--no-plugins]` | Na nuvem: instala esta config no `~/.claude` da VM. Vai no setup script do ambiente (texto em `docs/manual.md`, seção 9.1) |
-| `powershell -ExecutionPolicy Bypass -File scripts\sync\bootstrap.ps1` | Orquestra os três acima, o `apply-terminal.js` e instala o `playwright-cli` global (não instala nem configura o Headroom); usar em máquina nova, após o clone, e após `git pull` que mude plugins/settings |
+| `powershell -ExecutionPolicy Bypass -File scripts\sync\bootstrap.ps1` | Orquestra `apply-shared.ps1`, `apply-mcp.js`, `apply-plugins.js` e `apply-terminal.js`, instala o `playwright-cli` global (não instala nem configura o Headroom); usar em máquina nova, após o clone, e após `git pull` que mude plugins/settings |
 
 Fluxo padrão antes de commitar mudança de config:
 

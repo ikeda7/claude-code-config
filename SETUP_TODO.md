@@ -5,11 +5,11 @@
 Tudo que precisa rodar **em cada máquina** depois do `git pull` de 2026-10-28
 (PRs #7 a #10, #13 e o do fluxo padrão). Marque a coluna da máquina ao terminar.
 
-| # | Passo | PC principal | Máquina 2 | Máquina 3 |
+| # | Passo | PC pessoal | Note pessoal | Note do serviço |
 |---|---|---|---|---|
-| 1 | `cd ~\.claude` e `git pull` | [ ] | [ ] | [ ] |
-| 2 | `powershell -ExecutionPolicy Bypass -File .\scripts\sync\bootstrap.ps1`. No fim ele roda o `check-machine.js` | [ ] | [ ] | [ ] |
-| 3 | Rodar `node .\scripts\sync\check-machine.js` até não sobrar `FALTA`. Cada linha que falta já mostra o comando que resolve (settings, plugins, MCP, `gh`, `playwright-cli`, `python3`, `sh`, fluxo) | [ ] | [ ] | [ ] |
+| 1 | `cd ~\.claude` e `git pull` | [x] | [ ] | [ ] |
+| 2 | `powershell -ExecutionPolicy Bypass -File .\scripts\sync\bootstrap.ps1`. No fim ele roda o `check-machine.js` | [x] | [ ] | [ ] |
+| 3 | Rodar `node .\scripts\sync\check-machine.js` até não sobrar `FALTA`. Cada linha que falta já mostra o comando que resolve (settings, plugins, MCP, `gh`, `playwright-cli`, `python3`, `sh`, fluxo) | [x] | [ ] | [ ] |
 | 4 | Reiniciar o Claude Code e, numa sessão nova, conferir `/context`. Se pesar demais, desligar `superpowers` (`false` no `settings.json`, depois `make-shared.js`); o fluxo usa 6 skills dele e o `skills/fluxo/catalogo.md` indica as alternativas | [ ] | [ ] | [ ] |
 | 5 | Opcional: `pip uninstall headroom-ai`, se foi instalado | [ ] | [ ] | [ ] |
 | 6 | Opcional, para usar o `omniroute`: `npm i -g omniroute` e deixar `omniroute` rodando | [ ] | [ ] | [ ] |

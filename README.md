@@ -14,13 +14,14 @@ agente, com as mesmas regras, os mesmos comandos e os mesmos automatismos.
 |---|---|---|
 | `agents/` | 26 | Subagents das stacks em uso (Java/Spring, Angular/TS, Flutter) e transversais |
 | `commands/` | 38 | Slash commands (`/plan`, `/pr`, `/setup-github`, …) |
-| `skills/` | 48 | Conhecimento sob demanda, carregado quando a tarefa casa; `fluxo` é o fluxo padrão |
+| `skills/` | 49 | Conhecimento sob demanda, carregado quando a tarefa casa; `fluxo` é o fluxo padrão |
 | `archive/` | 241 skills · 42 agents · 57 commands | Fora das stacks em uso; **não carregam**. Para reativar, mova de volta para `skills/`, `agents/` ou `commands/` |
 | `rules/` | 124 | Regras: `common/` sempre ativo, 21 linguagens sob demanda |
-| `scripts/` | 267 | Implementação dos hooks e utilitários de sync |
+| `scripts/` | 271 | Implementação dos hooks e utilitários de sync |
 | `prompts/` | 1 | Roteiros reutilizáveis meus |
 | `docs/` | 3 | `manual.md` (**como usar tudo**: o que é automático, o que acionar, atalhos, problemas comuns), `config-detalhes.md` (detalhes e histórico da config) e `rules-guide.md` (guia de instalação das regras do toolkit original) |
 | `contexts/` | 3 | Referência manual |
+| `terminal/` | 1 | `windows-terminal.json`: o Windows Terminal padrão (ver "Windows Terminal" abaixo) |
 | `mcp-configs/` | 1 | Catálogo de MCP servers (referência, não ativo) |
 
 Resumo em [CLAUDE.md](CLAUDE.md), que é o arquivo que o próprio
@@ -98,11 +99,11 @@ plugins). Editar direto no `~/.claude` mexe na config em uso no meio da sessão.
 
 | Máquina | Configurada? |
 |---|---|
-| PC principal (Windows 11, este repo nasceu nele) | Sim; falta só o checklist de 2026-10-28 abaixo |
-| Máquina 2 | Rodar o passo 1 abaixo |
-| Máquina 3 | Rodar o passo 1 abaixo |
+| PC pessoal (Windows 11, este repo nasceu nele) | Sim, completo em 2026-10-29 (`check-machine.js` sem `FALTA`) |
+| Note pessoal | Rodar o passo 1 abaixo |
+| Note do serviço | Rodar o passo 1 abaixo, só no Windows (o WSL fica de fora e continua perfil padrão do Terminal) |
 
-**Pendente nas 3 máquinas** (mudanças de 2026-10-28): siga o
+**Pendente nos dois notes** (mudanças de 2026-10-28 em diante): siga o
 [checklist por máquina do `SETUP_TODO.md`](SETUP_TODO.md#checklist-por-máquina-fazer-nas-3).
 Em resumo: `git pull`, rodar o `bootstrap.ps1` **antes** de qualquer
 `make-shared.js`, resolver o que o `check-machine.js` apontar e reiniciar o
@@ -279,8 +280,8 @@ desenvolvimento em texto claro. Num repositório git isso viraria permanente no
 histórico.
 
 O que sincroniza é **`settings.shared.json`**: apenas `hooks`, `env`, `model`,
-`effortLevel`, `enabledPlugins`, `extraKnownMarketplaces` e
-`autoUpdatesChannel`. O gerador (`scripts/sync/make-shared.js`) roda uma
+`effortLevel`, `enabledPlugins`, `extraKnownMarketplaces`, `autoUpdatesChannel`
+e `statusLine`. O gerador (`scripts/sync/make-shared.js`) roda uma
 varredura de segredos e **aborta sem escrever** se encontrar padrão de senha,
 API key, PAT do GitHub ou chave privada.
 

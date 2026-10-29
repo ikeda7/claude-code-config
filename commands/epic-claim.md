@@ -19,8 +19,5 @@ What this does:
 3. Updates labels and the local SQLite cache.
 4. Appends an audit comment for the claim.
 
-Compatibility aliases:
-
-- `/orch-add-feature`
-- `/orch-change-feature`
-- `/prp-implement`
+Compatibility aliases: `/orch-add-feature`, `/orch-change-feature` and `/prp-implement` were moved to
+`archive/`; for the implementation itself use `/fluxo <pedido>`.
