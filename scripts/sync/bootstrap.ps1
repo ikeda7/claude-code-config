@@ -11,7 +11,7 @@
 #   4. instala os plugins declarados (via CLI do Claude Code)
 #   5. instala o playwright-cli global (usado pela skill playwright-cli)
 #   6. aplica a personalizacao do Windows Terminal (terminal/windows-terminal.json)
-#   7. aplica os ajustes do claude-mem (scripts/sync/claude-mem-shared.json)
+#   7. instala o uv (se faltar) e aplica os ajustes do claude-mem (claude-mem-shared.json)
 #   8. reporta o que ficou pendente
 #
 # Headroom NAO e instalado nem configurado (decisao de 2026-10-22, ver
@@ -118,7 +118,17 @@ Write-Output ""
 # ---- 7. claude-mem ---------------------------------------------------------
 # Agrupa observacoes e pausa antes de apertar o uso da assinatura. Falha
 # aqui nao aborta; sem settings.json do claude-mem, so avisa.
-Write-Output "[7/7] claude-mem (economia de cota)"
+Write-Output "[7/7] claude-mem (economia de cota, redacao, busca semantica)"
+# A busca semantica (Chroma) roda via uvx; sem ele o claude-mem so registra falha.
+if (-not (Get-Command uvx -ErrorAction SilentlyContinue)) {
+    if (Get-Command winget -ErrorAction SilentlyContinue) {
+        & winget install --id astral-sh.uv -e --silent --accept-package-agreements --accept-source-agreements | Out-Null
+        if ($LASTEXITCODE -ne 0) { Write-Output "  AVISO: uv nao instalou. Rode depois: winget install astral-sh.uv" }
+        else { Write-Output "  uv instalado (abra um terminal novo para o PATH valer)" }
+    } else {
+        Write-Output "  AVISO: sem winget; instale o uv (https://docs.astral.sh/uv/) para a busca semantica"
+    }
+}
 & node (Join-Path $SyncDir 'apply-claude-mem.js')
 if ($LASTEXITCODE -ne 0) {
     Write-Output "  AVISO: falhou. Rode depois: node scripts\sync\apply-claude-mem.js"

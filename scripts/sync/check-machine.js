@@ -159,6 +159,8 @@ check('sh no PATH (hooks do claude-security)', sh('sh', ['--version']).ok || sh(
 if (wanted.some(id => id.startsWith('claude-mem@'))) {
   check('claude-mem com os ajustes de cota do repo (opcional)', require('./apply-claude-mem.js').isApplied(),
     'node ~/.claude/scripts/sync/apply-claude-mem.js (precisa ter rodado uma sessao com o claude-mem)', true);
+  check('uvx no PATH (busca semantica do claude-mem, opcional)', sh('uvx', ['--version']).ok,
+    'winget install astral-sh.uv e abra um terminal novo', true);
 }
 if (IS_WIN && !IS_CLOUD) {
   const terminal = require('./apply-terminal.js');

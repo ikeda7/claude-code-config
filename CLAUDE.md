@@ -21,16 +21,16 @@ onde a config nasceu; nas outras, confira versões antes de presumir.
 
 | Diretório | Qtd | Conteúdo |
 |---|---|---|
-| `agents/` | 26 | Subagents das stacks em uso e transversais |
-| `commands/` | 38 | Slash commands |
-| `skills/` | 49 | Skills em subdiretórios com `SKILL.md`, incluindo `fluxo` (o fluxo padrão) |
+| `agents/` | 25 | Subagents das stacks em uso e transversais |
+| `commands/` | 34 | Slash commands |
+| `skills/` | 48 | Skills em subdiretórios com `SKILL.md`, incluindo `fluxo` (o fluxo padrão) |
 | `rules/` | 124 | Regras em 22 subdiretórios (`common/` + 21 linguagens) |
 | `scripts/` | 271 | Utilitários Node.js, implementação dos hooks e sync |
 | `prompts/` | 1 | Roteiros reutilizáveis do usuário (ex.: `setup-roadmap-github.md`, usado por `/setup-github`) |
 | `contexts/` | 3 | Arquivos de contexto (referência manual, não carregam sozinhos) |
 | `terminal/` | 1 | `windows-terminal.json`: o Windows Terminal padrão, aplicado por `apply-terminal.js` |
 | `mcp-configs/` | 1 | `mcp-servers.json` — catálogo de referência, não ativo |
-| `archive/` | 241 · 42 · 57 | Skills, agents e commands de outras stacks. **Não carregam.** Para usar um, mova de volta para `skills/`, `agents/` ou `commands/` |
+| `archive/` | 242 · 43 · 61 | Skills, agents e commands de outras stacks. **Não carregam.** Para usar um, mova de volta para `skills/`, `agents/` ou `commands/` |
 
 ## Comandos
 
@@ -169,10 +169,10 @@ ou `/model opus[1m]` só quando a tarefa pedir. `/clear` ao trocar de tarefa,
   `filesystem` foram aposentados em 2026-10-29 (duplicavam recursos nativos); o
   `apply-mcp.js` os remove. Pendências com credencial: `SETUP_TODO.md`.
 - claude-mem: `scripts/sync/claude-mem-shared.json` (batch 10, pausa com 80% do
-  uso semanal) aplicado por `apply-claude-mem.js`, que o bootstrap chama.
-- Plugins: `context-mode`, `claude-mem`, `cartographer`, `omniroute` (exige
-  servidor OmniRoute local) e os oficiais listados
-  em `settings.shared.json`. **Não** rodar `headroom init -g claude` (desliga o
+  uso semanal, redação de segredos, busca semântica via `uvx`) aplicado por
+  `apply-claude-mem.js`; o bootstrap instala o `uv` e chama o script.
+- Plugins: `context-mode`, `claude-mem`, `cartographer` e os oficiais listados
+  em `settings.shared.json` (`omniroute` desligado em 2026-10-29). **Não** rodar `headroom init -g claude` (desliga o
   `/remote-control`).
 - `settings.shared.json` é versionado; `settings.json` e `~/.claude.json` não.
   Depois de mudar hooks/env/model/plugins: `make-shared.js` + `check-ascii.js`.

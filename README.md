@@ -12,10 +12,10 @@ agente, com as mesmas regras, os mesmos comandos e os mesmos automatismos.
 
 | Diretório | Qtd | O que é |
 |---|---|---|
-| `agents/` | 26 | Subagents das stacks em uso (Java/Spring, Angular/TS, Flutter) e transversais |
-| `commands/` | 38 | Slash commands (`/plan`, `/pr`, `/setup-github`, …) |
-| `skills/` | 49 | Conhecimento sob demanda, carregado quando a tarefa casa; `fluxo` é o fluxo padrão |
-| `archive/` | 241 skills · 42 agents · 57 commands | Fora das stacks em uso; **não carregam**. Para reativar, mova de volta para `skills/`, `agents/` ou `commands/` |
+| `agents/` | 25 | Subagents das stacks em uso (Java/Spring, Angular/TS, Flutter) e transversais |
+| `commands/` | 34 | Slash commands (`/plan`, `/pr`, `/setup-github`, …) |
+| `skills/` | 48 | Conhecimento sob demanda, carregado quando a tarefa casa; `fluxo` é o fluxo padrão |
+| `archive/` | 242 skills · 43 agents · 61 commands | Fora das stacks em uso; **não carregam**. Para reativar, mova de volta para `skills/`, `agents/` ou `commands/` |
 | `rules/` | 124 | Regras: `common/` sempre ativo, 21 linguagens sob demanda |
 | `scripts/` | 271 | Implementação dos hooks e utilitários de sync |
 | `prompts/` | 1 | Roteiros reutilizáveis meus |
@@ -244,7 +244,7 @@ bootstrap.
 | `apply-shared.ps1` | Mescla `settings.shared.json` no `settings.json` local |
 | `apply-mcp.js` | Injeta MCP servers em `~/.claude.json` |
 | `apply-plugins.js` | Registra marketplaces e instala os plugins de `settings.shared.json` (`--dry-run` só mostra) |
-| `apply-claude-mem.js` | Aplica `claude-mem-shared.json` (batch e limites de cota do claude-mem) no `~/.claude-mem/settings.json` |
+| `apply-claude-mem.js` | Aplica `claude-mem-shared.json` (batch, limites de cota, redação e busca semântica do claude-mem) no `~/.claude-mem/settings.json` |
 | `apply-terminal.js` | Funde `terminal/windows-terminal.json` no Windows Terminal, com backup (`--dry-run`, `--set-default`) |
 | `make-shared.js` | Regenera `settings.shared.json` (com varredura de segredos) |
 | `check-ascii.js` | Barra BOM e caractere não-ASCII em `.ps1` |

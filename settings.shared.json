@@ -243,7 +243,7 @@
     "plugin-dev@claude-plugins-official": false,
     "cartographer@cartographer-marketplace": true,
     "claude-mem@thedotmack": true,
-    "omniroute@omniroute-claude-plugin": true
+    "omniroute@omniroute-claude-plugin": false
   },
   "extraKnownMarketplaces": {
     "context-mode": {

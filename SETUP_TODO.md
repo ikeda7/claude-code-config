@@ -12,7 +12,7 @@ Tudo que precisa rodar **em cada máquina** depois do `git pull` de 2026-10-28
 | 3 | Rodar `node .\scripts\sync\check-machine.js` até não sobrar `FALTA`. Cada linha que falta já mostra o comando que resolve (settings, plugins, MCP, `gh`, `playwright-cli`, `python3`, `sh`, fluxo) | [x] | [ ] | [ ] |
 | 4 | Reiniciar o Claude Code e, numa sessão nova, conferir `/context`. Se pesar demais, desligar `superpowers` (`false` no `settings.json`, depois `make-shared.js`); o fluxo usa 6 skills dele e o `skills/fluxo/catalogo.md` indica as alternativas | [ ] | [ ] | [ ] |
 | 5 | Opcional: `pip uninstall headroom-ai`, se foi instalado | [ ] | [ ] | [ ] |
-| 6 | Opcional, para usar o `omniroute`: `npm i -g omniroute` e deixar `omniroute` rodando | [ ] | [ ] | [ ] |
+| 6 | ~~omniroute~~: desligado em 2026-10-29, nada a fazer | - | - | - |
 | 7 | 1º uso num projeto web: `inspect.mjs` da `design-taste-frontend` acha o Edge/Chrome | [ ] | [ ] | [ ] |
 
 Por que o passo 2 vem **antes** de qualquer `make-shared.js`: o bootstrap roda
@@ -142,7 +142,8 @@ Sugestão: ativar sob demanda, conforme o projeto — não todos de uma vez.
 
 ## Outras pendências
 
-- [ ] **Decidir sobre o plugin `omniroute`** (adiado em 2026-10-28). Hoje só
+- [x] **Decidir sobre o plugin `omniroute`**: desligado em 2026-10-29 (`false` em
+      `enabledPlugins`). Contexto da decisão: Hoje só
       registra um MCP em `localhost:20128`, sem benefício, e na nuvem aparece como
       falha no `/mcp`. O modo gateway (que troca de modelo quando a cota acaba)
       exige `ANTHROPIC_BASE_URL`, o que desliga o `/remote-control`, e passar a
