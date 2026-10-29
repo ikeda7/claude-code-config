@@ -45,14 +45,9 @@ function findSettingsFiles() {
   return settingsCandidates().filter(f => fs.existsSync(f));
 }
 
-// Remove comentarios // e /* */ e virgulas sobrando, respeitando strings.
-function parseJsonc(text) {
-  const src = text.replace(/^﻿/, '');
-  try {
-    return JSON.parse(src);
-  } catch (_) {
-    // segue para a limpeza
-  }
+// Uma passada que respeita strings: remove comentarios // e /* */ e virgula
+// antes de } ou ]. Texto dentro de string nunca e alterado.
+function stripJsonc(src) {
   let out = '';
   let inStr = false;
   for (let i = 0; i < src.length; i++) {
@@ -70,11 +65,33 @@ function parseJsonc(text) {
       i += 2;
       while (i < src.length && !(src[i] === '*' && src[i + 1] === '/')) i++;
       i++;
+    } else if (ch === ',' && /^[}\]]/.test(stripLeadingComments(src.slice(i + 1)))) {
+      // virgula sobrando: descarta
     } else {
       out += ch;
     }
   }
-  return JSON.parse(out.replace(/,(\s*[}\]])/g, '$1'));
+  return out;
+}
+
+// Pula espaco e comentarios no inicio de um trecho (para olhar o proximo token).
+function stripLeadingComments(rest) {
+  let s = rest;
+  for (;;) {
+    const t = s.replace(/^\s+/, '');
+    if (t.startsWith('//')) s = t.slice(t.indexOf('\n') + 1 || t.length);
+    else if (t.startsWith('/*')) s = t.slice((t.indexOf('*/') + 2) || t.length);
+    else return t;
+  }
+}
+
+function parseJsonc(text) {
+  const src = text.replace(/^\uFEFF/, '');
+  try {
+    return JSON.parse(src);
+  } catch (_) {
+    return JSON.parse(stripJsonc(src));
+  }
 }
 
 function readSource() {
@@ -144,10 +161,14 @@ function merge(current, source, opts) {
   profiles.list = upsertProfiles(profiles.list || [], wantedProfiles(source), log);
   next.profiles = profiles;
 
-  const currentDefault = profiles.list.find(p => p.guid === current.defaultProfile);
+  // defaultProfile pode ser guid ou nome. Se nao esta na lista, e um perfil
+  // dinamico que o Terminal nao gravou (tipico do WSL): trata como WSL.
+  const currentDefault = profiles.list.find(p => p.guid === current.defaultProfile || p.name === current.defaultProfile);
+  const keepCurrent = current.defaultProfile && (!currentDefault || isWslProfile(currentDefault));
   if (current.defaultProfile !== source.defaultProfile) {
-    if (isWslProfile(currentDefault) && !opts.setDefault) {
-      notes.push('perfil padrao mantido em "' + currentDefault.name + '" (WSL); use --set-default para trocar');
+    if (keepCurrent && !opts.setDefault) {
+      const label = currentDefault ? currentDefault.name : current.defaultProfile;
+      notes.push('perfil padrao mantido em "' + label + '" (WSL ou perfil dinamico); use --set-default para trocar');
     } else {
       next.defaultProfile = source.defaultProfile;
       log.push('perfil padrao -> Claude Code');
@@ -155,7 +176,7 @@ function merge(current, source, opts) {
   }
 
   const actions = upsertById(current.actions, source.actions);
-  const keybindings = upsertById(current.keybindings, source.keybindings, (w, x) => w.keys === x.keys);
+  const keybindings = upsertById(current.keybindings, source.keybindings, (w, x) => String(w.keys).toLowerCase() === String(x.keys).toLowerCase());
   if (JSON.stringify(actions) !== JSON.stringify(current.actions || [])) log.push('actions');
   if (JSON.stringify(keybindings) !== JSON.stringify(current.keybindings || [])) log.push('keybindings');
   next.actions = actions;
@@ -166,8 +187,12 @@ function merge(current, source, opts) {
 
 /** Usado pelo check-machine.js: o perfil do repo existe em algum settings? */
 function isApplied() {
-  const source = readSource();
-  const guid = source.profiles[0].guid;
+  let guid;
+  try {
+    guid = readSource().profiles[0].guid;
+  } catch (_) {
+    return false;
+  }
   return findSettingsFiles().some(f => {
     try {
       const s = parseJsonc(fs.readFileSync(f, 'utf8'));
@@ -231,7 +256,10 @@ function main() {
     }
     const backup = file + '.bak-' + stamp();
     fs.copyFileSync(file, backup);
-    fs.writeFileSync(file, JSON.stringify(next, null, 4) + '\n', 'utf8');
+    // Grava ao lado e renomeia: uma queda no meio nao deixa o arquivo truncado.
+    const tmp = file + '.tmp';
+    fs.writeFileSync(tmp, JSON.stringify(next, null, 4) + '\n', 'utf8');
+    fs.renameSync(tmp, file);
     console.log('    gravado; backup em ' + backup);
   }
   return failed ? 1 : 0;
