@@ -282,6 +282,7 @@ instalados por `apply-plugins.js`):
 |---|---|---|
 | `cartographer@cartographer-marketplace` | `kingbootoshi/cartographer` | — |
 | `claude-mem@thedotmack` | `thedotmack/claude-mem` | worker em background (sobe sozinho) |
+| `hyperframes@hyperframes` | `https://github.com/heygen-com/hyperframes.git` (URL HTTPS: o atalho `github` clona via SSH e falha sem chave; o aviso de Git LFS no clone é só de fixtures de teste) | Node 22+, FFmpeg e Chrome para o render; voz local Kokoro opcional (venv Python 3.10-3.13 + `HYPERFRAMES_PYTHON`). Adicionado em 2026-11-25 |
 | `omniroute@omniroute-claude-plugin` | `projectsaibg/omniroute-claude-plugin` | **desligado** desde 2026-10-29 (ver abaixo) |
 
 Avaliado e **não** ativado (decisão de 2026-10-22, ver `SETUP_TODO.md`):

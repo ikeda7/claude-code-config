@@ -159,6 +159,7 @@ nativo, mas não os aliases dele**. Então:
 | `claude-md-management` | `/claude-md-management:revise-claude-md` e melhoria do `CLAUDE.md` | 9 |
 | `claude-code-setup` | Recomenda automações (hooks, skills, MCP) para o projeto | 1 (`/fluxo init`) |
 | `hookify` | Hooks a partir de conversa: `/hookify` (criar), `/hookify:list`, `/hookify:configure`, `/hookify:help`, skill `hookify:writing-rules` e agent `hookify:conversation-analyzer`. As cópias do ECC foram para `archive/` em 2026-10-29 por duplicarem o plugin | 9 |
+| `hyperframes` | HeyGen, Apache-2.0: vídeo a partir de HTML/CSS/GSAP renderizado em MP4 local. Skills `/hyperframes:hyperframes` (comece por ela), `hyperframes-cli`, `hyperframes-registry`, `media-use`, `slideshow`, `figma`, `remotion-to-hyperframes`; `reverse-any-video` e `style-sampling` exigem HyperFrames Pro. Marketplace por URL HTTPS (o atalho `github` clona via SSH e falha sem chave). Voz local Kokoro: venv Python 3.10-3.13 + `HYPERFRAMES_PYTHON` | F (vídeo) |
 | `omniroute` | Desligado em 2026-10-29: o servidor local não roda nas máquinas. Religar = `true` em `enabledPlugins` + `npm i -g omniroute` | F |
 | `session-report`, `plugin-dev` | Desligados para economizar contexto | F |
 
