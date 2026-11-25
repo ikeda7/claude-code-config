@@ -243,7 +243,8 @@
     "plugin-dev@claude-plugins-official": false,
     "cartographer@cartographer-marketplace": true,
     "claude-mem@thedotmack": true,
-    "omniroute@omniroute-claude-plugin": false
+    "omniroute@omniroute-claude-plugin": false,
+    "hyperframes@hyperframes": true
   },
   "extraKnownMarketplaces": {
     "context-mode": {
@@ -274,6 +275,12 @@
       "source": {
         "source": "github",
         "repo": "projectsaibg/omniroute-claude-plugin"
+      }
+    },
+    "hyperframes": {
+      "source": {
+        "source": "git",
+        "url": "https://github.com/heygen-com/hyperframes.git"
       }
     }
   },

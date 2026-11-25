@@ -171,7 +171,7 @@ ou `/model opus[1m]` só quando a tarefa pedir. `/clear` ao trocar de tarefa,
 - claude-mem: `scripts/sync/claude-mem-shared.json` (batch 10, pausa com 80% do
   uso semanal, redação de segredos, busca semântica via `uvx`) aplicado por
   `apply-claude-mem.js`; o bootstrap instala o `uv` e chama o script.
-- Plugins: `context-mode`, `claude-mem`, `cartographer` e os oficiais listados
+- Plugins: `context-mode`, `claude-mem`, `cartographer`, `hyperframes` (vídeo HTML→MP4) e os oficiais listados
   em `settings.shared.json` (`omniroute` desligado em 2026-10-29). **Não** rodar `headroom init -g claude` (desliga o
   `/remote-control`).
 - `settings.shared.json` é versionado; `settings.json` e `~/.claude.json` não.
